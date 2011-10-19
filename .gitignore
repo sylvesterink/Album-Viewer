@@ -7,8 +7,13 @@
 *.o
 *.so
 *.suo
-PhotoAlbum1/bin
-PhotoAlbum1/obj
+<<<<<<< HEAD
+/bin
+/obj
+=======
+/bin
+/obj
+>>>>>>> b1ccc0f55e2ab9239182e506f9d0b79f54b16254
 
 # Packages #
 ############
