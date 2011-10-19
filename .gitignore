@@ -6,6 +6,9 @@
 *.exe
 *.o
 *.so
+*.suo
+/bin
+/obj
 
 # Packages #
 ############
