@@ -9,7 +9,7 @@ namespace PhotoAlbumViewOfTheGods
 {
     class XMLInterface
     {
-        private List<pictureData> dataList = new List<pictureData>();//Vector containing picture info
+        private List<Photo> dataList = new List<Photo>();//Vector containing picture info
         private string directory;
         private string albumFolder;
         private string photoFolder;
@@ -33,7 +33,7 @@ namespace PhotoAlbumViewOfTheGods
         }
 
         //sets the data from the dataStruct into the dataList vector, returns false if id is too big
-        public bool setData(pictureData dataStruct, int id)
+        public bool setData(Photo dataStruct, int id)
         {
             if (id >= dataList.Count)
                 return false;
@@ -52,7 +52,7 @@ namespace PhotoAlbumViewOfTheGods
         //Zach & Cavan
         public void addPhoto(string path)
         {
-            pictureData image = new pictureData();
+            Photo image = new Photo();
             image.description = "";
             string newPath;
             string extension = Path.GetExtension(path);
@@ -99,9 +99,9 @@ namespace PhotoAlbumViewOfTheGods
 
         //Function is used to get picture info from and element in the datalist
         //The id of the picture is sent and the info for that pic is returned
-        public pictureData getData(int id)
+        public Photo getData(int id)
         {
-            pictureData tempData = new pictureData();
+            Photo tempData = new Photo();
             tempData.name = "";
             tempData.id = "0";
             tempData.path = "";
@@ -186,7 +186,7 @@ namespace PhotoAlbumViewOfTheGods
         //Zach
         public bool loadAlbum(string albumName)
         {
-            pictureData PicData = new pictureData();
+            Photo PicData = new Photo();
             //if fails to get or read file
             //return false;
             XDocument xdoc = new XDocument();
@@ -258,7 +258,7 @@ namespace PhotoAlbumViewOfTheGods
         }
 
         //Returns current xml data in a vector of struct pictureData
-        public List<pictureData> getDataList()
+        public List<Photo> getDataList()
         {
             return dataList;
         }
@@ -283,7 +283,7 @@ namespace PhotoAlbumViewOfTheGods
                 int numofpics = dataList.Count - 1;
                 int IDvalue;
                 int CurrentID = Convert.ToInt32(id);
-                pictureData Removing;
+                Photo Removing;
                 dataList.RemoveAt(CurrentID);
                 while (CurrentID != numofpics)
                 {

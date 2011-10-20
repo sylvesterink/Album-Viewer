@@ -595,7 +595,7 @@
             this.label_TreeHelp.Name = "label_TreeHelp";
             this.label_TreeHelp.Size = new System.Drawing.Size(148, 19);
             this.label_TreeHelp.TabIndex = 15;
-            this.label_TreeHelp.Text = "Avaialble Albums";
+            this.label_TreeHelp.Text = "Available Albums";
             this.label_TreeHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // colorDialog_Background

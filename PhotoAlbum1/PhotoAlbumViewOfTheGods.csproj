@@ -64,6 +64,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Album.cs" />
+    <Compile Include="AlbumManager.cs" />
+    <Compile Include="Photo.cs" />
     <Compile Include="Utilities.cs" />
     <Compile Include="CurrentPhoto.cs" />
     <Compile Include="Form_Main.cs">

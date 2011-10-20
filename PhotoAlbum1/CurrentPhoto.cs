@@ -7,9 +7,9 @@ namespace PhotoAlbumViewOfTheGods
 {
     //Simple class representing the current photo selected by the user
     //Cavan
-    class Photo
+    class oldPhoto
     {
-        pictureData photoData; //data array representing current photo
+        Photo photoData; //data array representing current photo
 
         //Sets and returns current ID as string
         public string id
@@ -40,13 +40,13 @@ namespace PhotoAlbumViewOfTheGods
         }
 
         //Sets current photo. Passed pictureData structure
-        public void setData(pictureData data)
+        public void setData(Photo data)
         {
             photoData = data;
         }
 
         //Returns current photo data struct
-        public pictureData getData()
+        public Photo getData()
         {
             return photoData;
         }
