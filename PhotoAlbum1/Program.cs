@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Diagnostics;
-
+using System;
 namespace PhotoAlbumViewOfTheGods
 {
     static class Program
     {
+        
         public static Process PriorProcess()
         // URL: http://www.ai.uga.edu/mc/SingleInstance.html
         // Returns a System.Diagnostics.Process pointing to
@@ -42,6 +43,11 @@ namespace PhotoAlbumViewOfTheGods
             if (PriorProcess() != null)
             {
                 MessageBox.Show("You can only run one instance of PhotoAlbumViewOfTheGods at a time.","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                return;
+            }
+            if (Environment.Version.Major < 4)
+            {
+                MessageBox.Show(".NET version 4.0 or greater is required.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             Application.EnableVisualStyles();
