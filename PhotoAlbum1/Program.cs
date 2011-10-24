@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using System.Diagnostics;
-using System;
+
 namespace PhotoAlbumViewOfTheGods
 {
     static class Program
