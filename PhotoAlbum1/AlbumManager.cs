@@ -40,7 +40,7 @@ namespace PhotoAlbumViewOfTheGods
             }
 
             if (albumList.Count > 0)
-                currentAlbum = albumNameList[0];
+                currentAlbum = albumNameList.First();
         }
 
         //Creates a new album with the user entered name returns true if successful
@@ -77,6 +77,61 @@ namespace PhotoAlbumViewOfTheGods
                 //if can't access file to delte
                 return false;
             }
+        }
+
+        //Saves the currently selected album
+        //Brandon
+        public bool saveCurrentAlbum()
+        {
+            return albumList[currentAlbum].save();
+        }
+
+        //Adds photo to currently selected album
+        //Brandon
+        public void addPhotoToCurrent(string path)
+        {
+            albumList[currentAlbum].addPhoto(path, directory, photoFolder);
+        }
+
+        //Removes photo from currently selected album
+        //Brandon
+        public void removePhotoFromCurrent(string id)
+        {
+            albumList[currentAlbum].removePhoto(id);
+        }
+
+        //Gets photo from currently selected album
+        //Brandon
+        public Photo getPhotoFromCurrent(int id)
+        {
+            return albumList[currentAlbum].getPhoto(id);
+        }
+
+        //Sets photo info in currently selected album
+        //Brandon
+        public bool setPhotoInCurrent(Photo data, int id)
+        {
+            return albumList[currentAlbum].setPhoto(data, id);
+        }
+
+        //Gets photo list in currently selected album
+        //Brandon
+        public string[] getPhotoListInCurrent()
+        {
+            return albumList[currentAlbum].getPhotoList();
+        }
+
+        //Changes the currently selected album to the sent album if it exists
+        //Brandon
+        public bool selectAlbum(string albumName)
+        {
+            if (albumList.ContainsKey(albumName))
+            {
+                currentAlbum = albumName;
+                return true;
+            }
+
+            return false;
         }
 
         //Returns an array of the albums
