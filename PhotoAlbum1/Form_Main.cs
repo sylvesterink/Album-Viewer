@@ -15,14 +15,14 @@ using System.Drawing.Drawing2D;
 namespace PhotoAlbumViewOfTheGods
 {
     //Photo data structure
-    struct pictureData
-    {
-        public string id;
-        public string path;
-        public string name;
-        public string description;
-        public Size size;
-    }
+    //struct pictureData
+    //{
+    //    public string id;
+    //    public string path;
+    //    public string name;
+    //    public string description;
+    //    public Size size;
+    //}
 
     //Main UI form
     public partial class Form_Main : Form
@@ -49,12 +49,13 @@ namespace PhotoAlbumViewOfTheGods
         float borderFactor = 8; //Border size will be framewidth / borderFactor
 
         //Data Structures
-        pictureData pictureDataStored;
-        List<pictureData> pictureList = new List<pictureData>(); //used to store XMLInterface class list
+        Photo pictureDataStored;
+        List<Photo> pictureList = new List<Photo>(); //used to store XMLInterface class list
         XMLInterface albumData; //class to interact with album files
+        AlbumManager albumManager;
         string[] nameList;
         TreeNode treeNode = new TreeNode();
-        Photo currentPhoto = new Photo();
+        oldPhoto currentPhoto = new oldPhoto();
 
         //Constructor function
         //Initializes form
@@ -237,6 +238,7 @@ namespace PhotoAlbumViewOfTheGods
 
             //Initilize data structure
             albumData = new XMLInterface(DIRECTORY, FOLDER, FOLDERPHOTO, FILETYPE);
+            albumManager = new AlbumManager(DIRECTORY, FOLDER, FOLDERPHOTO, FILETYPE); //!!! left off here
             
             //Check Folders and create if needed
             if (Directory.Exists(DIRECTORY + FOLDER))
@@ -552,7 +554,7 @@ namespace PhotoAlbumViewOfTheGods
         {
             panel1.Hide();
             Panel tempPanel;
-            pictureData picData = new pictureData();
+            Photo picData = new Photo();
             int scrollPosition = panel1.VerticalScroll.Value; //save user scroll position
             
             pictureList = albumData.getDataList();
@@ -593,7 +595,7 @@ namespace PhotoAlbumViewOfTheGods
         //Parameters: accepts picturedata struct
         //Creates a new panel, sets its picture data, and sets background image to scaled down image from file
         //Returns thumbnial panel
-        private Panel getNewThumbnail(pictureData imageData, int id)
+        private Panel getNewThumbnail(Photo imageData, int id)
         {
             Panel newPanel = new Panel();
             newPanel.Visible = false;
