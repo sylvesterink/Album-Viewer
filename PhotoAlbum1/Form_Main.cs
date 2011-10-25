@@ -238,6 +238,7 @@ namespace PhotoAlbumViewOfTheGods
 
             //Initilize data structure
             albumData = new XMLInterface(DIRECTORY, FOLDER, FOLDERPHOTO, FILETYPE);
+            albumManager = new AlbumManager(DIRECTORY, FOLDER, FOLDERPHOTO, FILETYPE); //!!! left off here
             
             //Check Folders and create if needed
             if (Directory.Exists(DIRECTORY + FOLDER))
