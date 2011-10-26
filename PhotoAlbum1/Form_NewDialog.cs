@@ -18,7 +18,7 @@ namespace PhotoAlbumViewOfTheGods
     //Cavan
     public partial class Form_NewFileDialog : Form
     {
-        string[] albumsList;
+        private string[] albumsList;
         //Return Value
         public string albumNameValue
         {
@@ -40,7 +40,6 @@ namespace PhotoAlbumViewOfTheGods
             {
                 albumsList[i] = Utilities.getNameFromPath(albumsList[i]).ToUpper();
             }
-            label_Extension.Text = ext;
         }
 
         //Cancel button event
@@ -58,16 +57,15 @@ namespace PhotoAlbumViewOfTheGods
         private void button_Create_Click(object sender, EventArgs e)
         {
             //Check if name is null or contains invalid characters
-            if (textBox_AlbumName.Text == "" || !Utilities.isStringValid(textBox_AlbumName.Text))
+            //if (textBox_AlbumName.Text == "" || !Utilities.isStringValid(textBox_AlbumName.Text))
+            if (!System.Text.RegularExpressions.Regex.IsMatch(textBox_AlbumName.Text,"^[a-zA-Z0-9_-]+$"))
             {
-                label_Error.Text = "Invalid File Name";
-                label_Error.Visible = true;
+                MessageBox.Show("Your album name may only contain underscores, hyphens, and alphanumeric characters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             //Checks for albums with the same name
             else if(albumsList.Contains(textBox_AlbumName.Text.ToUpper()))
             {
-                label_Error.Text = "Album name already exists";
-                label_Error.Visible = true;
+                MessageBox.Show("That album name has alrady been created.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else
             {
