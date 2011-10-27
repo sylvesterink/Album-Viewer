@@ -1127,10 +1127,12 @@ namespace PhotoAlbumViewOfTheGods
         //Event Handler
         //Shows error mesage and clear message label. Adds spacing.
         //Cavan
+        //TODO: remove legacy error message label
         private void handleError(string msg)
         {
-            toolStripStatusLabel_Error.Text = msg + "   ";
-            toolStripStatusLabel_Clear.Visible = true;
+            MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //toolStripStatusLabel_Error.Text = msg + "   ";
+            //toolStripStatusLabel_Clear.Visible = true;
         }
 
         //Event Handler
