@@ -70,6 +70,7 @@ namespace PhotoAlbumViewOfTheGods
             try
             {
                 File.Delete(albumName);
+                albumList.Remove(albumName);
                 return true;
             }
             catch
@@ -79,11 +80,28 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        //Deletes currently selected album, returns true if successful
+        //Brandon
+        public bool deleteCurrentAlbum()
+        {
+            return deleteAlbum(currentAlbum);
+        }
+
         //Saves the currently selected album
         //Brandon
         public bool saveCurrentAlbum()
         {
             return albumList[currentAlbum].save();
+        }
+
+        public bool renameCurrentAlbum(string newName)
+        {
+            if (newName != "")
+            {
+                return true;
+            }
+
+            return false;
         }
 
         //Adds photo to currently selected album
@@ -132,6 +150,13 @@ namespace PhotoAlbumViewOfTheGods
             }
 
             return false;
+        }
+
+        //Returns the name of the currently selected album
+        //Brandon
+        public string getCurrentAlbumName()
+        {
+            return currentAlbum;
         }
 
         //Returns an array of the albums

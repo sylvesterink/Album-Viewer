@@ -87,6 +87,13 @@ namespace PhotoAlbumViewOfTheGods
             return true;
         }
 
+        //Change the name of the album
+        //Brandon
+        public bool rename(string newName)
+        {
+            return false;
+        }
+
         //Function is called when importing a picture, where path is the picture's path
         //Copies the pic to a new photos folder
         //Compares pictures if a duplicate name exists

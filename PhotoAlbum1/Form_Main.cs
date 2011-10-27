@@ -50,10 +50,11 @@ namespace PhotoAlbumViewOfTheGods
 
         //Data Structures
         Photo pictureDataStored;
-        List<Photo> pictureList = new List<Photo>(); //used to store XMLInterface class list
-        XMLInterface albumData; //class to interact with album files
+        //List<Photo> pictureList = new List<Photo>(); //used to store XMLInterface class list
+        string[] pictureList; //used to store XMLInterface class list
+        //XMLInterface albumData; //class to interact with album files
         AlbumManager albumManager;
-        string[] nameList;
+        //string[] nameList;
         TreeNode treeNode = new TreeNode();
         oldPhoto currentPhoto = new oldPhoto();
 
@@ -201,7 +202,8 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            deleteAlbum(albumData.filePath);
+            //deleteAlbum(albumData.filePath);!!!old deleteme
+            deleteAlbum(albumManager.getCurrentAlbumName());
         }
 
         //Update button click event
@@ -213,7 +215,8 @@ namespace PhotoAlbumViewOfTheGods
         {
             renamePicture();
             currentPhoto.description = richTextBox_Description.Text;
-            albumData.setData(currentPhoto.getData(), Convert.ToInt32(currentPhoto.id));
+            //albumData.setData(currentPhoto.getData(), Convert.ToInt32(currentPhoto.id));
+            albumManager.setPhotoInCurrent(currentPhoto.getData(), Convert.ToInt32(currentPhoto.id));
             populateList();
             button_RenamePic.Enabled = false;
             panel1.Focus();
@@ -232,18 +235,21 @@ namespace PhotoAlbumViewOfTheGods
         //Checks for any album files and updates menus to allow open if any are found
         //Sets thumbnail frame spacing and updates the album list tree
         //Cavan
+        //TODO: remove albumdata references
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Text = APPNAME;
 
             //Initilize data structure
-            albumData = new XMLInterface(DIRECTORY, FOLDER, FOLDERPHOTO, FILETYPE);
-            albumManager = new AlbumManager(DIRECTORY, FOLDER, FOLDERPHOTO, FILETYPE); //!!! left off here
+            //albumData = new XMLInterface(DIRECTORY, FOLDER, FOLDERPHOTO, FILETYPE);
+            albumManager = new AlbumManager(DIRECTORY, FOLDER, FOLDERPHOTO, FILETYPE);
+            albumManager.loadAlbums();
             
             //Check Folders and create if needed
             if (Directory.Exists(DIRECTORY + FOLDER))
             {
-                string[] files = albumData.getAlbumList();
+                //string[] filesold = albumData.getAlbumList();
+                string[] files = albumManager.getAlbumList();
                 if (files.Count() != 0)
                 {
                     openToolStripMenuItem.Enabled = true;
@@ -256,7 +262,7 @@ namespace PhotoAlbumViewOfTheGods
             if (!Directory.Exists(DIRECTORY + FOLDERPHOTO))
                 Directory.CreateDirectory(DIRECTORY + FOLDERPHOTO);
 
-            albumData.filePath = ""; //stat with no album open
+            //albumData.filePath = ""; //stat with no album open  !!!unnecessary with new model
             //Set up Frames
             panel1.BackColor = color_backColor;
             frameWidth = (panel1.Width / (framesPerRow + 1)) - 4;
@@ -286,7 +292,8 @@ namespace PhotoAlbumViewOfTheGods
                 node.ImageIndex = 0;
                 treeView_Albums.Nodes.Add(node);
                 //Highlight if album node is open
-                if (node.Name == albumData.filePath)
+                //if (node.Name == albumData.filePath)
+                if (node.Name == albumManager.getCurrentAlbumName())
                     node.BackColor = Color.LightGray;
             }
         }
@@ -295,26 +302,29 @@ namespace PhotoAlbumViewOfTheGods
         //Method: retrieve album data and clear tree
         //        loop through each picture and add its name, description, and path to the photo tree.
         //Cavan
+        //TODO: readd functionality to show description
         private void populateList()
         {
             TreeNode newNode;
-            pictureList = albumData.getDataList();
+            //pictureList = albumData.getDataList();
+            pictureList = albumManager.getPhotoListInCurrent();
             treeView_Pictures.Nodes.Clear();
-            string[] nodes = albumData.getPictureList();
-            string tempText = "";
-            for (int i = 0; i < pictureList.Count; i++)
+            //string[] nodes = albumData.getPictureList();
+            //string tempText = "";
+            for (int i = 0; i < pictureList.Count(); i++)
             {
                 //Photo list
                 newNode = new TreeNode();
-                newNode.Name = pictureList[i].path;
+                //newNode.Name = pictureList[i].path;
+                newNode.Name = pictureList[i];
                 //Append description if there is any
-                tempText = pictureList[i].description;
-                if (tempText.Length > 50)
-                    newNode.Text = pictureList[i].name + "   |   " + tempText.Substring(0, 50) + "...";
-                else if (tempText.Length > 0)
-                    newNode.Text = pictureList[i].name + "   |   " + pictureList[i].description.Substring(0, pictureList[i].description.Length);
-                else
-                    newNode.Text = pictureList[i].name;
+                //tempText = pictureList[i].description; !!!
+                //if (tempText.Length > 50)
+                //    newNode.Text = pictureList[i] + "   |   " + tempText.Substring(0, 50) + "...";
+                //else if (tempText.Length > 0)
+                //    newNode.Text = pictureList[i] + "   |   " + pictureList[i].description.Substring(0, pictureList[i].description.Length);
+                //else
+                    newNode.Text = pictureList[i];
                 treeView_Pictures.Nodes.Add(newNode);
             }
         }
@@ -337,7 +347,8 @@ namespace PhotoAlbumViewOfTheGods
                 panel_Border.Location = new Point((p.Location.X - (frameWidth / 20 + 2)), (p.Location.Y - (frameWidth / 20)) - 3);
                 panel_Border.Show();
                 p.BringToFront();
-                pictureDataStored = albumData.getData(Convert.ToInt32(id)); //get album data
+                //pictureDataStored = albumData.getData(Convert.ToInt32(id)); //get album data
+                pictureDataStored = albumManager.getPhotoFromCurrent( Convert.ToInt32(id) ); //get album data
                 currentPhoto.setData(pictureDataStored); //Sets current photo properties
 
                 //Set picture info panel
@@ -377,7 +388,8 @@ namespace PhotoAlbumViewOfTheGods
             {
                 //Get data
                 int id = e.Node.Index;
-                pictureDataStored = albumData.getData(Convert.ToInt32(id));
+                //pictureDataStored = albumData.getData(Convert.ToInt32(id));
+                pictureDataStored = albumManager.getPhotoFromCurrent(Convert.ToInt32(id));
                 currentPhoto.setData(pictureDataStored);
                 //Set data panel
                 textBox_Name.Text = pictureDataStored.name;
@@ -499,24 +511,39 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void openAlbum(string albumPath)
         {
-            //If there is a file open, close it then open, else just open
-            if (!(albumData.filePath == ""))
+            ////If there is a file open, close it then open, else just open
+            //if (!(albumData.filePath == ""))
+            //{
+            //    //If album can't close show error message and stop
+            //    if (albumClose())
+            //    {
+            //        //Open
+            //        openAlbumFromFile(albumPath);
+            //    }
+            //    else
+            //    {
+            //        handleError("Unable to access file to save");
+            //    }
+            //}
+            //else
+            //{
+            //    //Open
+            //    openAlbumFromFile(albumPath);
+            //}
+
+            if (!albumManager.selectAlbum(albumPath))
             {
-                //If album can't close show error message and stop
-                if (albumClose())
-                {
-                    //Open
-                    openAlbumFromFile(albumPath);
-                }
-                else
-                {
-                    handleError("Unable to access file to save");
-                }
+                handleError("Unable to access file to load");
             }
             else
             {
-                //Open
-                openAlbumFromFile(albumPath);
+                //Show picture views and set title and label text with file name
+                populateScreen();
+                populateList();
+                populateTree();
+                toolStripStatusLabel_ALbumName.Text = albumPath + "  |";
+                enableItems();
+                this.Text = APPNAME + " : " + albumPath;
             }
             panel1.Focus();
         }
@@ -527,23 +554,24 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void openAlbumFromFile(string path)
         {
+            MessageBox.Show("this should not be called");
             //Open
-            albumData.filePath = path;
-            if (!albumData.loadAlbum(path))
-            {
-                handleError("Unable to access file to load");
-            }
-            else
-            {
-                //Show picture views and set title and label text with file name
-                populateScreen();
-                populateList();
-                populateTree();
-                toolStripStatusLabel_ALbumName.Text = Utilities.getNameFromPath(path) + "  |";
-                albumData.filePath = path;
-                enableItems();
-                this.Text = APPNAME + " : " + Utilities.getNameFromPath(path);
-            }
+            //albumData.filePath = path;
+            //if (!albumData.loadAlbum(path))
+            //{
+            //    handleError("Unable to access file to load");
+            //}
+            //else
+            //{
+            //    //Show picture views and set title and label text with file name
+            //    populateScreen();
+            //    populateList();
+            //    populateTree();
+            //    toolStripStatusLabel_ALbumName.Text = Utilities.getNameFromPath(path) + "  |";
+            //    albumData.filePath = path;
+            //    enableItems();
+            //    this.Text = APPNAME + " : " + Utilities.getNameFromPath(path);
+            //}
         }
 
         //Display thumbnails method
@@ -557,7 +585,7 @@ namespace PhotoAlbumViewOfTheGods
             Photo picData = new Photo();
             int scrollPosition = panel1.VerticalScroll.Value; //save user scroll position
             
-            pictureList = albumData.getDataList();
+            pictureList = albumManager.getPhotoListInCurrent();
             
             panel1.VerticalScroll.Value = 0; //set scroll to top for correct reference when setting panel location
             int loopCount = pictureList.Count();
@@ -567,7 +595,7 @@ namespace PhotoAlbumViewOfTheGods
                 if (panel1.Controls.Find("panel" + Utilities.getIdFromInt(i), false).Count() > 0)
                     continue;
 
-                picData = pictureList[i];
+                picData = albumManager.getPhotoFromCurrent( i ); //!!! this may be a bad idea.  may want to send string name instead
                 tempPanel = getNewThumbnail(picData, i); //Create new panel
                 //tempPanel.BackColor = color_backColor; Used if main panel color has changed.
                 panel1.Controls.Add(tempPanel); //Add panel to main panel
@@ -584,9 +612,9 @@ namespace PhotoAlbumViewOfTheGods
             
             panel1.Show();
             //Update Tooltip size
-            toolStripStatusLabel_Total.Text = pictureList.Count.ToString();
+            toolStripStatusLabel_Total.Text = pictureList.Count().ToString();
             //Update nameList
-            nameList = albumData.getPictureList();
+            //nameList = albumData.getPictureList();
             panel1.Focus();
             panel1.VerticalScroll.Value = scrollPosition; //return user scroll posiiton
         }
@@ -608,7 +636,7 @@ namespace PhotoAlbumViewOfTheGods
             {
                 Image tempImage = Image.FromFile(imageData.path);
                 imageData.size = tempImage.Size;
-                albumData.setData(imageData, id);
+                albumManager.setPhotoInCurrent(imageData, id);//!!! why????
                 newPanel.BackgroundImage = Utilities.ScalImage(tempImage, new Size(frameSize.Width, frameSize.Height));
                 //newPanel.BackgroundImage = Image.FromFile(imageData.path).GetThumbnailImage(frameSize.Width, frameSize.Height, imageCallback, IntPtr.Zero);
                 imageData.size = newPanel.BackgroundImage.Size;
@@ -621,7 +649,7 @@ namespace PhotoAlbumViewOfTheGods
                 {
                     imageData.description = "File not found\n\n" + imageData.description;
                 }
-                albumData.setData(imageData, id);
+                albumManager.setPhotoInCurrent(imageData, id);
             }
             //Panel event handlers
             newPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_MouseClick);
@@ -676,7 +704,7 @@ namespace PhotoAlbumViewOfTheGods
             {
                 renamePicture();
                 currentPhoto.description = richTextBox_Description.Text;
-                albumData.setData(currentPhoto.getData(), Convert.ToInt32(currentPhoto.id));
+                albumManager.setPhotoInCurrent(currentPhoto.getData(), Convert.ToInt32(currentPhoto.id));
                 populateList();
                 button_RenamePic.Enabled = false;
                 e.Handled = true;
@@ -699,11 +727,11 @@ namespace PhotoAlbumViewOfTheGods
                 //Valid name, update picture data
                 currentPhoto.name = textBox_Name.Text;
                 string id = panel_CurrentPanel.Name.Substring(panel_CurrentPanel.Name.Length - 3, 3); //get id
-                pictureDataStored = albumData.getData(Convert.ToInt32(id));
+                pictureDataStored = albumManager.getPhotoFromCurrent(Convert.ToInt32(id));
                 textBox_Name.Text = textBox_Name.Text.Trim(); //trim spaces
                 pictureDataStored.name = textBox_Name.Text;
-                albumData.setData(pictureDataStored, Convert.ToInt32(id));
-                nameList = albumData.getPictureList(); //Update nameList
+                albumManager.setPhotoInCurrent(pictureDataStored, Convert.ToInt32(id));
+                //nameList = albumData.getPictureList(); //Update nameList
                 //Notify user of success
                 label_NameError.ForeColor = Color.Green;
                 label_NameError.Text = "Update successful";
@@ -745,7 +773,7 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form_NewFileDialog namePrompt = new Form_NewFileDialog(albumData.getAlbumList(), FILETYPE);
+            Form_NewFileDialog namePrompt = new Form_NewFileDialog( albumManager.getAlbumList(), FILETYPE);
             namePrompt.ShowDialog();
             //Retrieve name entered by user
             string albumName = namePrompt.albumNameValue;
@@ -757,13 +785,13 @@ namespace PhotoAlbumViewOfTheGods
                 if (albumClose())
                 {
                     //Create new album
-                    if (albumData.createAlbum(albumName))
+                    if (albumManager.createAlbum(albumName))
                     {
                         enableItems(); //enables menu items
 
-                        albumData.filePath = DIRECTORY + FOLDER + "\\" + albumName + FILETYPE; //sets current file path
+                        //albumData.filePath = DIRECTORY + FOLDER + "\\" + albumName + FILETYPE; //sets current file path
                         populateTree();
-                        this.Text = APPNAME + " : " + Utilities.getNameFromPath(albumData.filePath);
+                        this.Text = APPNAME + " : " + albumName;
                     }
                     else
                     {
@@ -815,7 +843,7 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private bool albumClose()
         {
-            if (!albumData.saveAlbum())
+            if (!albumManager.saveCurrentAlbum())
             {
                 handleError("Unable to save file");
                 return false;
@@ -825,7 +853,6 @@ namespace PhotoAlbumViewOfTheGods
                 clearDisplay();
                 //Clear Trees
                 treeView_Pictures.Nodes.Clear();
-                albumData.clearAlbum();
 
                 disableItems();
 
@@ -890,7 +917,7 @@ namespace PhotoAlbumViewOfTheGods
                     //check if file is valid
                     if (Utilities.isImageValid(value))
                     {
-                        albumData.addPhoto(value);
+                        albumManager.addPhotoToCurrent(value);
                         populateScreen();
                         populateList();
                     }
@@ -928,34 +955,49 @@ namespace PhotoAlbumViewOfTheGods
         //Zach
         private void renameAlbum()
         {
-            if (albumClose())
+            Rename namePrompt = new Rename(pictureList);
+            namePrompt.ShowDialog();
+            //Retrieve name entered by user
+            string newName = namePrompt.Newname;
+            namePrompt.Dispose();
+
+            if (albumManager.renameCurrentAlbum(newName))
             {
-                Rename namePrompt = new Rename(nameList);
-                namePrompt.ShowDialog();
-                //Retrieve name entered by user
-                string Replacement = namePrompt.Newname;
-                namePrompt.Dispose();
-                if (Replacement != "")
-                {
-                    albumData.loadAlbum(treeNode.Name);
-                    if (albumData.deleteAlbum(treeNode.Name))
-                    {
-                        albumData.filePath = DIRECTORY + FOLDER + "\\" + Replacement + FILETYPE;
-                        albumData.saveAlbum();
-                        albumData.clearAlbum();
-                        populateTree();
-                    }
-                    else
-                    {
-                        handleError( "Unable to access file to delete");
-                    }
-                }
+                populateTree();
             }
             else
             {
-                handleError("Unable to access file to save");
-
+                handleError("Unable to rename");
             }
+
+            //if (albumClose())
+            //{
+            //    Rename namePrompt = new Rename(pictureList);
+            //    namePrompt.ShowDialog();
+            //    //Retrieve name entered by user
+            //    string Replacement = namePrompt.Newname;
+            //    namePrompt.Dispose();
+            //    if (Replacement != "")
+            //    {
+            //        albumData.loadAlbum(treeNode.Name);
+            //        if (albumData.deleteAlbum(treeNode.Name))
+            //        {
+            //            albumData.filePath = DIRECTORY + FOLDER + "\\" + Replacement + FILETYPE;
+            //            albumData.saveAlbum();
+            //            albumData.clearAlbum();
+            //            populateTree();
+            //        }
+            //        else
+            //        {
+            //            handleError( "Unable to access file to delete");
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    handleError("Unable to access file to save");
+
+            //}
         }
 
         //Delete album method
@@ -964,26 +1006,35 @@ namespace PhotoAlbumViewOfTheGods
         //Zach
         private void deleteAlbum(string filePathToDelete)
         {
-            if (albumData.filePath == filePathToDelete)
+            if (albumManager.deleteAlbum(filePathToDelete))
             {
-                if (albumClose())
-                {
-                    if (albumData.deleteAlbum(filePathToDelete))
-                    {
-                        populateTree();   
-                    }
-                    else
-                    {
-                        handleError("Unable to access file to delete");
-                    }
-                }
-            }
-            if (albumData.deleteAlbum(filePathToDelete))
                 populateTree();
+            }
             else
             {
                 handleError("Unable to access file to delete");
             }
+
+            //if (albumData.filePath == filePathToDelete)
+            //{
+            //    if (albumClose())
+            //    {
+            //        if (albumData.deleteAlbum(filePathToDelete))
+            //        {
+            //            populateTree();   
+            //        }
+            //        else
+            //        {
+            //            handleError("Unable to access file to delete");
+            //        }
+            //    }
+            //}
+            //if (albumData.deleteAlbum(filePathToDelete))
+            //    populateTree();
+            //else
+            //{
+            //    handleError("Unable to access file to delete");
+            //}
         }
 
         //View image method
@@ -1036,7 +1087,8 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void deletePhoto()
         {
-            albumData.RemovePic(currentPhoto.id);
+            //albumData.RemovePic(currentPhoto.id);
+            albumManager.removePhotoFromCurrent(currentPhoto.id);
 
             clearDisplay();
             populateScreen();
