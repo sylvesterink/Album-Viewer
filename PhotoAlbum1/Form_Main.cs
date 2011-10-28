@@ -8,9 +8,6 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Drawing2D;
-//using System.Resources;
-//using System.Text.RegularExpressions;
-//using System.Threading;
 
 namespace PhotoAlbumViewOfTheGods
 {
@@ -27,15 +24,27 @@ namespace PhotoAlbumViewOfTheGods
     //Main UI form
     public partial class Form_Main : Form
     {
-        //Directory Locations
         private const string LAST_USER_FILE = "last_user.ofthegods";
         public const string FILETYPE = ".album"; // Must match XMLInterface FILETYPE const
         public const string FOLDER_USERS = "\\Users"; //Folder to store album files
         public const string FOLDER_PHOTOS = "\\Photos"; //Folder to store all images
+
+
+        //Directory Locations
+        private string _currentUser;
+        private string _directoryCurrent;
+        private string _directoryPhotos;
+        private string _directoryUsers;
+        private string _directoryCurrentUser;
+        
+        //File Locations
+        private string _lastUserFile;
+
+        
         string APP_DIRECTORY = Directory.GetCurrentDirectory();
         const string APPNAME = "Photo Album Viewer of the Gods";
         string lastUsedFolder; //Stores last dir for importing images
-        public string currentUser;
+        
 
         //Thumbnail Panel attributes
         Size frameSize;
@@ -62,6 +71,10 @@ namespace PhotoAlbumViewOfTheGods
         //Initializes form
         public Form_Main()
         {
+            _directoryCurrent = Directory.GetCurrentDirectory();
+            _directoryPhotos = _directoryCurrent + "\\Photos";
+            _directoryUsers = _directoryCurrent + "\\Users";
+            _lastUserFile = _directoryCurrent + "\\" + LAST_USER_FILE;
             InitializeComponent();
         }
 
@@ -237,45 +250,47 @@ namespace PhotoAlbumViewOfTheGods
         {
             this.Text = APPNAME;
 
-            if (File.Exists(APP_DIRECTORY +"\\"+ LAST_USER_FILE))
+            if (File.Exists(_lastUserFile))
             {
-                TextReader s = new StreamReader(APP_DIRECTORY +"\\"+ LAST_USER_FILE);
-                currentUser = s.ReadLine();
-                s.Close();
-                if (!Directory.Exists(APP_DIRECTORY + FOLDER_USERS + "\\" + currentUser))
+                TextReader tr = new StreamReader(_lastUserFile);
+                _currentUser = tr.ReadLine();
+                tr.Close();
+                _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
+                if (!Directory.Exists(_directoryCurrentUser))
                 {
                     MessageBox.Show("An error has occurred - Error: 0x44GGD7", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                File.Create(APP_DIRECTORY + LAST_USER_FILE);
+                File.Create(_lastUserFile);
             }
 
-            if (!Directory.Exists(APP_DIRECTORY + FOLDER_USERS) || Directory.GetDirectories(APP_DIRECTORY + FOLDER_USERS).Count() == 0)
+            if (!Directory.Exists(_directoryUsers) || Directory.GetDirectories(_directoryUsers).Count() == 0)
             {
                 MessageBox.Show("Welcome to Photo Album Viewer of the Gods. Before you can continue you must create a new user account.", "Welcome", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Directory.CreateDirectory(APP_DIRECTORY + FOLDER_USERS);
-                Form_NewUser namePrompt = new Form_NewUser(APP_DIRECTORY + FOLDER_USERS, true);
+                Directory.CreateDirectory(_directoryUsers);
+                Form_NewUser namePrompt = new Form_NewUser(_directoryUsers, true);
                 namePrompt.ShowDialog();
-                //Retrieve name entered by user
-                string userName = namePrompt.userName;
+                _currentUser = namePrompt.userName;
                 namePrompt.Dispose();
-                //Create File if user pressed create
+                if (_currentUser != "")
+                {
+                    _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
 
-                Directory.CreateDirectory(APP_DIRECTORY + FOLDER_USERS + "\\" + userName);
-                TextWriter tw = new StreamWriter(APP_DIRECTORY + "\\" + LAST_USER_FILE);
-                tw.Write(userName);
-                tw.Close();
-                currentUser = userName;
+                    Directory.CreateDirectory(_directoryCurrentUser);
+                    TextWriter tw = new StreamWriter(_lastUserFile);
+                    tw.Write(_currentUser);
+                    tw.Close();
+                }
             }
 
 
             //Initilize data structure
-            albumData = new XMLInterface(APP_DIRECTORY, FOLDER_USERS+"\\"+currentUser, FOLDER_PHOTOS, FILETYPE);
+            albumData = new XMLInterface(APP_DIRECTORY, FOLDER_USERS+"\\"+_currentUser, FOLDER_PHOTOS, FILETYPE);
 
             //Check Folders and create if needed
-            if (Directory.Exists(APP_DIRECTORY + FOLDER_USERS) && Directory.GetDirectories(APP_DIRECTORY+FOLDER_USERS).Count() > 0)
+            if (Directory.Exists(_directoryUsers) && Directory.GetDirectories(_directoryUsers).Count() > 0)
             {
                 string[] files = albumData.getAlbumList();
                 if (files.Count() != 0)
@@ -283,9 +298,9 @@ namespace PhotoAlbumViewOfTheGods
                     openToolStripMenuItem.Enabled = true;
                 }
             }
-            
-            if (!Directory.Exists(APP_DIRECTORY + FOLDER_PHOTOS))
-                Directory.CreateDirectory(APP_DIRECTORY + FOLDER_PHOTOS);
+
+            if (!Directory.Exists(_directoryPhotos))
+                Directory.CreateDirectory(_directoryPhotos);
 
             albumData.filePath = ""; //stat with no album open
             //Set up Frames
@@ -305,7 +320,7 @@ namespace PhotoAlbumViewOfTheGods
         private void populateTree()
         {
             TreeNode node;
-            string[] albumList = Directory.GetFiles(APP_DIRECTORY + FOLDER_USERS + "\\" + currentUser, "*" + FILETYPE);
+            string[] albumList = Directory.GetFiles(_directoryCurrentUser, "*" + FILETYPE);
             treeView_Albums.Nodes.Clear(); //Clears nodes so they can be added again
 
             //Loop through each found file and add it to tree. Set its path and show the file name
@@ -1111,15 +1126,17 @@ namespace PhotoAlbumViewOfTheGods
 
         private void newUserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Form_NewUser namePrompt = new Form_NewUser(APP_DIRECTORY+FOLDER_USERS,false);
+            string userName;
+            Form_NewUser namePrompt = new Form_NewUser(_directoryUsers, true);
+            namePrompt.StartPosition = FormStartPosition.CenterParent;
             namePrompt.ShowDialog();
             //Retrieve name entered by user
-            string userName = namePrompt.userName;
+            userName = namePrompt.userName;
             namePrompt.Dispose();
             //Create File if user pressed create
             if (userName != "")
             {
-                Directory.CreateDirectory(APP_DIRECTORY+FOLDER_USERS + "\\" + userName);
+                Directory.CreateDirectory(_directoryUsers + "\\" + userName);
             }
         }
     }

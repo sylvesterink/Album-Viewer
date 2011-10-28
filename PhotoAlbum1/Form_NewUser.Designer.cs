@@ -80,11 +80,13 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button_addUser);
             this.Controls.Add(this.button_cancel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form_NewUser";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Add New User";
             this.ResumeLayout(false);
             this.PerformLayout();

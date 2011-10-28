@@ -18,29 +18,25 @@ namespace PhotoAlbumViewOfTheGods
     //Cavan
     public partial class Form_Viewer : Form
     {
-        //Picture size
-        int picWidth = 0;
-        int picHeight = 0;
-        //Draw locations
-        float drawX = 0;
-        float drawY = 0;
-
-        Image image_Temp;
-        Image image_Viewer;
-
-        //Passed Values
-        string imagePath;
-        string photoName;
+        private int picWidth = 0;
+        private int picHeight = 0;
+        private float drawX = 0;
+        private float drawY = 0;
+        private bool isModified = false;
+        private Image image_Temp;
+        private Image image_Viewer;
+        private string imagePath;
+        private string photoName;
 
         //Constructor function, saves passed values and calls main
         //Cavan
-        public Form_Viewer(string path, string pName)
+        public Form_Viewer(string path, string imageName)
         {
             InitializeComponent();
             //Sets painting variables
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            photoName = pName;
+            photoName = imageName;
             viewImage(path);
         }
 
@@ -88,6 +84,7 @@ namespace PhotoAlbumViewOfTheGods
                 image_Temp = Utilities.ScalImage(image_Viewer, new Size(picWidth, picHeight));
                 e.Graphics.DrawImage(image_Temp, drawX, drawY);
             }
+            image_Temp.Dispose();
         } 
 
 
@@ -97,6 +94,7 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void timer1_Tick(object sender, EventArgs e)
         {
+            
             using (Graphics gWrite = this.CreateGraphics())
             {
                 gWrite.DrawString(photoName, new Font("Arial", 12, FontStyle.Bold), new SolidBrush(Color.Black), new Point(0, this.Height - 52));
@@ -121,8 +119,14 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void Form_Viewer_FormClosing(object sender, FormClosingEventArgs e)
         {
-            image_Temp.Dispose();
-            image_Viewer.Dispose();
+            image_Temp.Dispose(); //release resources on temp image
+
+            if (isModified && MessageBox.Show("Would you like to save the changes you have made?","Confirm Save",MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                image_Viewer.Save(imagePath); //save the rotated image
+            }
+
+            image_Viewer.Dispose(); //release resources on loaded image
             this.Dispose();
         }
 
@@ -144,7 +148,20 @@ namespace PhotoAlbumViewOfTheGods
                 this.Height = picHeight + 50;
             } 
             timer_Paint.Start(); //Used to call initial paint values that cannot be called on load events
-            
+        }
+
+        private void button_rotate_cc_Click(object sender, EventArgs e)
+        {
+            isModified = true;
+            image_Viewer.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            Invalidate();
+        }
+
+        private void button_rotate_ccw_Click(object sender, EventArgs e)
+        {
+            isModified = true;
+            image_Viewer.RotateFlip(RotateFlipType.Rotate270FlipNone);
+            Invalidate();
         }
 
     }

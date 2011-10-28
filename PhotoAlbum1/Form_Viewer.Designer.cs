@@ -32,6 +32,8 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timer_Paint = new System.Windows.Forms.Timer(this.components);
             this.timer_Resize = new System.Windows.Forms.Timer(this.components);
+            this.button_rotate_cc = new System.Windows.Forms.Button();
+            this.button_rotate_ccw = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -48,6 +50,26 @@
             this.timer_Resize.Interval = 20;
             this.timer_Resize.Tick += new System.EventHandler(this.timer_Resize_Tick);
             // 
+            // button_rotate_cc
+            // 
+            this.button_rotate_cc.Location = new System.Drawing.Point(484, 204);
+            this.button_rotate_cc.Name = "button_rotate_cc";
+            this.button_rotate_cc.Size = new System.Drawing.Size(103, 23);
+            this.button_rotate_cc.TabIndex = 0;
+            this.button_rotate_cc.Text = "Rotate Clockwise";
+            this.button_rotate_cc.UseVisualStyleBackColor = true;
+            this.button_rotate_cc.Click += new System.EventHandler(this.button_rotate_cc_Click);
+            // 
+            // button_rotate_ccw
+            // 
+            this.button_rotate_ccw.Location = new System.Drawing.Point(440, 242);
+            this.button_rotate_ccw.Name = "button_rotate_ccw";
+            this.button_rotate_ccw.Size = new System.Drawing.Size(147, 23);
+            this.button_rotate_ccw.TabIndex = 1;
+            this.button_rotate_ccw.Text = "Rotate Counter-Clockwise";
+            this.button_rotate_ccw.UseVisualStyleBackColor = true;
+            this.button_rotate_ccw.Click += new System.EventHandler(this.button_rotate_ccw_Click);
+            // 
             // Form_Viewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -56,6 +78,8 @@
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(599, 536);
+            this.Controls.Add(this.button_rotate_ccw);
+            this.Controls.Add(this.button_rotate_cc);
             this.DoubleBuffered = true;
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
@@ -74,5 +98,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Timer timer_Paint;
         private System.Windows.Forms.Timer timer_Resize;
+        private System.Windows.Forms.Button button_rotate_cc;
+        private System.Windows.Forms.Button button_rotate_ccw;
     }
 }
