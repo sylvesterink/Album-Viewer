@@ -643,6 +643,7 @@ namespace PhotoAlbumViewOfTheGods
                 newPanel.BackgroundImage = Utilities.ScalImage(tempImage, new Size(frameSize.Width, frameSize.Height));
                 //newPanel.BackgroundImage = Image.FromFile(imageData.path).GetThumbnailImage(frameSize.Width, frameSize.Height, imageCallback, IntPtr.Zero);
                 imageData.size = newPanel.BackgroundImage.Size;
+                tempImage.Dispose();
             }
             catch
             {
@@ -992,25 +993,28 @@ namespace PhotoAlbumViewOfTheGods
         //Zach
         private void deleteAlbum(string filePathToDelete)
         {
-            if (albumData.filePath == filePathToDelete)
+            if (MessageBox.Show("Are you sure you want to delete this album and all the photos within?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
-                if (albumClose())
+                if (albumData.filePath == filePathToDelete)
                 {
-                    if (albumData.deleteAlbum(filePathToDelete))
+                    if (albumClose())
                     {
-                        populateTree();   
-                    }
-                    else
-                    {
-                        handleError("Unable to access file to delete");
+                        if (albumData.deleteAlbum(filePathToDelete))
+                        {
+                            populateTree();
+                        }
+                        else
+                        {
+                            handleError("Unable to access file to delete");
+                        }
                     }
                 }
-            }
-            if (albumData.deleteAlbum(filePathToDelete))
-                populateTree();
-            else
-            {
-                handleError("Unable to access file to delete");
+                if (albumData.deleteAlbum(filePathToDelete))
+                    populateTree();
+                else
+                {
+                    handleError("Unable to access file to delete");
+                }
             }
         }
 
@@ -1064,11 +1068,14 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void deletePhoto()
         {
-            albumData.RemovePic(currentPhoto.id);
+            if (MessageBox.Show("Are you sure you want to delete this photo?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
+            {
+                albumData.RemovePic(currentPhoto.id);
 
-            clearDisplay();
-            populateScreen();
-            populateList();
+                clearDisplay();
+                populateScreen();
+                populateList();
+            }
         }
 
         //Update info button event
