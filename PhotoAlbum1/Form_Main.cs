@@ -28,12 +28,14 @@ namespace PhotoAlbumViewOfTheGods
     public partial class Form_Main : Form
     {
         //Directory Locations
-        public const string FILETYPE = ".abm"; // Must match XMLInterface FILETYPE const
-        public const string FOLDER = "\\Albums"; //Folder to store album files
-        public const string FOLDERPHOTO = "\\Photos"; //Folder to store all images
-        string DIRECTORY = Directory.GetCurrentDirectory();
+        private const string LAST_USER_FILE = "last_user.ofthegods";
+        public const string FILETYPE = ".album"; // Must match XMLInterface FILETYPE const
+        public const string FOLDER_USERS = "\\Users"; //Folder to store album files
+        public const string FOLDER_PHOTOS = "\\Photos"; //Folder to store all images
+        string APP_DIRECTORY = Directory.GetCurrentDirectory();
         const string APPNAME = "Photo Album Viewer of the Gods";
         string lastUsedFolder; //Stores last dir for importing images
+        public string currentUser;
 
         //Thumbnail Panel attributes
         Size frameSize;
@@ -235,11 +237,45 @@ namespace PhotoAlbumViewOfTheGods
         {
             this.Text = APPNAME;
 
+            if (File.Exists(APP_DIRECTORY +"\\"+ LAST_USER_FILE))
+            {
+                TextReader s = new StreamReader(APP_DIRECTORY +"\\"+ LAST_USER_FILE);
+                currentUser = s.ReadLine();
+                s.Close();
+                if (!Directory.Exists(APP_DIRECTORY + FOLDER_USERS + "\\" + currentUser))
+                {
+                    MessageBox.Show("An error has occurred - Error: 0x44GGD7", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                File.Create(APP_DIRECTORY + LAST_USER_FILE);
+            }
+
+            if (!Directory.Exists(APP_DIRECTORY + FOLDER_USERS) || Directory.GetDirectories(APP_DIRECTORY + FOLDER_USERS).Count() == 0)
+            {
+                MessageBox.Show("Welcome to Photo Album Viewer of the Gods. Before you can continue you must create a new user account.", "Welcome", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                Directory.CreateDirectory(APP_DIRECTORY + FOLDER_USERS);
+                Form_NewUser namePrompt = new Form_NewUser(APP_DIRECTORY + FOLDER_USERS, true);
+                namePrompt.ShowDialog();
+                //Retrieve name entered by user
+                string userName = namePrompt.userName;
+                namePrompt.Dispose();
+                //Create File if user pressed create
+
+                Directory.CreateDirectory(APP_DIRECTORY + FOLDER_USERS + "\\" + userName);
+                TextWriter tw = new StreamWriter(APP_DIRECTORY + "\\" + LAST_USER_FILE);
+                tw.Write(userName);
+                tw.Close();
+                currentUser = userName;
+            }
+
+
             //Initilize data structure
-            albumData = new XMLInterface(DIRECTORY, FOLDER, FOLDERPHOTO, FILETYPE);
-            
+            albumData = new XMLInterface(APP_DIRECTORY, FOLDER_USERS+"\\"+currentUser, FOLDER_PHOTOS, FILETYPE);
+
             //Check Folders and create if needed
-            if (Directory.Exists(DIRECTORY + FOLDER))
+            if (Directory.Exists(APP_DIRECTORY + FOLDER_USERS) && Directory.GetDirectories(APP_DIRECTORY+FOLDER_USERS).Count() > 0)
             {
                 string[] files = albumData.getAlbumList();
                 if (files.Count() != 0)
@@ -247,12 +283,9 @@ namespace PhotoAlbumViewOfTheGods
                     openToolStripMenuItem.Enabled = true;
                 }
             }
-            else
-            {
-                Directory.CreateDirectory(DIRECTORY + FOLDER);
-            }
-            if (!Directory.Exists(DIRECTORY + FOLDERPHOTO))
-                Directory.CreateDirectory(DIRECTORY + FOLDERPHOTO);
+            
+            if (!Directory.Exists(APP_DIRECTORY + FOLDER_PHOTOS))
+                Directory.CreateDirectory(APP_DIRECTORY + FOLDER_PHOTOS);
 
             albumData.filePath = ""; //stat with no album open
             //Set up Frames
@@ -272,7 +305,7 @@ namespace PhotoAlbumViewOfTheGods
         private void populateTree()
         {
             TreeNode node;
-            string[] albumList = Directory.GetFiles(Directory.GetCurrentDirectory() + FOLDER, "*" + FILETYPE);
+            string[] albumList = Directory.GetFiles(APP_DIRECTORY + FOLDER_USERS + "\\" + currentUser, "*" + FILETYPE);
             treeView_Albums.Nodes.Clear(); //Clears nodes so they can be added again
 
             //Loop through each found file and add it to tree. Set its path and show the file name
@@ -479,7 +512,7 @@ namespace PhotoAlbumViewOfTheGods
         //Menu open album event
         //Sets file dialog filter, title, and multisilect. Shows the dialog. Calls openAlbum if a file was selected
         //Cavan
-        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        /*private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openFileDialog_Load.Filter = "Album files|*.abm"; //Allow only album files
             openFileDialog_Load.Title = "Open Album";
@@ -489,7 +522,7 @@ namespace PhotoAlbumViewOfTheGods
             {
                 openAlbum(openFileDialog_Load.FileName);
             }
-        }
+        }*/
 
         //Open Album method. Passed the file path to open
         //Close current album if one is open.
@@ -526,10 +559,10 @@ namespace PhotoAlbumViewOfTheGods
         private void openAlbumFromFile(string path)
         {
             //Open
-            albumData.filePath = path;
+            //albumData.filePath = path;
             if (!albumData.loadAlbum(path))
             {
-                handleError("Unable to access file to load");
+                handleError("Unable to load album.");
             }
             else
             {
@@ -759,7 +792,7 @@ namespace PhotoAlbumViewOfTheGods
                     {
                         enableItems(); //enables menu items
 
-                        albumData.filePath = DIRECTORY + FOLDER + "\\" + albumName + FILETYPE; //sets current file path
+                        albumData.filePath = APP_DIRECTORY + FOLDER_USERS + "\\" + albumName + FILETYPE; //sets current file path
                         populateTree();
                         this.Text = APPNAME + " : " + Utilities.getNameFromPath(albumData.filePath);
                     }
@@ -780,12 +813,11 @@ namespace PhotoAlbumViewOfTheGods
         //Enables menu items and cals error handle to clear errors
         private void enableItems()
         {
-            closeToolStripMenuItem.Enabled = true;
+            //closeToolStripMenuItem.Enabled = true;
             importToolStripMenuItem.Enabled = true;
             toolStripStatusLabel_TotalLabel.Text = "Pictures: ";
             deleteToolStripMenuItem.Enabled = true;
             renameToolStripMenuItem.Enabled = true;
-            handleError(); //clears errors
         }
 
         //Disable items method
@@ -799,7 +831,7 @@ namespace PhotoAlbumViewOfTheGods
             toolStripStatusLabel_Total.Text = "";
             label_NameError.Visible = false;
             //Reset menu options
-            closeToolStripMenuItem.Enabled = false;
+            //closeToolStripMenuItem.Enabled = false;
             importToolStripMenuItem.Enabled = false;
             removeToolStripMenuItem.Enabled = false;
             deleteToolStripMenuItem.Enabled = false;
@@ -829,7 +861,6 @@ namespace PhotoAlbumViewOfTheGods
 
                 populateTree(); //remove highlight
 
-                handleError(); //clear errors
 
                 return true;
             }
@@ -874,8 +905,7 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            handleError(); //clear errors
-            openFileDialog_Load.Filter = "Image Files|*.jpg;*.bmp;*.gif;*.png|All files|*.*";
+            openFileDialog_Load.Filter = "Image Files|*.jpg;*.jpeg;*.bmp;*.gif;*.png";
             openFileDialog_Load.Title = "Import Photo";
             openFileDialog_Load.FileName = "";
             openFileDialog_Load.InitialDirectory = lastUsedFolder;
@@ -938,7 +968,7 @@ namespace PhotoAlbumViewOfTheGods
                     albumData.loadAlbum(treeNode.Name);
                     if (albumData.deleteAlbum(treeNode.Name))
                     {
-                        albumData.filePath = DIRECTORY + FOLDER + "\\" + Replacement + FILETYPE;
+                        albumData.filePath = APP_DIRECTORY + FOLDER_USERS + "\\" + Replacement + FILETYPE;
                         albumData.saveAlbum();
                         albumData.clearAlbum();
                         populateTree();
@@ -1050,14 +1080,6 @@ namespace PhotoAlbumViewOfTheGods
             button_RenamePic.Enabled = false;
         }
 
-        //Clear errors label click event
-        //calls event handler to clear errors
-        //Cavan & Zach
-        private void toolStripStatusLabel_Clear_Click(object sender, EventArgs e)
-        {
-            handleError();
-        }
-
         //List mode switch click event
         //If a picture is selected, focuses picture list to show selected node. Used when switching from thumbnail view to list view
         //Cavan & Zach
@@ -1071,21 +1093,27 @@ namespace PhotoAlbumViewOfTheGods
         }
 
         //Event Handler
-        //Shows error mesage and clear message label. Adds spacing.
-        //Cavan
-        private void handleError(string msg)
-        {
-            toolStripStatusLabel_Error.Text = msg + "   ";
-            toolStripStatusLabel_Clear.Visible = true;
-        }
-
-        //Event Handler
         //Clears errors
         //Cavan
-        private void handleError()
+        private void handleError(string message)
         {
-            toolStripStatusLabel_Error.Text = "";
-            toolStripStatusLabel_Clear.Visible = false;
+            //toolStripStatusLabel_Error.Text = "";
+            //toolStripStatusLabel_Clear.Visible = false;
+            MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void newUserToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form_NewUser namePrompt = new Form_NewUser(APP_DIRECTORY+FOLDER_USERS,false);
+            namePrompt.ShowDialog();
+            //Retrieve name entered by user
+            string userName = namePrompt.userName;
+            namePrompt.Dispose();
+            //Create File if user pressed create
+            if (userName != "")
+            {
+                Directory.CreateDirectory(APP_DIRECTORY+FOLDER_USERS + "\\" + userName);
+            }
         }
     }
 

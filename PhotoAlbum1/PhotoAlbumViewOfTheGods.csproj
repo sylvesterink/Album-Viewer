@@ -67,6 +67,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Form_NewUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_NewUser.Designer.cs">
+      <DependentUpon>Form_NewUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utilities.cs" />
     <Compile Include="CurrentPhoto.cs" />
     <Compile Include="Form_Main.cs">
@@ -106,6 +112,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form_NewDialog.resx">
       <DependentUpon>Form_NewDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_NewUser.resx">
+      <DependentUpon>Form_NewUser.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form_Viewer.resx">
       <DependentUpon>Form_Viewer.cs</DependentUpon>

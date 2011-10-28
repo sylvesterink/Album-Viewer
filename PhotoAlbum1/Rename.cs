@@ -37,7 +37,7 @@ namespace PhotoAlbumViewOfTheGods
                 Error_label.Text = "Invalid name";
                 Error_label.Visible = true;
             }
-            else if (File.Exists(Directory.GetCurrentDirectory() + Form_Main.FOLDER + "\\" + Rename_box.Text + Form_Main.FILETYPE))
+            else if (File.Exists(Directory.GetCurrentDirectory() + Form_Main.FOLDER_USERS + "\\" + Rename_box.Text + Form_Main.FILETYPE))
             {
                 Error_label.Text = "Duplicate album exists";
                 Error_label.Visible = true;

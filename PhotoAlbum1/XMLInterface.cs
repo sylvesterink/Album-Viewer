@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Xml.Linq;
+using System.Windows.Forms;
 //Cavan & Zach: This class deals with events that use or modify data in the XML(.abm) files
 namespace PhotoAlbumViewOfTheGods
 {
@@ -15,12 +16,15 @@ namespace PhotoAlbumViewOfTheGods
         private string photoFolder;
         private string albumExtension;
         private string _filePath = "";
+        private string currentAlbumName;
 
         //Gets filepath
         public string filePath
         {
             get {return _filePath;}
-            set { _filePath = value; }
+            set {
+                currentAlbumName = System.IO.Path.GetFileName(value);
+                _filePath = value; }
         }
 
         //Constructor that initializes variables used in this class
@@ -219,6 +223,7 @@ namespace PhotoAlbumViewOfTheGods
             }
             //read and load xml data into dataList
             _filePath = albumName;
+
             return true;
 
 
@@ -229,29 +234,31 @@ namespace PhotoAlbumViewOfTheGods
         {
             //loop and load each element into pictureData struct, then 
             //write values in xml
-            if (_filePath != "")
+            string saveTo = directory + albumFolder + "\\" + currentAlbumName;
+            if (currentAlbumName != "")
             {
                 try
                 {
                     XElement xmlSave = new XElement("Album",
                         new XElement("AlbumInfo",
-                            new XAttribute("name", _filePath),
+                            new XAttribute("name", saveTo),
                             from picInfo in dataList
                             select new XElement("PictureInfo",
-                                       new XAttribute("id", picInfo.id),
-                                       new XAttribute("path", picInfo.path),
-                                       new XAttribute("name", picInfo.name),
-                                       new XAttribute("description", picInfo.description)
+                                        new XAttribute("id", picInfo.id),
+                                        new XAttribute("path", picInfo.path),
+                                        new XAttribute("name", picInfo.name),
+                                        new XAttribute("description", picInfo.description)
                             )
-                           )
+                            )
                         );
                     //_filepath is the albums name
-                    xmlSave.Save(_filePath);
-                    _filePath = "";
-                    return true;
+                    xmlSave.Save(saveTo);
                 }
-                catch
-                { return false; }
+                catch (SystemException e)
+                {
+                    MessageBox.Show("Error" + saveTo);
+                    return false;
+                }                
             }
             //Still return true if there was nothing to save
             return true;
