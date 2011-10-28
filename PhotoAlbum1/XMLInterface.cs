@@ -92,6 +92,7 @@ namespace PhotoAlbumViewOfTheGods
 
                 }
 
+                image.MD5 = Utilities.CalculateMD5(newPath);
                 image.path = newPath;
                 image.name = Utilities.getNameFromPath(path);
                 image.id = Utilities.getIdFromInt(idCount);
@@ -218,6 +219,7 @@ namespace PhotoAlbumViewOfTheGods
                     PicData.path = PictureInfo.Attribute("path").Value;
                     PicData.name = PictureInfo.Attribute("name").Value;
                     PicData.description = PictureInfo.Attribute("description").Value;
+                    PicData.MD5 = PictureInfo.Attribute("md5").Value;
                     dataList.Add(PicData);
                 }
             }
@@ -247,7 +249,8 @@ namespace PhotoAlbumViewOfTheGods
                                         new XAttribute("id", picInfo.id),
                                         new XAttribute("path", picInfo.path),
                                         new XAttribute("name", picInfo.name),
-                                        new XAttribute("description", picInfo.description)
+                                        new XAttribute("description", picInfo.description),
+                                        new XAttribute("md5", picInfo.MD5)
                             )
                             )
                         );
@@ -256,7 +259,7 @@ namespace PhotoAlbumViewOfTheGods
                 }
                 catch (SystemException e)
                 {
-                    MessageBox.Show("Error" + saveTo);
+                    MessageBox.Show("Error: "+e.Message);
                     return false;
                 }                
             }

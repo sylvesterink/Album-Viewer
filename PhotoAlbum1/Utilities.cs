@@ -20,6 +20,21 @@ namespace PhotoAlbumViewOfTheGods
             return Path.GetFileNameWithoutExtension(path);
         }
 
+        public static string CalculateMD5(string path)
+        {
+            FileStream file = new FileStream(path, FileMode.Open);
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] retVal = md5.ComputeHash(file);
+            file.Close();
+
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < retVal.Length; i++)
+            {
+                sb.Append(retVal[i].ToString("x2"));
+            }
+            return sb.ToString();
+        }
+
         //Utility Function. Passed integer ID
         //Returns string value of passed ID
         //Cavan
@@ -77,13 +92,13 @@ namespace PhotoAlbumViewOfTheGods
             int append = 2;
             string extension = Path.GetExtension(filePath);
             filePath = filePath.Substring(0, (filePath.Length - extension.Length)); //path without extensions
-            while(true)
+            while (true)
             {
-                if(!File.Exists(filePath + "(" + append.ToString() + ")" + extension))
+                if (!File.Exists(filePath + "(" + append.ToString() + ")" + extension))
                     break;
                 append++;
             }
-            
+
             return filePath + "(" + append.ToString() + ")" + extension;
         }
 

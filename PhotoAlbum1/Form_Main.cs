@@ -19,6 +19,7 @@ namespace PhotoAlbumViewOfTheGods
         public string name;
         public string description;
         public Size size;
+        public string MD5;
     }
 
     //Main UI form
