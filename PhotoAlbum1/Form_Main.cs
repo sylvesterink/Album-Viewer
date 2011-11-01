@@ -41,6 +41,9 @@ namespace PhotoAlbumViewOfTheGods
         //File Locations
         private string _lastUserFile;
 
+        //All Images MD5 & Path
+        private List<Utilities.AllImagesInfo> _allImageInfo;
+
         
         string APP_DIRECTORY = Directory.GetCurrentDirectory();
         const string APPNAME = "Photo Album Viewer of the Gods";
@@ -250,6 +253,7 @@ namespace PhotoAlbumViewOfTheGods
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Text = APPNAME;
+            _allImageInfo = Utilities.getAllImageInfo();
 
             if (File.Exists(_lastUserFile))
             {

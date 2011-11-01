@@ -6,18 +6,60 @@ using System.IO;
 using System.Drawing; //needed for Image compares
 using System.Drawing.Drawing2D;
 using System.Security.Cryptography; //needed for MD5 values
+using System.Xml.Linq;
 
 namespace PhotoAlbumViewOfTheGods
 {
+    
+
     //Public static class providing common functions for PhotoAlbum namespace
     //Cavan
     public static class Utilities
     {
+
+        public struct AllImagesInfo
+        {
+            public string MD5;
+            public string path;
+        }
         //Utility Function. Passed file path
         //Returns the filename without path or extension
         public static string getNameFromPath(string path)
         {
             return Path.GetFileNameWithoutExtension(path);
+        }
+
+        public static List<AllImagesInfo> getAllImageInfo()
+        {
+            AllImagesInfo imageInfo;
+            List<AllImagesInfo> allImageInfo = new List<AllImagesInfo>();
+            string[] albums = System.IO.Directory.GetFiles(System.IO.Directory.GetCurrentDirectory() + "\\Users", "*.album", System.IO.SearchOption.AllDirectories);
+            foreach (string album in albums)
+            {
+                XDocument xdoc = new XDocument();
+                try
+                {
+                    xdoc = XDocument.Load(album);
+                    var Albums = from AlbumInfo in xdoc.Descendants("AlbumInfo")
+                    select new
+                    {
+                        Header = AlbumInfo.Attribute("name").Value,
+                        Children = AlbumInfo.Descendants("PictureInfo")
+                    };
+
+                    foreach (var albumInfo in Albums)
+                    {
+                        foreach (var PictureInfo in albumInfo.Children)
+                        {
+                            imageInfo.MD5 = PictureInfo.Attribute("md5").Value;
+                            imageInfo.path = PictureInfo.Attribute("path").Value;
+                            allImageInfo.Add(imageInfo);
+                        }
+                    }
+                }
+                catch { }
+            }
+            return allImageInfo;
         }
 
         public static string CalculateMD5(string path)
