@@ -253,8 +253,7 @@ namespace PhotoAlbumViewOfTheGods
         private void Form1_Load(object sender, EventArgs e)
         {
             this.Text = APPNAME;
-            _allImageInfo = Utilities.getAllImageInfo();
-
+            
             if (File.Exists(_lastUserFile))
             {
                 TextReader tr = new StreamReader(_lastUserFile);
@@ -318,6 +317,7 @@ namespace PhotoAlbumViewOfTheGods
 
             populateTree(); //Display any album files
             panel1.Focus(); //Start focus on main panel so any tree nodes are not slected
+            _allImageInfo = Utilities.getAllImageInfo();
         }
 
         //Populates the album list with any found album files
@@ -1144,7 +1144,39 @@ namespace PhotoAlbumViewOfTheGods
                 Directory.CreateDirectory(_directoryUsers + "\\" + userName);
             }
         }
+
+        private void cleanupPhotosToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int totalRemoved;
+            string wording;
+            if (MessageBox.Show("You are about to remove all photos that are not in use by any of the users of this program. This action cannot be undone. Are you sure you want to continue?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                totalRemoved = Utilities.cleanUpPhotos();
+                wording = (totalRemoved == 1) ? "photo" : "photos";
+                MessageBox.Show(totalRemoved.ToString() + " " + wording + " were removed", totalRemoved + " " + wording + " removed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void printImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Utilities.printImage(currentPhoto.path);
+        }
+
+        private void printAlbumToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            openAlbum(treeNode.Name);
+            int total = pictureList.Count;
+            string wording = (total == 1) ? "photo" : "photos";
+            if (total == 0)
+            {
+                MessageBox.Show("There are no photos in this album!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }else if(MessageBox.Show("Are you sure you want to print " + total + " " + wording + "?", "Confirm Print", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                for (int i = 0; i < total; i++)
+                {
+                    Utilities.printImage(pictureList[i].path);
+                }
+            }            
+        }
     }
-
-
 }

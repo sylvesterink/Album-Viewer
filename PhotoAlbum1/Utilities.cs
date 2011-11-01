@@ -16,7 +16,7 @@ namespace PhotoAlbumViewOfTheGods
     //Cavan
     public static class Utilities
     {
-
+        private static string printImagePath;
         public struct AllImagesInfo
         {
             public string MD5;
@@ -29,11 +29,54 @@ namespace PhotoAlbumViewOfTheGods
             return Path.GetFileNameWithoutExtension(path);
         }
 
+        public static void printImage(string filePath)
+        {
+            printImagePath = filePath;
+            System.Drawing.Printing.PrintDocument pd = new System.Drawing.Printing.PrintDocument();
+            pd.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(PrintImage);
+            pd.Print();
+        }
+
+        //http://social.msdn.microsoft.com/Forums/en-US/csharpgeneral/thread/eb80fbbe-6b89-4c3d-9ede-88a2b105c714/
+        private static void PrintImage(object o, System.Drawing.Printing.PrintPageEventArgs e)
+        {
+            Bitmap img = new Bitmap(printImagePath);
+            Point p = new Point(10, 10);
+            e.Graphics.DrawImage(img, p);
+        }
+
+        public static int cleanUpPhotos()
+        {
+            int totalRemoved = 0;
+            List<AllImagesInfo> _allImageInfo = getAllImageInfo();
+            foreach(string path in Directory.GetFiles(Directory.GetCurrentDirectory() + "\\Photos","*.*",SearchOption.AllDirectories).Where(s=>s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".jpeg") || s.EndsWith(".gif")))
+            {
+                if (!_allImageInfo.Exists(x => x.path == path))
+                {
+                    try
+                    {
+                        if (File.Exists(path))
+                        {
+                            File.Delete(path);
+                            totalRemoved++;
+                        }
+                        else
+                        {
+                            throw new Exception("File path does not exist!!");
+                        }
+                    }catch(Exception e){
+                        System.Windows.Forms.MessageBox.Show("An error has occurred trying to remove photos. " + e.Message,"Error",System.Windows.Forms.MessageBoxButtons.OK,System.Windows.Forms.MessageBoxIcon.Error);
+                    }
+                }
+            }
+            return totalRemoved;
+        }
+
         public static List<AllImagesInfo> getAllImageInfo()
         {
             AllImagesInfo imageInfo;
             List<AllImagesInfo> allImageInfo = new List<AllImagesInfo>();
-            string[] albums = System.IO.Directory.GetFiles(System.IO.Directory.GetCurrentDirectory() + "\\Users", "*.album", System.IO.SearchOption.AllDirectories);
+            string[] albums = Directory.GetFiles(Directory.GetCurrentDirectory() + "\\Users", "*.album", SearchOption.AllDirectories);
             foreach (string album in albums)
             {
                 XDocument xdoc = new XDocument();
