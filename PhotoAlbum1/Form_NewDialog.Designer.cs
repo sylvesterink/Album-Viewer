@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_NewFileDialog));
             this.button_Create = new System.Windows.Forms.Button();
             this.button_Cancel = new System.Windows.Forms.Button();
             this.textBox_AlbumName = new System.Windows.Forms.TextBox();
@@ -38,9 +39,9 @@
             // 
             // button_Create
             // 
-            this.button_Create.Location = new System.Drawing.Point(39, 82);
+            this.button_Create.Location = new System.Drawing.Point(91, 52);
             this.button_Create.Name = "button_Create";
-            this.button_Create.Size = new System.Drawing.Size(88, 33);
+            this.button_Create.Size = new System.Drawing.Size(75, 22);
             this.button_Create.TabIndex = 2;
             this.button_Create.Text = "Create";
             this.button_Create.UseVisualStyleBackColor = true;
@@ -49,9 +50,9 @@
             // button_Cancel
             // 
             this.button_Cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.button_Cancel.Location = new System.Drawing.Point(163, 82);
+            this.button_Cancel.Location = new System.Drawing.Point(185, 52);
             this.button_Cancel.Name = "button_Cancel";
-            this.button_Cancel.Size = new System.Drawing.Size(91, 33);
+            this.button_Cancel.Size = new System.Drawing.Size(69, 22);
             this.button_Cancel.TabIndex = 3;
             this.button_Cancel.Text = "Cancel";
             this.button_Cancel.UseVisualStyleBackColor = true;
@@ -80,14 +81,17 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.button_Cancel;
-            this.ClientSize = new System.Drawing.Size(303, 144);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(287, 96);
             this.Controls.Add(this.label_AlbumName);
             this.Controls.Add(this.textBox_AlbumName);
             this.Controls.Add(this.button_Cancel);
             this.Controls.Add(this.button_Create);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form_NewFileDialog";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "New Album";
             this.ResumeLayout(false);

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Viewer));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timer_Paint = new System.Windows.Forms.Timer(this.components);
             this.timer_Resize = new System.Windows.Forms.Timer(this.components);
@@ -105,12 +106,14 @@
             this.DoubleBuffered = true;
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(300, 299);
             this.Name = "Form_Viewer";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Image Viewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Viewer_FormClosing);
-            this.Load += new System.EventHandler(this.Form_Viewer_Load);
             this.ResizeEnd += new System.EventHandler(this.Form_Viewer_ResizeEnd);
             this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);

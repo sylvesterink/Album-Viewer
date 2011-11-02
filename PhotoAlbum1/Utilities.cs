@@ -48,8 +48,9 @@ namespace PhotoAlbumViewOfTheGods
         public static int cleanUpPhotos()
         {
             int totalRemoved = 0;
+            System.Globalization.CultureInfo ci = new System.Globalization.CultureInfo("en-US");
             List<AllImagesInfo> _allImageInfo = getAllImageInfo();
-            foreach(string photoPath in Directory.GetFiles(Directory.GetCurrentDirectory() + "\\Photos","*.*",SearchOption.AllDirectories).Where(s=>s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".jpeg") || s.EndsWith(".gif") || s.EndsWith(".bmp")))
+            foreach(string photoPath in Directory.GetFiles(Directory.GetCurrentDirectory() + "\\Photos","*.*",SearchOption.AllDirectories).Where(s=>s.EndsWith(".jpg",true,ci) || s.EndsWith(".png",true,ci) || s.EndsWith(".jpeg",true,ci) || s.EndsWith(".gif",true,ci) || s.EndsWith(".bmp",true,ci)))
             {
                 if (!_allImageInfo.Exists(x => x.path == photoPath))
                 {

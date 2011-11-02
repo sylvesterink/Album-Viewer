@@ -37,10 +37,11 @@
             // 
             // button_cancel
             // 
+            this.button_cancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.button_cancel.Location = new System.Drawing.Point(162, 49);
             this.button_cancel.Name = "button_cancel";
             this.button_cancel.Size = new System.Drawing.Size(75, 23);
-            this.button_cancel.TabIndex = 0;
+            this.button_cancel.TabIndex = 2;
             this.button_cancel.Text = "Cancel";
             this.button_cancel.UseVisualStyleBackColor = true;
             this.button_cancel.Click += new System.EventHandler(this.button_cancel_Click);
@@ -69,18 +70,21 @@
             this.text_username.Location = new System.Drawing.Point(78, 23);
             this.text_username.Name = "text_username";
             this.text_username.Size = new System.Drawing.Size(159, 20);
-            this.text_username.TabIndex = 3;
+            this.text_username.TabIndex = 0;
             // 
             // Form_NewUser
             // 
+            this.AcceptButton = this.button_addUser;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.CancelButton = this.button_cancel;
             this.ClientSize = new System.Drawing.Size(259, 88);
             this.Controls.Add(this.text_username);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button_addUser);
             this.Controls.Add(this.button_cancel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;

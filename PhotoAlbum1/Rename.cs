@@ -15,10 +15,11 @@ namespace PhotoAlbumViewOfTheGods
     //Entered value is retrieved by acessing Newname variable
     public partial class Rename : Form
     {
-        public Rename(string[] albums)
+        public Rename()
         {
             InitializeComponent();
         }
+
         //Zach: called to get the name from the Rename file dialog's text
         public string Newname
         {
@@ -32,20 +33,7 @@ namespace PhotoAlbumViewOfTheGods
         // or checks to see if it does not already exist
         private void OKbutton_Click_1(object sender, EventArgs e)
         {
-            if (Rename_box.Text.Trim() == "" || !Utilities.isStringValid(Rename_box.Text))
-            {
-                Error_label.Text = "Invalid name";
-                Error_label.Visible = true;
-            }
-            else if (File.Exists(Directory.GetCurrentDirectory() + Form_Main.FOLDER_USERS + "\\" + Rename_box.Text + Form_Main.FILETYPE))
-            {
-                Error_label.Text = "Duplicate album exists";
-                Error_label.Visible = true;
-            }
-            else
-            {
-                this.Close();
-            }
+            
         }
 
         //Zach: clicking cancel sets the text to empty

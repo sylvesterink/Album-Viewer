@@ -70,15 +70,17 @@ namespace PhotoAlbumViewOfTheGods
         //Zach & Cavan
         public void addPhoto(string path)
         {
+            saveAlbum();
+            List<Utilities.AllImagesInfo> allImages = Utilities.getAllImageInfo();
             pictureData image = new pictureData();
             image.description = "";
             string newPath;
-            string extension = Path.GetExtension(path);
-            string[] imageList = Directory.GetFiles(directory + photoFolder);//, "*" + extension);
             bool flagPath = false;
+            string imageName = Utilities.getNameFromPath(path);
+            string calculateMD5 = Utilities.CalculateMD5(path);
+            int totalImages = allImages.Count;
             
-            int idCount = dataList.Count;
-            newPath = directory + photoFolder + "\\" + Utilities.getNameFromPath(path) + extension;
+            newPath = directory + photoFolder + "\\" + imageName + Path.GetExtension(path);
             //Checks to see if a pic with the same name exists, checks if it exists then compare the pics
             try
             {
@@ -88,29 +90,29 @@ namespace PhotoAlbumViewOfTheGods
                 }
                 else
                 {
-                    foreach(string value in imageList)
+                    for (int i = 0; i < totalImages; i++)
                     {
-                        if(Utilities.areImagesEqual(path, value))
+                        if (allImages[i].MD5 == calculateMD5)
                         {
                             flagPath = true;
-                            newPath = value;
+                            newPath = allImages[i].path;
                             break;
                         }
                     }
 
                     if (!flagPath)
                     {
-                        newPath = Utilities.getAppendName(newPath);
-                        File.Copy(path, newPath);
+                        File.Copy(path, Utilities.getAppendName(newPath));
                     }
 
                 }
 
-                image.MD5 = Utilities.CalculateMD5(newPath);
+                image.MD5 = calculateMD5;
                 image.path = newPath;
-                image.name = Utilities.getNameFromPath(path);
-                image.id = Utilities.getIdFromInt(idCount);
+                image.name = imageName;
+                image.id = Utilities.getIdFromInt(dataList.Count);
                 dataList.Add(image);
+                saveAlbum();
             }
             catch { }
             
@@ -213,7 +215,7 @@ namespace PhotoAlbumViewOfTheGods
             {
                 xdoc = XDocument.Load(albumName);
             }
-            catch
+            catch(Exception e)
             {
                 return false;
             }

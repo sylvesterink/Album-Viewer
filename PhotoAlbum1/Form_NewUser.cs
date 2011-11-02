@@ -63,6 +63,10 @@ namespace PhotoAlbumViewOfTheGods
                     this.Close();
                 }
             }
+            else
+            {
+                this.Close();
+            }
         }
     }
 }
