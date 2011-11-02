@@ -169,6 +169,11 @@ namespace PhotoAlbumViewOfTheGods
             return true;
         }
 
+        public static bool isValidString(string text)
+        {
+            return (System.Text.RegularExpressions.Regex.IsMatch(text, "^[a-zA-Z0-9_-]+$")) ? true : false;
+        }
+
         //Utility Funtion. Passed string file path
         //Method: Removes extension, adds (#) if file exists. Reappends extension to new filename
         //Returns A unique name if a file with passed path already exists using (#) format at the end.
@@ -186,50 +191,6 @@ namespace PhotoAlbumViewOfTheGods
             }
 
             return filePath + "(" + append.ToString() + ")" + extension;
-        }
-
-        //Utility Function. Passed two file paths
-        //Method: Loda path into images. Gets byte arrays of pictures. Get MD5 value of byte arrays. Compares MD5 values
-        //Returns bool represeting if the 2 files are Images and MD5 values are equal
-        //assistance from http://www.dreamincode.net/code/snippet2859.htm
-        //Cavan
-        public static bool areImagesEqual(string path1, string path2)
-        {
-            ImageConverter imageConverter = new ImageConverter();
-            Image photo1;
-            Image photo2;
-            try
-            {
-                photo1 = Image.FromFile(path1);
-                photo2 = Image.FromFile(path2);
-            }
-            catch { return false; }//returns false if both files are not images
-
-            byte[] photoBytes1 = new byte[1];
-            byte[] photoBytes2 = new byte[1];
-            //Convert images into byte arrays
-            photoBytes1 = (byte[])imageConverter.ConvertTo(photo1, photoBytes1.GetType());
-            photoBytes2 = (byte[])imageConverter.ConvertTo(photo2, photoBytes2.GetType());
-
-            MD5 m = MD5.Create();
-            byte[] h1 = m.ComputeHash(photoBytes1);
-            byte[] h2 = m.ComputeHash(photoBytes2);
-
-            //Check for equal MD5s
-            for (int i = 0; i < h1.Length && i < h2.Length; i++)
-            {
-                if (!(h1[i] == h2[i]))
-                {
-                    //mismatch found
-                    photo1.Dispose();
-                    photo2.Dispose();
-                    return false;
-                }
-            }
-
-            photo1.Dispose();
-            photo2.Dispose();
-            return true;
         }
 
         //Scale image to desired size. Passed image and desired size.

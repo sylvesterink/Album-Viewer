@@ -15,8 +15,10 @@ namespace PhotoAlbumViewOfTheGods
     //Entered value is retrieved by acessing Newname variable
     public partial class Rename : Form
     {
-        public Rename()
+        private string _folderPath;
+        public Rename(string path)
         {
+            _folderPath = path;
             InitializeComponent();
         }
 
@@ -33,7 +35,18 @@ namespace PhotoAlbumViewOfTheGods
         // or checks to see if it does not already exist
         private void OKbutton_Click_1(object sender, EventArgs e)
         {
-            
+            if (!System.Text.RegularExpressions.Regex.IsMatch(Newname, "^[a-zA-Z0-9_-]+$"))
+            {
+                MessageBox.Show("Album names may only contain underscores, hyphens, and alphanumeric characters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (File.Exists(_folderPath + "\\" + Newname))
+            {
+                MessageBox.Show("You already have an album titled '" + Newname + "'.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                this.Close();
+            }
         }
 
         //Zach: clicking cancel sets the text to empty

@@ -28,6 +28,11 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        public string setValueOfCreate
+        {
+            set { button_Create.Text = value; }
+        }
+
         //Constructor function.
         //Passed a list of current album paths and file extension
         //Method: gets file names from file paths
@@ -58,14 +63,16 @@ namespace PhotoAlbumViewOfTheGods
         {
             //Check if name is null or contains invalid characters
             //if (textBox_AlbumName.Text == "" || !Utilities.isStringValid(textBox_AlbumName.Text))
-            if (!System.Text.RegularExpressions.Regex.IsMatch(textBox_AlbumName.Text, "^[a-zA-Z0-9_-]+$"))
+            if (!Utilities.isValidString(textBox_AlbumName.Text))
             {
                 MessageBox.Show("Your album name may only contain underscores, hyphens, and alphanumeric characters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textBox_AlbumName.Focus();
             }
             //Checks for albums with the same name
             else if(albumsList.Contains(textBox_AlbumName.Text.ToUpper()))
             {
                 MessageBox.Show("That album name has alrady been created.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textBox_AlbumName.Focus();
             }
             else
             {

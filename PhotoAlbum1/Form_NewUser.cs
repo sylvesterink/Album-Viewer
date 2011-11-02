@@ -37,7 +37,7 @@ namespace PhotoAlbumViewOfTheGods
 
         private void button_adduser_Click(object sender, EventArgs e)
         {
-            if (!Regex.IsMatch(userName, "^[a-zA-Z0-9_-]+$"))
+            if (!Utilities.isValidString(userName))
             {
                 MessageBox.Show("User name may only contain underscores, hyphens, and alphanumeric characters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

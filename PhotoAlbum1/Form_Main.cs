@@ -47,15 +47,15 @@ namespace PhotoAlbumViewOfTheGods
         private string _lastImportedFrom;
 
         //Thumbnail Panel attributes
-        Size frameSize;
-        Panel _panel_CurrentPanel;
+        private Size frameSize;
+        private Panel _panel_CurrentPanel;
         private Color color_backColor = Color.White;
         private Color color_borderColor = Color.Black;
-        private int framesPerRow = 6;
-        int frameWidth = 0; //defined in form_load function
-        int frameSpacingY = 20;
-        int frameSpacingX = 0; // defined in form_load function
-        float borderFactor = 8; //Border size will be framewidth / borderFactor
+        private const int _framesPerRow = 6;
+        private int _frameWidth = 0;
+        private const int _frameSpacingY = 20;
+        private int _frameSpacingX = 0;
+        private const float _borderFactor = 8;
 
         //Data Structures    
         private TreeNode _treeNode;
@@ -63,7 +63,6 @@ namespace PhotoAlbumViewOfTheGods
         private XMLInterface _albumData;
         private List<pictureData> _pictureList;
         private pictureData _pictureDataStored;
-        private List<Utilities.AllImagesInfo> _allImageInfo;
 
         //Constructor function
         //Initializes form
@@ -316,11 +315,11 @@ namespace PhotoAlbumViewOfTheGods
             _albumData.filePath = ""; //stat with no album open
             //Set up Frames
             panel1.BackColor = color_backColor;
-            frameWidth = (panel1.Width / (framesPerRow + 1)) - 4;
-            frameSpacingX = frameWidth / framesPerRow;
-            frameSize = new Size(frameWidth, frameWidth);
+            _frameWidth = (panel1.Width / (_framesPerRow + 1)) - 4;
+            _frameSpacingX = _frameWidth / _framesPerRow;
+            frameSize = new Size(_frameWidth, _frameWidth);
             //Update Border size
-            panel_Border.Size = new Size((int)(frameWidth + (frameWidth / borderFactor)), (int)(frameWidth + (frameWidth / borderFactor)));
+            panel_Border.Size = new Size((int)(_frameWidth + (_frameWidth / _borderFactor)), (int)(_frameWidth + (_frameWidth / _borderFactor)));
 
             populateTree(); //Display any album files
             panel1.Focus(); //Start focus on main panel so any tree nodes are not slected
@@ -439,7 +438,7 @@ namespace PhotoAlbumViewOfTheGods
                 string id = p.Name.Substring(p.Name.Length - 3, 3); //get id
                 //currentId = Convert.ToInt32(id);
                 //Set border panel
-                panel_Border.Location = new Point((p.Location.X - (frameWidth / 20 + 2)), (p.Location.Y - (frameWidth / 20)) - 3);
+                panel_Border.Location = new Point((p.Location.X - (_frameWidth / 20 + 2)), (p.Location.Y - (_frameWidth / 20)) - 3);
                 panel_Border.Show();
                 p.BringToFront();
                 _pictureDataStored = _albumData.getData(Convert.ToInt32(id)); //get album data
@@ -499,7 +498,7 @@ namespace PhotoAlbumViewOfTheGods
                     {
                         _panel_CurrentPanel = value;
                         _panel_CurrentPanel.Name = "panel" + Utilities.getIdFromInt(id);
-                        panel_Border.Location = new Point((value.Location.X - (frameWidth / 20 + 2)), (value.Location.Y - (frameWidth / 20)) - 3);
+                        panel_Border.Location = new Point((value.Location.X - (_frameWidth / 20 + 2)), (value.Location.Y - (_frameWidth / 20)) - 3);
                         panel_Border.SendToBack();
                         panel_Border.Show();
                         _panel_CurrentPanel.BackColor = panel_Border.BackColor;
@@ -605,7 +604,7 @@ namespace PhotoAlbumViewOfTheGods
         private void openAlbum(string albumPath)
         {
             //If there is a file open, close it then open, else just open
-            if (!(_albumData.filePath == ""))
+            if (_albumData.filePath != "")
             {
                 //If album can't close show error message and stop
                 if (albumClose())
@@ -740,8 +739,8 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private Point getFrameLocation(int id)
         {    
-            Point p = new Point(((id % (framesPerRow)) * (frameWidth + frameSpacingX) + (frameSpacingX / 2)), 
-                ((id / framesPerRow) * (frameWidth + frameSpacingY)) + 6); //+6 to offset from top
+            Point p = new Point(((id % (_framesPerRow)) * (_frameWidth + _frameSpacingX) + (_frameSpacingX / 2)), 
+                ((id / _framesPerRow) * (_frameWidth + _frameSpacingY)) + 6); //+6 to offset from top
             return p;
         }
 
@@ -865,7 +864,7 @@ namespace PhotoAlbumViewOfTheGods
                     {
                         enableItems(); //enables menu items
 
-                        _albumData.filePath = _directoryCurrent + FOLDER_USERS + "\\" + albumName + _constantFileType; //sets current file path
+                        _albumData.filePath = _directoryCurrentUser + "\\" + albumName + _constantFileType; //sets current file path
                         populateTree();
                         this.Text = _constantAppName + " : " + Utilities.getNameFromPath(_albumData.filePath);
                     }
@@ -1029,16 +1028,17 @@ namespace PhotoAlbumViewOfTheGods
         //Zach
         private void renameAlbum()
         {
-            Rename namePrompt;
             string newAlbumName;
-            if (albumClose())
+            Form_NewFileDialog namePrompt = new Form_NewFileDialog(_albumData.getAlbumList(), _constantFileType);
+            
+            namePrompt.Text = "Rename Album";
+            namePrompt.setValueOfCreate = "Rename";
+            namePrompt.ShowDialog();
+            newAlbumName = namePrompt.albumNameValue;
+            namePrompt.Dispose();
+            if (newAlbumName != "")
             {
-                namePrompt = new Rename();
-                namePrompt.ShowDialog();
-                //Retrieve name entered by user
-                newAlbumName = namePrompt.Newname;
-                namePrompt.Dispose();
-                if (newAlbumName != "")
+                if (albumClose())
                 {
                     _albumData.loadAlbum(_treeNode.Name);
                     if (_albumData.deleteAlbum(_treeNode.Name))
@@ -1047,18 +1047,19 @@ namespace PhotoAlbumViewOfTheGods
                         _albumData.saveAlbum();
                         //albumData.clearAlbum(); //why was this in here? Ask Cavan
                         populateTree();
+                        openAlbum(_albumData.filePath);
                     }
                     else
                     {
                         handleError( "Unable to access file to delete");
                     }
                 }
-            }
-            else
-            {
-                handleError("Unable to access file to save");
+                else
+                {
+                    handleError("Unable to access file to save");
 
-            }
+                }
+            }           
         }
 
         //Delete album method
@@ -1069,25 +1070,17 @@ namespace PhotoAlbumViewOfTheGods
         {
             if (MessageBox.Show("Are you sure you want to delete this album and all the photos within?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
-                if (_albumData.filePath == filePathToDelete)
+                if (_albumData.deleteAlbum(filePathToDelete))
                 {
-                    if (albumClose())
+                    populateTree();
+                    if (_albumData.filePath == filePathToDelete) //we deleted the open album so clear the filePath or else on reopen it will save the album again
                     {
-                        if (_albumData.deleteAlbum(filePathToDelete))
-                        {
-                            populateTree();
-                        }
-                        else
-                        {
-                            handleError("Unable to access file to delete");
-                        }
+                        _albumData.filePath = "";
                     }
                 }
-                if (_albumData.deleteAlbum(filePathToDelete))
-                    populateTree();
                 else
                 {
-                    handleError("Unable to access file to delete");
+                    handleError("An error occurred trying to delete the album.");
                 }
             }
         }
