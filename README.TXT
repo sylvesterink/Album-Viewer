@@ -33,6 +33,22 @@ Table of Contents
 3. Version History
 	
 Cycle 2 Deployment
+	2.2.4322.37302 11/01/2011
+			- Multiuser capability complete.  (Switching users added.)
+			- Initial adjustments of the photo viewer
+			- Fixed new album dialog forcing main form into background
+			- Made new user and photo viewer windows start centered
+			- Minor bugfixes
+
+	2.1.4322.21999 11/01/2011
+			- Added ability to create multiple users
+			- Added ability to print images
+			- Added ability to rotate images
+			- Fixed photo deletion
+			- Added confirmation on deletion of photo or album
+			- Added MD5 checksum attribute for photos
+			- Removed "Close Album" feature
+
 	2.0.4313.41000 10/23/2011
             - Added default application icon
 			- Added a check to make sure only one instance of the program is running
