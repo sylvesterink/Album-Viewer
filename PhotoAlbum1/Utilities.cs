@@ -49,15 +49,15 @@ namespace PhotoAlbumViewOfTheGods
         {
             int totalRemoved = 0;
             List<AllImagesInfo> _allImageInfo = getAllImageInfo();
-            foreach(string path in Directory.GetFiles(Directory.GetCurrentDirectory() + "\\Photos","*.*",SearchOption.AllDirectories).Where(s=>s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".jpeg") || s.EndsWith(".gif")))
+            foreach(string photoPath in Directory.GetFiles(Directory.GetCurrentDirectory() + "\\Photos","*.*",SearchOption.AllDirectories).Where(s=>s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".jpeg") || s.EndsWith(".gif") || s.EndsWith(".bmp")))
             {
-                if (!_allImageInfo.Exists(x => x.path == path))
+                if (!_allImageInfo.Exists(x => x.path == photoPath))
                 {
                     try
                     {
-                        if (File.Exists(path))
+                        if (File.Exists(photoPath))
                         {
-                            File.Delete(path);
+                            File.Delete(photoPath);
                             totalRemoved++;
                         }
                         else

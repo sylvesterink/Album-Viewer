@@ -15,8 +15,10 @@ namespace PhotoAlbumViewOfTheGods
         private string albumFolder;
         private string photoFolder;
         private string albumExtension;
+        private string usersDirectory;
         private string _filePath = "";
         private string currentAlbumName;
+        private string _currentUser;
 
         //Gets filepath
         public string filePath
@@ -27,13 +29,25 @@ namespace PhotoAlbumViewOfTheGods
                 _filePath = value; }
         }
 
+        public string CurrentUser
+        {
+            get { return _currentUser; }
+            set
+            {
+                _currentUser = value;
+                albumFolder = usersDirectory + "\\" + _currentUser;
+            }
+        }
+
         //Constructor that initializes variables used in this class
-        public XMLInterface(string folderDir, string albumDirectory, string photoDirectory, string ext)
+        public XMLInterface(string folderDir, string albumDirectory, string photoDirectory, string ext, string currentUser)
         {
             directory = folderDir;
-            albumFolder = albumDirectory;
+            usersDirectory = albumDirectory;
+            albumFolder = albumDirectory + "\\" + currentUser;
             photoFolder = photoDirectory;
             albumExtension = ext;
+            _currentUser = currentUser;
         }
 
         //sets the data from the dataStruct into the dataList vector, returns false if id is too big

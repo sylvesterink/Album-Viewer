@@ -252,25 +252,32 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void Form1_Load(object sender, EventArgs e)
         {
+            bool isFirstTimeError = false;
             this.Text = APPNAME;
-            
+
             if (File.Exists(_lastUserFile))
             {
                 TextReader tr = new StreamReader(_lastUserFile);
                 _currentUser = tr.ReadLine();
                 tr.Close();
-                _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
-                if (!Directory.Exists(_directoryCurrentUser))
+
+                if (_currentUser == "" || _currentUser == null)
                 {
-                    MessageBox.Show("An error has occurred - Error: 0x44GGD7", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    isFirstTimeError = true; //someone is messing with the config file!!
                 }
-            }
-            else
-            {
-                File.Create(_lastUserFile);
+                else
+                {
+                    _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
+                    if (!Directory.Exists(_directoryCurrentUser))
+                    {
+                        MessageBox.Show("An error has occurred - Error: 0x44GGD7", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                cleanupPhotosToolStripMenuItem.Enabled = true;
+                newToolStripMenuItem.Enabled = true;
             }
 
-            if (!Directory.Exists(_directoryUsers) || Directory.GetDirectories(_directoryUsers).Count() == 0)
+            if (isFirstTimeError || !Directory.Exists(_directoryUsers) || Directory.GetDirectories(_directoryUsers).Count() == 0)
             {
                 MessageBox.Show("Welcome to Photo Album Viewer of the Gods. Before you can continue you must create a new user account.", "Welcome", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Directory.CreateDirectory(_directoryUsers);
@@ -283,15 +290,18 @@ namespace PhotoAlbumViewOfTheGods
                     _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
 
                     Directory.CreateDirectory(_directoryCurrentUser);
-                    TextWriter tw = new StreamWriter(_lastUserFile);
-                    tw.Write(_currentUser);
-                    tw.Close();
+                    updateLastUserFile();
+                }
+                else
+                {
+                    this.FormClosing -= Form_Main_FormClosing;
+                    this.Close();
                 }
             }
 
 
             //Initilize data structure
-            albumData = new XMLInterface(APP_DIRECTORY, FOLDER_USERS+"\\"+_currentUser, FOLDER_PHOTOS, FILETYPE);
+            albumData = new XMLInterface(APP_DIRECTORY, FOLDER_USERS, FOLDER_PHOTOS, FILETYPE, _currentUser);
 
             //Check Folders and create if needed
             if (Directory.Exists(_directoryUsers) && Directory.GetDirectories(_directoryUsers).Count() > 0)
@@ -299,7 +309,7 @@ namespace PhotoAlbumViewOfTheGods
                 string[] files = albumData.getAlbumList();
                 if (files.Count() != 0)
                 {
-                    openToolStripMenuItem.Enabled = true;
+                    switchUserToolStripMenuItem.Enabled = true;
                 }
             }
 
@@ -317,7 +327,54 @@ namespace PhotoAlbumViewOfTheGods
 
             populateTree(); //Display any album files
             panel1.Focus(); //Start focus on main panel so any tree nodes are not slected
-            _allImageInfo = Utilities.getAllImageInfo();
+            updateStatusBar("Current User: " + _currentUser);
+            populateUsers();
+        }
+
+        private void updateLastUserFile()
+        {
+            TextWriter tw = new StreamWriter(_lastUserFile);
+            tw.Write(_currentUser);
+            tw.Close();
+        }
+
+        private void populateUsers()
+        {
+            string userName;
+            string[] userList = totalUsers();
+            Array.Sort(userList);
+            switchUserToolStripMenuItem.DropDownItems.Clear();
+            if (userList.Count() > 1)
+            {
+                switchUserToolStripMenuItem.Enabled = true;
+                foreach (string userDirectory in userList)
+                {
+                    userName = System.IO.Path.GetFileName(userDirectory);
+                    if (_currentUser != userName)
+                    {
+                        ToolStripItem toolStripItem = new ToolStripMenuItem(userName,null, new EventHandler(switchUser));
+                        switchUserToolStripMenuItem.DropDownItems.Add(toolStripItem);
+                    }
+                }
+            }
+        }
+
+        private void switchUser(object sender, EventArgs e)
+        {
+            albumClose();
+            _currentUser = sender.ToString();
+            _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
+            albumData.CurrentUser = _currentUser;
+            clearDisplay();
+            populateList();
+            populateTree();
+            populateUsers();
+            updateLastUserFile();
+        }
+
+        private string[] totalUsers()
+        {
+            return Directory.GetDirectories(_directoryUsers);
         }
 
         //Populates the album list with any found album files
@@ -989,9 +1046,9 @@ namespace PhotoAlbumViewOfTheGods
                     albumData.loadAlbum(treeNode.Name);
                     if (albumData.deleteAlbum(treeNode.Name))
                     {
-                        albumData.filePath = APP_DIRECTORY + FOLDER_USERS + "\\" + Replacement + FILETYPE;
+                        albumData.filePath = _directoryCurrentUser + "\\" + Replacement + FILETYPE;
                         albumData.saveAlbum();
-                        albumData.clearAlbum();
+                        //albumData.clearAlbum(); //why was this in here? Ask Cavan
                         populateTree();
                     }
                     else
@@ -1142,6 +1199,7 @@ namespace PhotoAlbumViewOfTheGods
             if (userName != "")
             {
                 Directory.CreateDirectory(_directoryUsers + "\\" + userName);
+                populateUsers();
             }
         }
 
@@ -1151,9 +1209,11 @@ namespace PhotoAlbumViewOfTheGods
             string wording;
             if (MessageBox.Show("You are about to remove all photos that are not in use by any of the users of this program. This action cannot be undone. Are you sure you want to continue?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
+                albumClose();
+                //albumData.saveAlbum();
                 totalRemoved = Utilities.cleanUpPhotos();
-                wording = (totalRemoved == 1) ? "photo" : "photos";
-                MessageBox.Show(totalRemoved.ToString() + " " + wording + " were removed", totalRemoved + " " + wording + " removed", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                wording = (totalRemoved == 1) ? "photo was" : "photos were";
+                MessageBox.Show(totalRemoved.ToString() + " " + wording + " removed", totalRemoved + " " + wording + " removed", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -1177,6 +1237,11 @@ namespace PhotoAlbumViewOfTheGods
                     Utilities.printImage(pictureList[i].path);
                 }
             }            
+        }
+
+        private void updateStatusBar(string statusBarText)
+        {
+            toolStripStatusLabel_TotalLabel.Text = statusBarText;
         }
     }
 }

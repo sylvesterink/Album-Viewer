@@ -51,7 +51,7 @@ namespace PhotoAlbumViewOfTheGods
 
         private void button_cancel_Click(object sender, EventArgs e)
         {
-            if (firstRun && MessageBox.Show("You must create a user before you can add any photos. Are you sure you want to quit?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
+            if (firstRun && MessageBox.Show("You must create a user before you can use this program. Canceling will exit the program. Are you sure you want to quit?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)
             {
                 this.Close();
             }
