@@ -90,7 +90,6 @@
             this.Name = "Form_NewFileDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "New Album";
-            this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();
 

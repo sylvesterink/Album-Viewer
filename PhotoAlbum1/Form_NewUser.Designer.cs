@@ -86,7 +86,7 @@
             this.MinimizeBox = false;
             this.Name = "Form_NewUser";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add New User";
             this.ResumeLayout(false);
             this.PerformLayout();

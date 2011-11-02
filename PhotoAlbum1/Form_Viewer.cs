@@ -22,11 +22,16 @@ namespace PhotoAlbumViewOfTheGods
         private int picHeight = 0;
         private float drawX = 0;
         private float drawY = 0;
-        private bool isModified = false;
+        private bool _isModified = false;
         private Image image_Temp;
         private Image image_Viewer;
         private string imagePath;
         private string photoName;
+
+        public bool isModified
+        {
+            get { return _isModified; }
+        }
 
         //Constructor function, saves passed values and calls main
         //Cavan
@@ -122,7 +127,7 @@ namespace PhotoAlbumViewOfTheGods
         {
             image_Temp.Dispose(); //release resources on temp image
 
-            if (isModified && MessageBox.Show("Would you like to save the changes you have made?","Confirm Save",MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (_isModified && MessageBox.Show("Would you like to save the changes you have made?","Confirm Save",MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 image_Viewer.Save(imagePath); //save the rotated image
             }
@@ -153,14 +158,14 @@ namespace PhotoAlbumViewOfTheGods
 
         private void button_rotate_cc_Click(object sender, EventArgs e)
         {
-            isModified = true;
+            _isModified = true;
             image_Viewer.RotateFlip(RotateFlipType.Rotate90FlipNone);
             Invalidate();
         }
 
         private void button_rotate_ccw_Click(object sender, EventArgs e)
         {
-            isModified = true;
+            _isModified = true;
             image_Viewer.RotateFlip(RotateFlipType.Rotate270FlipNone);
             Invalidate();
         }

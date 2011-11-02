@@ -309,7 +309,7 @@ namespace PhotoAlbumViewOfTheGods
             if (Directory.Exists(_directoryUsers) && Directory.GetDirectories(_directoryUsers).Count() > 0)
             {
                 string[] files = albumData.getAlbumList();
-                if (files.Count() != 0)
+                if (files.Count() > 1)
                 {
                     switchUserToolStripMenuItem.Enabled = true;
                 }
