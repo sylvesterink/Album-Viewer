@@ -60,6 +60,8 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void Form_Viewer_Resize(object sender, EventArgs e)
         {
+            panel1.Left = this.Width / 2 - panel1.Width / 2;
+            panel1.Top = this.Height - 100;// panel1.Height;
             Invalidate();
         }
 
@@ -110,7 +112,6 @@ namespace PhotoAlbumViewOfTheGods
             using (Graphics gWrite = this.CreateGraphics()) 
             {
                 gWrite.DrawString(photoName, new Font("Arial", 12, FontStyle.Bold), new SolidBrush(Color.Black), new Point(0, this.Height - 52));
-
             }
         }
 
@@ -167,6 +168,11 @@ namespace PhotoAlbumViewOfTheGods
         private void button1_Click(object sender, EventArgs e)
         {
             Utilities.printImage(imagePath);
+        }
+
+        private void Form_Viewer_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

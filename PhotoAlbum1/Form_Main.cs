@@ -291,6 +291,8 @@ namespace PhotoAlbumViewOfTheGods
 
                     Directory.CreateDirectory(_directoryCurrentUser);
                     updateLastUserFile();
+                    cleanupPhotosToolStripMenuItem.Enabled = true;
+                    newToolStripMenuItem.Enabled = true;
                 }
                 else
                 {

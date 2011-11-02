@@ -35,6 +35,8 @@
             this.button_rotate_cc = new System.Windows.Forms.Button();
             this.button_rotate_ccw = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -53,7 +55,7 @@
             // 
             // button_rotate_cc
             // 
-            this.button_rotate_cc.Location = new System.Drawing.Point(484, 204);
+            this.button_rotate_cc.Location = new System.Drawing.Point(3, 3);
             this.button_rotate_cc.Name = "button_rotate_cc";
             this.button_rotate_cc.Size = new System.Drawing.Size(103, 23);
             this.button_rotate_cc.TabIndex = 0;
@@ -63,7 +65,7 @@
             // 
             // button_rotate_ccw
             // 
-            this.button_rotate_ccw.Location = new System.Drawing.Point(440, 242);
+            this.button_rotate_ccw.Location = new System.Drawing.Point(112, 3);
             this.button_rotate_ccw.Name = "button_rotate_ccw";
             this.button_rotate_ccw.Size = new System.Drawing.Size(147, 23);
             this.button_rotate_ccw.TabIndex = 1;
@@ -73,13 +75,23 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(512, 271);
+            this.button1.Location = new System.Drawing.Point(265, 3);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
             this.button1.Text = "Print Image";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.button_rotate_cc);
+            this.panel1.Controls.Add(this.button1);
+            this.panel1.Controls.Add(this.button_rotate_ccw);
+            this.panel1.Location = new System.Drawing.Point(12, 12);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(345, 37);
+            this.panel1.TabIndex = 3;
             // 
             // Form_Viewer
             // 
@@ -88,10 +100,8 @@
             this.AutoSize = true;
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(599, 536);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.button_rotate_ccw);
-            this.Controls.Add(this.button_rotate_cc);
+            this.ClientSize = new System.Drawing.Size(366, 265);
+            this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
@@ -100,7 +110,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.WindowsDefaultBounds;
             this.Text = "Image Viewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Viewer_FormClosing);
+            this.Load += new System.EventHandler(this.Form_Viewer_Load);
             this.ResizeEnd += new System.EventHandler(this.Form_Viewer_ResizeEnd);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -113,5 +125,6 @@
         private System.Windows.Forms.Button button_rotate_cc;
         private System.Windows.Forms.Button button_rotate_ccw;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Panel panel1;
     }
 }
