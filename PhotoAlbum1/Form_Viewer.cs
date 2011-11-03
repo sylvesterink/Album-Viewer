@@ -20,10 +20,7 @@ namespace PhotoAlbumViewOfTheGods
     {
         private int _picWidth = 0;
         private int _picHeight = 0;
-        private float _drawX = 0;
-        private float _drawY = 0;
         private bool _isModified = false;
-        private Image _imageTemp;
         private Image _imageViewer;
         private string _imagePath;
         private string _photoName;
@@ -39,8 +36,9 @@ namespace PhotoAlbumViewOfTheGods
         {
             InitializeComponent();
             //Sets painting variables
-            SetStyle(ControlStyles.UserPaint, true);
-            SetStyle(ControlStyles.AllPaintingInWmPaint, true);
+            //MAY NOT BE NECESSARY FOR PICTURE BOX
+            //SetStyle(ControlStyles.UserPaint, true);
+            //SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             _photoName = imageName;
             viewImage(path);
         }
@@ -52,12 +50,16 @@ namespace PhotoAlbumViewOfTheGods
         {
             _imageViewer = Image.FromFile(path);
             this.Text = _photoName;
+            imageNameLabel.Text = _photoName;
             _imagePath = path;
             _picWidth = _imageViewer.Size.Width;
             _picHeight = _imageViewer.Size.Height;
             //Sets window starting size
             this.Resize += new System.EventHandler(this.Form_Viewer_Resize); //Enables resize event handler
             timer_Resize.Start(); //resizes the window right after loading
+
+            pictureBox1.Image = _imageViewer;
+            resizeElements();        
         }
 
         //Form resize event function
@@ -65,9 +67,19 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void Form_Viewer_Resize(object sender, EventArgs e)
         {
-            panel1.Left = this.Width / 2 - panel1.Width / 2;
-            panel1.Top = this.Height - 100;// panel1.Height;
+            resizeElements();
             Invalidate();
+        }
+
+        private void resizeElements()
+        {
+            Size clientSize = this.ClientSize;
+
+            panel1.Top = clientSize.Height - panel1.Height;// panel1.Height;
+            panel1.Width = clientSize.Width;
+
+            pictureBox1.Width = clientSize.Width;
+            pictureBox1.Height = clientSize.Height - panel1.Height - 1;
         }
 
         //Form paint event
@@ -75,23 +87,23 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         protected override void OnPaint(PaintEventArgs e)
         {
-            // Call the OnPaint method of the base class.
-            base.OnPaint(e);
+            //// Call the OnPaint method of the base class.
+            //base.OnPaint(e);
 
-            // Call methods of the System.Drawing.Graphics object.
-            if (this.Width - 50 < _picWidth || this.Height - 50 < _picHeight)
-            {
-                //Form is smaller than image size, draw to form
-                _imageTemp = Utilities.ScalImage(_imageViewer, new Size(this.Width - 50, this.Height - 50));
-                e.Graphics.DrawImage(_imageTemp, _drawX, _drawY);
-            }
-            else
-            {
-                //Form is larger than image size, draw image at its normal size
-                _imageTemp = Utilities.ScalImage(_imageViewer, new Size(_picWidth, _picHeight));
-                e.Graphics.DrawImage(_imageTemp, _drawX, _drawY);
-            }
-            _imageTemp.Dispose();
+            //// Call methods of the System.Drawing.Graphics object.
+            //if (this.Width - 50 < _picWidth || this.Height - 50 < _picHeight)
+            //{
+            //    //Form is smaller than image size, draw to form
+            //    _imageTemp = Utilities.ScalImage(_imageViewer, new Size(this.Width - 50, this.Height - 50));
+            //    e.Graphics.DrawImage(_imageTemp, _drawX, _drawY);
+            //}
+            //else
+            //{
+            //    //Form is larger than image size, draw image at its normal size
+            //    _imageTemp = Utilities.ScalImage(_imageViewer, new Size(_picWidth, _picHeight));
+            //    e.Graphics.DrawImage(_imageTemp, _drawX, _drawY);
+            //}
+            //_imageTemp.Dispose();
         } 
 
 
@@ -101,12 +113,13 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void timer1_Tick(object sender, EventArgs e)
         {
-            
-            using (Graphics gWrite = this.CreateGraphics())
-            {
-                gWrite.DrawString(_photoName, new Font("Arial", 12, FontStyle.Bold), new SolidBrush(Color.Black), new Point(0, this.Height - 52));
-            }
-            timer_Paint.Stop();
+            // Following code is unnecessary, as we don't use this method to label image anymore.
+            // TODO: Remove
+            //using (Graphics gWrite = this.CreateGraphics())
+            //{
+            //    gWrite.DrawString(_photoName, new Font("Arial", 12, FontStyle.Bold), new SolidBrush(Color.Black), new Point(0, this.Height - 52));
+            //}
+            //timer_Paint.Stop();
         }
 
         //Form end resize event.
@@ -114,10 +127,12 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void Form_Viewer_ResizeEnd(object sender, EventArgs e)
         {
-            using (Graphics gWrite = this.CreateGraphics()) 
-            {
-                gWrite.DrawString(_photoName, new Font("Arial", 12, FontStyle.Bold), new SolidBrush(Color.Black), new Point(0, this.Height - 52));
-            }
+            // Following code is unnecessary, as we don't use this method to label image anymore.
+            // TODO: Remove
+            //using (Graphics gWrite = this.CreateGraphics()) 
+            //{
+            //    gWrite.DrawString(_photoName, new Font("Arial", 12, FontStyle.Bold), new SolidBrush(Color.Black), new Point(0, this.Height - 52));
+            //}
         }
 
         //Form closing event
@@ -125,7 +140,7 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void Form_Viewer_FormClosing(object sender, FormClosingEventArgs e)
         {
-            _imageTemp.Dispose(); //release resources on temp image
+            //_imageTemp.Dispose(); //release resources on temp image
 
             if (_isModified && MessageBox.Show("Would you like to save the changes you have made?", "Confirm Save", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -147,23 +162,24 @@ namespace PhotoAlbumViewOfTheGods
         {
             timer_Resize.Stop();
             this.Show();
-            Size screenSize = new Size((int)(Screen.PrimaryScreen.Bounds.Width / 1.5), (int)(Screen.PrimaryScreen.Bounds.Height / 1.5));
-            if (_picWidth > screenSize.Width || _picHeight > screenSize.Height)
-            {
-                this.Size = screenSize;
-            }
-            else
-            {
-                this.Width = _picWidth + 50;
-                this.Height = _picHeight + 50;
-            } 
-            timer_Paint.Start(); //Used to call initial paint values that cannot be called on load events
+            //Size screenSize = new Size((int)(Screen.PrimaryScreen.Bounds.Width / 1.5), (int)(Screen.PrimaryScreen.Bounds.Height / 1.5));
+            //if (_picWidth > screenSize.Width || _picHeight > screenSize.Height)
+            //{
+            //    this.Size = screenSize;
+            //}
+            //else
+            //{
+            //    this.Width = _picWidth + 50;
+            //    this.Height = _picHeight + 50;
+            //} 
+            //timer_Paint.Start(); //Used to call initial paint values that cannot be called on load events
         }
 
         private void button_rotate_cc_Click(object sender, EventArgs e)
         {
             _isModified = true;
             _imageViewer.RotateFlip(RotateFlipType.Rotate90FlipNone);
+            pictureBox1.Image = _imageViewer;
             Invalidate();
         }
 
@@ -171,6 +187,7 @@ namespace PhotoAlbumViewOfTheGods
         {
             _isModified = true;
             _imageViewer.RotateFlip(RotateFlipType.Rotate270FlipNone);
+            pictureBox1.Image = _imageViewer;
             Invalidate();
         }
 
