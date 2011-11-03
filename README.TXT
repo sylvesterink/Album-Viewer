@@ -33,6 +33,16 @@ Table of Contents
 3. Version History
 	
 Cycle 2 Deployment
+	2.3.4324.23252 11/03/2011
+			- Fixed MD5 checks on new photos
+			- Added ability to store extra info of pictures, such as timestamps
+			- Added ability to copy image from one album to another
+			- Fixed photo viewer scaling and resizing
+			- Cleaned up photo viewer interface
+			- Added ability to navigate to next and previous photos in photo viewer
+			- Implemented basid slideshow feature in viewer
+			- Minor bugfixes (rename issue, etc)
+
 	2.2.4322.37302 11/01/2011
 			- Multiuser capability complete.  (Switching users added.)
 			- Initial adjustments of the photo viewer

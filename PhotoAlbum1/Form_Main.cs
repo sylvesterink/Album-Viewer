@@ -40,7 +40,7 @@ namespace PhotoAlbumViewOfTheGods
         private Size frameSize;
         private Panel _panel_CurrentPanel;
         private Color color_backColor = Color.White;
-        private Color color_borderColor = Color.Black;
+        private Color color_borderColor = Color.Black;//Color.LightCyan;
         private const int _framesPerRow = 6;
         private int _frameWidth = 0;
         private const int _frameSpacingY = 20;
