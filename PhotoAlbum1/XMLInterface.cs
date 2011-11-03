@@ -17,7 +17,7 @@ namespace PhotoAlbumViewOfTheGods
         private string albumExtension;
         private string usersDirectory;
         private string _filePath = "";
-        private string currentAlbumName;
+        private string _currentAlbumName;
         private string _currentUser;
 
         //Gets filepath
@@ -25,7 +25,7 @@ namespace PhotoAlbumViewOfTheGods
         {
             get {return _filePath;}
             set {
-                currentAlbumName = System.IO.Path.GetFileName(value);
+                _currentAlbumName = System.IO.Path.GetFileName(value);
                 _filePath = value; }
         }
 
@@ -37,6 +37,12 @@ namespace PhotoAlbumViewOfTheGods
                 _currentUser = value;
                 albumFolder = usersDirectory + "\\" + _currentUser;
             }
+        }
+
+        public string currentAlbum
+        {
+            get { return _currentAlbumName; }
+            set { _currentAlbumName = value; }
         }
 
         //Constructor that initializes variables used in this class
@@ -246,6 +252,7 @@ namespace PhotoAlbumViewOfTheGods
             }
             //read and load xml data into dataList
             _filePath = albumName;
+            _currentAlbumName = albumName;
 
             return true;
 
@@ -257,8 +264,8 @@ namespace PhotoAlbumViewOfTheGods
         {
             //loop and load each element into pictureData struct, then 
             //write values in xml
-            string saveTo = directory + albumFolder + "\\" + currentAlbumName;
-            if (currentAlbumName != "")
+            string saveTo = directory + albumFolder + "\\" + _currentAlbumName;
+            if (_currentAlbumName != "")
             {
                 try
                 {

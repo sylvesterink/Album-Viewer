@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Drawing2D;
+using System.Xml.Linq;
 
 namespace PhotoAlbumViewOfTheGods
 {
@@ -397,6 +398,39 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        private string getAlbumID(string albumName)
+        {
+            XDocument xdoc = new XDocument();
+            xdoc = XDocument.Load(albumName);
+            return Utilities.getIdFromInt(xdoc.Descendants("PictureInfo").Count()).ToString();
+        }
+
+        private void copyImageToAlbum(object sender, EventArgs e)
+        {
+            string timestamp = Utilities.getTimeStamp();
+            string albumPath = _directoryCurrentUser + "\\" + sender.ToString() + _constantFileType;
+            try
+            {
+                XDocument xdoc = new XDocument();
+                xdoc = XDocument.Load(albumPath);
+                XElement newNode = new XElement("PictureInfo",
+                    new XAttribute("id", getAlbumID(albumPath)),
+                    new XAttribute("path", _currentPhoto.path),
+                    new XAttribute("name", _currentPhoto.name),
+                    new XAttribute("md5", _currentPhoto.MD5),
+                    new XAttribute("description",_currentPhoto.description),
+                    new XAttribute("dateAdded", timestamp),
+                    new XAttribute("dateModified", timestamp)
+                );
+                xdoc.Descendants("AlbumInfo").Single().Add(newNode);
+                xdoc.Save(albumPath);
+            }
+            catch
+            {
+                MessageBox.Show("you gone done sumthin wrong");
+            }
+        }
+
         //Populates picture list view
         //Method: retrieve album data and clear tree
         //        loop through each picture and add its name, description, and path to the photo tree.
@@ -408,6 +442,26 @@ namespace PhotoAlbumViewOfTheGods
             treeView_Pictures.Nodes.Clear();
             string[] nodes = _albumData.getPictureList();
             string tempText = "";
+            ToolStripItem toolStripItem;
+            string[] albums = _albumData.getAlbumList();
+            copyImageToAnotherAlbumToolStripMenuItem.Enabled = false;
+
+            if (albums.Count() > 1)
+            {
+                copyImageToAnotherAlbumToolStripMenuItem.DropDownItems.Clear();
+                copyImageToAnotherAlbumToolStripMenuItem.Enabled = true;
+                foreach (string albumName in albums)
+                {
+                    if (albumName != _albumData.currentAlbum)
+                    {
+                        toolStripItem = new ToolStripMenuItem(Utilities.getNameFromPath(albumName), null, new EventHandler(copyImageToAlbum));
+                        toolStripItem.Tag = "test";
+                        copyImageToAnotherAlbumToolStripMenuItem.DropDownItems.Add(toolStripItem);
+                    }
+                }
+            }
+
+            
             for (int i = 0; i < _pictureList.Count; i++)
             {
                 //Photo list
@@ -1096,6 +1150,12 @@ namespace PhotoAlbumViewOfTheGods
             {
                 Form_Viewer picView = new Form_Viewer(_currentPhoto.path, _currentPhoto.name);
                 picView.ShowDialog();
+                if (picView.isModified)
+                {
+                    clearDisplay();
+                    populateScreen();
+                }
+                picView.Dispose();                
             }
         }
 

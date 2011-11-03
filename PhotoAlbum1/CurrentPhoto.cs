@@ -17,6 +17,12 @@ namespace PhotoAlbumViewOfTheGods
             set { photoData.dateModified = value; }
         }
 
+        public string MD5
+        {
+            get { return photoData.MD5; }
+            set { photoData.MD5 = value; }
+        }
+
         //Sets and returns current ID as string
         public string id
         {

@@ -92,6 +92,7 @@
             this.colorDialog_Background = new System.Windows.Forms.ColorDialog();
             this.panel_Line = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.copyImageToAnotherAlbumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -322,40 +323,41 @@
             this.toolStripSeparator_Picture,
             this.viewToolStripMenuItem1,
             this.removeToolStripMenuItem1,
-            this.printImageToolStripMenuItem});
+            this.printImageToolStripMenuItem,
+            this.copyImageToAnotherAlbumToolStripMenuItem});
             this.contextMenuStrip_Picture.Name = "contextMenuStrip1";
-            this.contextMenuStrip_Picture.Size = new System.Drawing.Size(136, 98);
+            this.contextMenuStrip_Picture.Size = new System.Drawing.Size(153, 142);
             // 
             // fileNameToolStripMenuItem
             // 
             this.fileNameToolStripMenuItem.Enabled = false;
             this.fileNameToolStripMenuItem.Name = "fileNameToolStripMenuItem";
-            this.fileNameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fileNameToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.fileNameToolStripMenuItem.Text = "FileName";
             // 
             // toolStripSeparator_Picture
             // 
             this.toolStripSeparator_Picture.Name = "toolStripSeparator_Picture";
-            this.toolStripSeparator_Picture.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator_Picture.Size = new System.Drawing.Size(234, 6);
             // 
             // viewToolStripMenuItem1
             // 
             this.viewToolStripMenuItem1.Name = "viewToolStripMenuItem1";
-            this.viewToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.viewToolStripMenuItem1.Size = new System.Drawing.Size(237, 22);
             this.viewToolStripMenuItem1.Text = "View";
             this.viewToolStripMenuItem1.Click += new System.EventHandler(this.viewToolStripMenuItem1_Click);
             // 
             // removeToolStripMenuItem1
             // 
             this.removeToolStripMenuItem1.Name = "removeToolStripMenuItem1";
-            this.removeToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
+            this.removeToolStripMenuItem1.Size = new System.Drawing.Size(237, 22);
             this.removeToolStripMenuItem1.Text = "Remove";
             this.removeToolStripMenuItem1.Click += new System.EventHandler(this.removeToolStripMenuItem1_Click);
             // 
             // printImageToolStripMenuItem
             // 
             this.printImageToolStripMenuItem.Name = "printImageToolStripMenuItem";
-            this.printImageToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.printImageToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.printImageToolStripMenuItem.Text = "Print Image";
             this.printImageToolStripMenuItem.Click += new System.EventHandler(this.printImageToolStripMenuItem_Click);
             // 
@@ -638,6 +640,13 @@
             this.panel_Line.MouseEnter += new System.EventHandler(this.treeMin_MouseEnter);
             this.panel_Line.MouseLeave += new System.EventHandler(this.treeMin_MouseLeave);
             // 
+            // copyImageToAnotherAlbumToolStripMenuItem
+            // 
+            this.copyImageToAnotherAlbumToolStripMenuItem.Enabled = false;
+            this.copyImageToAnotherAlbumToolStripMenuItem.Name = "copyImageToAnotherAlbumToolStripMenuItem";
+            this.copyImageToAnotherAlbumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.copyImageToAnotherAlbumToolStripMenuItem.Text = "Copy Image to";
+            // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -742,6 +751,7 @@
         private System.Windows.Forms.ToolStripMenuItem cleanupPhotosToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem printImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem printAlbumToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem copyImageToAnotherAlbumToolStripMenuItem;
     }
 }
 

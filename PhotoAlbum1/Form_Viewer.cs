@@ -28,6 +28,11 @@ namespace PhotoAlbumViewOfTheGods
         private string _imagePath;
         private string _photoName;
 
+        public bool isModified
+        {
+            get { return _isModified; }
+        }
+
         //Constructor function, saves passed values and calls main
         //Cavan
         public Form_Viewer(string path, string imageName)
@@ -122,9 +127,13 @@ namespace PhotoAlbumViewOfTheGods
         {
             _imageTemp.Dispose(); //release resources on temp image
 
-            if (_isModified && MessageBox.Show("Would you like to save the changes you have made?","Confirm Save",MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (_isModified && MessageBox.Show("Would you like to save the changes you have made?", "Confirm Save", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 _imageViewer.Save(_imagePath); //save the rotated image
+            }
+            else
+            {
+                _isModified = false;
             }
 
             _imageViewer.Dispose(); //release resources on loaded image
