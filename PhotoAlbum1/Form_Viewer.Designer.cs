@@ -37,10 +37,11 @@
             this.button_rotate_ccw = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonSlideShow = new System.Windows.Forms.Button();
+            this.buttonPrevImage = new System.Windows.Forms.Button();
+            this.buttonNextImage = new System.Windows.Forms.Button();
             this.imageNameLabel = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.buttonNextImage = new System.Windows.Forms.Button();
-            this.buttonPrevImage = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -60,7 +61,7 @@
             // 
             // button_rotate_cc
             // 
-            this.button_rotate_cc.Location = new System.Drawing.Point(84, 25);
+            this.button_rotate_cc.Location = new System.Drawing.Point(70, 25);
             this.button_rotate_cc.Name = "button_rotate_cc";
             this.button_rotate_cc.Size = new System.Drawing.Size(75, 23);
             this.button_rotate_cc.TabIndex = 0;
@@ -70,7 +71,7 @@
             // 
             // button_rotate_ccw
             // 
-            this.button_rotate_ccw.Location = new System.Drawing.Point(165, 25);
+            this.button_rotate_ccw.Location = new System.Drawing.Point(151, 25);
             this.button_rotate_ccw.Name = "button_rotate_ccw";
             this.button_rotate_ccw.Size = new System.Drawing.Size(75, 23);
             this.button_rotate_ccw.TabIndex = 1;
@@ -80,7 +81,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(327, 25);
+            this.button1.Location = new System.Drawing.Point(293, 25);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -92,6 +93,7 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.DarkGray;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.buttonSlideShow);
             this.panel1.Controls.Add(this.buttonPrevImage);
             this.panel1.Controls.Add(this.buttonNextImage);
             this.panel1.Controls.Add(this.imageNameLabel);
@@ -103,13 +105,43 @@
             this.panel1.Size = new System.Drawing.Size(484, 53);
             this.panel1.TabIndex = 3;
             // 
+            // buttonSlideShow
+            // 
+            this.buttonSlideShow.Location = new System.Drawing.Point(374, 25);
+            this.buttonSlideShow.Name = "buttonSlideShow";
+            this.buttonSlideShow.Size = new System.Drawing.Size(96, 23);
+            this.buttonSlideShow.TabIndex = 6;
+            this.buttonSlideShow.Text = "Begin Slideshow";
+            this.buttonSlideShow.UseVisualStyleBackColor = true;
+            this.buttonSlideShow.Click += new System.EventHandler(this.buttonSlideShow_Click);
+            // 
+            // buttonPrevImage
+            // 
+            this.buttonPrevImage.Location = new System.Drawing.Point(9, 25);
+            this.buttonPrevImage.Name = "buttonPrevImage";
+            this.buttonPrevImage.Size = new System.Drawing.Size(55, 23);
+            this.buttonPrevImage.TabIndex = 5;
+            this.buttonPrevImage.Text = "<";
+            this.buttonPrevImage.UseVisualStyleBackColor = true;
+            this.buttonPrevImage.Click += new System.EventHandler(this.buttonPrevImage_Click);
+            // 
+            // buttonNextImage
+            // 
+            this.buttonNextImage.Location = new System.Drawing.Point(232, 25);
+            this.buttonNextImage.Name = "buttonNextImage";
+            this.buttonNextImage.Size = new System.Drawing.Size(55, 23);
+            this.buttonNextImage.TabIndex = 4;
+            this.buttonNextImage.Text = ">";
+            this.buttonNextImage.UseVisualStyleBackColor = true;
+            this.buttonNextImage.Click += new System.EventHandler(this.buttonNextImage_Click);
+            // 
             // imageNameLabel
             // 
             this.imageNameLabel.AutoSize = true;
-            this.imageNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.imageNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.imageNameLabel.Location = new System.Drawing.Point(3, 0);
             this.imageNameLabel.Name = "imageNameLabel";
-            this.imageNameLabel.Size = new System.Drawing.Size(0, 24);
+            this.imageNameLabel.Size = new System.Drawing.Size(0, 20);
             this.imageNameLabel.TabIndex = 3;
             // 
             // pictureBox1
@@ -120,26 +152,6 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
-            // 
-            // buttonNextImage
-            // 
-            this.buttonNextImage.Location = new System.Drawing.Point(246, 25);
-            this.buttonNextImage.Name = "buttonNextImage";
-            this.buttonNextImage.Size = new System.Drawing.Size(75, 23);
-            this.buttonNextImage.TabIndex = 4;
-            this.buttonNextImage.Text = ">";
-            this.buttonNextImage.UseVisualStyleBackColor = true;
-            this.buttonNextImage.Click += new System.EventHandler(this.buttonNextImage_Click);
-            // 
-            // buttonPrevImage
-            // 
-            this.buttonPrevImage.Location = new System.Drawing.Point(4, 25);
-            this.buttonPrevImage.Name = "buttonPrevImage";
-            this.buttonPrevImage.Size = new System.Drawing.Size(75, 23);
-            this.buttonPrevImage.TabIndex = 5;
-            this.buttonPrevImage.Text = "<";
-            this.buttonPrevImage.UseVisualStyleBackColor = true;
-            this.buttonPrevImage.Click += new System.EventHandler(this.buttonPrevImage_Click);
             // 
             // Form_Viewer
             // 
@@ -179,5 +191,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button buttonPrevImage;
         private System.Windows.Forms.Button buttonNextImage;
+        private System.Windows.Forms.Button buttonSlideShow;
     }
 }

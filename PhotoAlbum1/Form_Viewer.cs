@@ -27,6 +27,8 @@ namespace PhotoAlbumViewOfTheGods
         private List<pictureData> _pictureList;
         private int _currentImage;
 
+        static System.Windows.Forms.Timer slideshowTimer;
+
         public bool isModified
         {
             get { return _isModified; }
@@ -46,6 +48,10 @@ namespace PhotoAlbumViewOfTheGods
             //SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             
             viewImage(_pictureList[_currentImage].path);
+
+            //set up timer for slideshow
+            slideshowTimer = new System.Windows.Forms.Timer();
+            slideshowTimer.Tick += new EventHandler(TimerEventProcessor);
         }
 
         //Main function: sets all needed values for painting image
@@ -91,6 +97,10 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void Form_Viewer_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (slideshowTimer.Enabled)
+            {
+                endSlideshow();
+            }
             saveModifiedImage();
             this.Dispose();
         }
@@ -145,15 +155,76 @@ namespace PhotoAlbumViewOfTheGods
         {
             saveModifiedImage();
             if (_currentImage > 0)
+            {
                 _currentImage--;
-            viewImage(_pictureList[_currentImage].path);
+                viewImage(_pictureList[_currentImage].path);
+            }
         }
 
         private void buttonNextImage_Click(object sender, EventArgs e)
         {
             saveModifiedImage();
-            if (_currentImage < _pictureList.Count-1)
+            if (_currentImage < _pictureList.Count - 1)
+            {
                 _currentImage++;
+                viewImage(_pictureList[_currentImage].path);
+            }
+        }
+
+        private void buttonSlideShow_Click(object sender, EventArgs e)
+        {
+            if (!slideshowTimer.Enabled)
+            {
+                beginSlideshow();
+            }
+            else
+            {
+                endSlideshow();
+            }
+        }
+
+        private void beginSlideshow()
+        {
+            saveModifiedImage();
+
+            // Sets the timer interval to 5 seconds.
+            slideshowTimer.Interval = 5000;
+            slideshowTimer.Start();
+
+            //disable other buttons
+            buttonPrevImage.Enabled = false;
+            button_rotate_cc.Enabled = false;
+            button_rotate_ccw.Enabled = false;
+            buttonNextImage.Enabled = false;
+            button1.Enabled = false;
+
+            buttonSlideShow.Text = "End Slideshow";
+        }
+
+        private void endSlideshow()
+        {
+            slideshowTimer.Stop();
+
+            //enable other buttons
+            buttonPrevImage.Enabled = true;
+            button_rotate_cc.Enabled = true;
+            button_rotate_ccw.Enabled = true;
+            buttonNextImage.Enabled = true;
+            button1.Enabled = true;
+
+            buttonSlideShow.Text = "Begin Slideshow";
+        }
+
+        // This is the method to run when the timer is raised.
+        // Source: http://msdn.microsoft.com/en-us/library/system.windows.forms.timer.tick(v=vs.71).aspx
+        // Brandon
+        private void TimerEventProcessor(Object myObject, EventArgs myEventArgs)
+        {
+            if (_currentImage < _pictureList.Count - 1)
+                _currentImage++;
+            else
+                _currentImage = 0;
+
             viewImage(_pictureList[_currentImage].path);
         }
     }
