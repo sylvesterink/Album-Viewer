@@ -11,6 +11,12 @@ namespace PhotoAlbumViewOfTheGods
     {
         pictureData photoData; //data array representing current photo
 
+        public string dateModified
+        {
+            get { return photoData.dateModified; }
+            set { photoData.dateModified = value; }
+        }
+
         //Sets and returns current ID as string
         public string id
         {

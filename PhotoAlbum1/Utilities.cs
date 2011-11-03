@@ -29,6 +29,11 @@ namespace PhotoAlbumViewOfTheGods
             return Path.GetFileNameWithoutExtension(path);
         }
 
+        public static string getTimeStamp()
+        {
+            return ((long)((DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks) / 10000000)).ToString();
+        }
+
         public static void printImage(string filePath)
         {
             printImagePath = filePath;

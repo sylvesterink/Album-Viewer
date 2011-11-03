@@ -79,6 +79,7 @@ namespace PhotoAlbumViewOfTheGods
             string imageName = Utilities.getNameFromPath(path);
             string calculateMD5 = Utilities.CalculateMD5(path);
             int totalImages = allImages.Count;
+            string dateAdded = Utilities.getTimeStamp();
             
             newPath = directory + photoFolder + "\\" + imageName + Path.GetExtension(path);
             //Checks to see if a pic with the same name exists, checks if it exists then compare the pics
@@ -107,6 +108,8 @@ namespace PhotoAlbumViewOfTheGods
 
                 }
 
+                image.dateAdded = dateAdded;
+                image.dateModified = "0";
                 image.MD5 = calculateMD5;
                 image.path = newPath;
                 image.name = imageName;
@@ -236,6 +239,8 @@ namespace PhotoAlbumViewOfTheGods
                     PicData.name = PictureInfo.Attribute("name").Value;
                     PicData.description = PictureInfo.Attribute("description").Value;
                     PicData.MD5 = PictureInfo.Attribute("md5").Value;
+                    PicData.dateAdded = PictureInfo.Attribute("dateAdded").Value;
+                    PicData.dateModified = PictureInfo.Attribute("dateModified").Value;
                     dataList.Add(PicData);
                 }
             }
@@ -266,10 +271,11 @@ namespace PhotoAlbumViewOfTheGods
                                         new XAttribute("path", picInfo.path),
                                         new XAttribute("name", picInfo.name),
                                         new XAttribute("description", picInfo.description),
-                                        new XAttribute("md5", picInfo.MD5)
+                                        new XAttribute("md5", picInfo.MD5),
+                                        new XAttribute("dateAdded", picInfo.dateAdded),
+                                        new XAttribute("dateModified",picInfo.dateModified)
                             )
-                            )
-                        );
+                        ));
                     //_filepath is the albums name
                     xmlSave.Save(saveTo);
                 }

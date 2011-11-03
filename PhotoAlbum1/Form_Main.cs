@@ -20,6 +20,8 @@ namespace PhotoAlbumViewOfTheGods
         public string description;
         public Size size;
         public string MD5;
+        public string dateAdded;
+        public string dateModified;
     }
 
     //Main UI form
@@ -65,7 +67,6 @@ namespace PhotoAlbumViewOfTheGods
         private pictureData _pictureDataStored;
 
         //Constructor function
-        //Initializes form
         public Form_Main()
         {
             _treeNode = new TreeNode();
@@ -225,6 +226,7 @@ namespace PhotoAlbumViewOfTheGods
         {
             renamePicture();
             _currentPhoto.description = richTextBox_Description.Text;
+            _currentPhoto.dateModified = Utilities.getTimeStamp();
             _albumData.setData(_currentPhoto.getData(), Convert.ToInt32(_currentPhoto.id));
             populateList();
             button_RenamePic.Enabled = false;
