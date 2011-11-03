@@ -39,6 +39,8 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.imageNameLabel = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.buttonNextImage = new System.Windows.Forms.Button();
+            this.buttonPrevImage = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -50,7 +52,6 @@
             // timer_Paint
             // 
             this.timer_Paint.Interval = 20;
-            this.timer_Paint.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // timer_Resize
             // 
@@ -59,27 +60,27 @@
             // 
             // button_rotate_cc
             // 
-            this.button_rotate_cc.Location = new System.Drawing.Point(5, 27);
+            this.button_rotate_cc.Location = new System.Drawing.Point(84, 25);
             this.button_rotate_cc.Name = "button_rotate_cc";
-            this.button_rotate_cc.Size = new System.Drawing.Size(103, 23);
+            this.button_rotate_cc.Size = new System.Drawing.Size(75, 23);
             this.button_rotate_cc.TabIndex = 0;
-            this.button_rotate_cc.Text = "Rotate Clockwise";
+            this.button_rotate_cc.Text = "Rotate Right";
             this.button_rotate_cc.UseVisualStyleBackColor = true;
             this.button_rotate_cc.Click += new System.EventHandler(this.button_rotate_cc_Click);
             // 
             // button_rotate_ccw
             // 
-            this.button_rotate_ccw.Location = new System.Drawing.Point(114, 27);
+            this.button_rotate_ccw.Location = new System.Drawing.Point(165, 25);
             this.button_rotate_ccw.Name = "button_rotate_ccw";
-            this.button_rotate_ccw.Size = new System.Drawing.Size(147, 23);
+            this.button_rotate_ccw.Size = new System.Drawing.Size(75, 23);
             this.button_rotate_ccw.TabIndex = 1;
-            this.button_rotate_ccw.Text = "Rotate Counter-Clockwise";
+            this.button_rotate_ccw.Text = "Rotate Left";
             this.button_rotate_ccw.UseVisualStyleBackColor = true;
             this.button_rotate_ccw.Click += new System.EventHandler(this.button_rotate_ccw_Click);
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(267, 27);
+            this.button1.Location = new System.Drawing.Point(327, 25);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -91,6 +92,8 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.DarkGray;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.buttonPrevImage);
+            this.panel1.Controls.Add(this.buttonNextImage);
             this.panel1.Controls.Add(this.imageNameLabel);
             this.panel1.Controls.Add(this.button_rotate_cc);
             this.panel1.Controls.Add(this.button1);
@@ -118,6 +121,26 @@
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
+            // buttonNextImage
+            // 
+            this.buttonNextImage.Location = new System.Drawing.Point(246, 25);
+            this.buttonNextImage.Name = "buttonNextImage";
+            this.buttonNextImage.Size = new System.Drawing.Size(75, 23);
+            this.buttonNextImage.TabIndex = 4;
+            this.buttonNextImage.Text = ">";
+            this.buttonNextImage.UseVisualStyleBackColor = true;
+            this.buttonNextImage.Click += new System.EventHandler(this.buttonNextImage_Click);
+            // 
+            // buttonPrevImage
+            // 
+            this.buttonPrevImage.Location = new System.Drawing.Point(4, 25);
+            this.buttonPrevImage.Name = "buttonPrevImage";
+            this.buttonPrevImage.Size = new System.Drawing.Size(75, 23);
+            this.buttonPrevImage.TabIndex = 5;
+            this.buttonPrevImage.Text = "<";
+            this.buttonPrevImage.UseVisualStyleBackColor = true;
+            this.buttonPrevImage.Click += new System.EventHandler(this.buttonPrevImage_Click);
+            // 
             // Form_Viewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -130,13 +153,12 @@
             this.DoubleBuffered = true;
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(300, 300);
+            this.MinimumSize = new System.Drawing.Size(500, 500);
             this.Name = "Form_Viewer";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Image Viewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Viewer_FormClosing);
-            this.ResizeEnd += new System.EventHandler(this.Form_Viewer_ResizeEnd);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -155,5 +177,7 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label imageNameLabel;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button buttonPrevImage;
+        private System.Windows.Forms.Button buttonNextImage;
     }
 }

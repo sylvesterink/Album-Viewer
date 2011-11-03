@@ -21,9 +21,11 @@ namespace PhotoAlbumViewOfTheGods
         private int _picWidth = 0;
         private int _picHeight = 0;
         private bool _isModified = false;
+        private bool _isModifiedCurrent = false;
         private Image _imageViewer;
-        private string _imagePath;
-        private string _photoName;
+
+        private List<pictureData> _pictureList;
+        private int _currentImage;
 
         public bool isModified
         {
@@ -32,15 +34,18 @@ namespace PhotoAlbumViewOfTheGods
 
         //Constructor function, saves passed values and calls main
         //Cavan
-        public Form_Viewer(string path, string imageName)
+        public Form_Viewer(List<pictureData> pictureList, int currentImage)
         {
             InitializeComponent();
+            _pictureList = pictureList;
+            _currentImage = currentImage;
+
             //Sets painting variables
             //MAY NOT BE NECESSARY FOR PICTURE BOX
             //SetStyle(ControlStyles.UserPaint, true);
             //SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            _photoName = imageName;
-            viewImage(path);
+            
+            viewImage(_pictureList[_currentImage].path);
         }
 
         //Main function: sets all needed values for painting image
@@ -49,9 +54,8 @@ namespace PhotoAlbumViewOfTheGods
         private void viewImage(string path)
         {
             _imageViewer = Image.FromFile(path);
-            this.Text = _photoName;
-            imageNameLabel.Text = _photoName;
-            _imagePath = path;
+            this.Text = _pictureList[_currentImage].name;
+            imageNameLabel.Text = _pictureList[_currentImage].name;
             _picWidth = _imageViewer.Size.Width;
             _picHeight = _imageViewer.Size.Height;
             //Sets window starting size
@@ -82,77 +86,29 @@ namespace PhotoAlbumViewOfTheGods
             pictureBox1.Height = clientSize.Height - panel1.Height - 1;
         }
 
-        //Form paint event
-        //Main drawing function. Draws image to window size or max image size
-        //Cavan
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            //// Call the OnPaint method of the base class.
-            //base.OnPaint(e);
-
-            //// Call methods of the System.Drawing.Graphics object.
-            //if (this.Width - 50 < _picWidth || this.Height - 50 < _picHeight)
-            //{
-            //    //Form is smaller than image size, draw to form
-            //    _imageTemp = Utilities.ScalImage(_imageViewer, new Size(this.Width - 50, this.Height - 50));
-            //    e.Graphics.DrawImage(_imageTemp, _drawX, _drawY);
-            //}
-            //else
-            //{
-            //    //Form is larger than image size, draw image at its normal size
-            //    _imageTemp = Utilities.ScalImage(_imageViewer, new Size(_picWidth, _picHeight));
-            //    e.Graphics.DrawImage(_imageTemp, _drawX, _drawY);
-            //}
-            //_imageTemp.Dispose();
-        } 
-
-
-
-        //Timer tick event. 
-        //Draws picture name soon after form load. Stops after 1 tick
-        //Cavan
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            // Following code is unnecessary, as we don't use this method to label image anymore.
-            // TODO: Remove
-            //using (Graphics gWrite = this.CreateGraphics())
-            //{
-            //    gWrite.DrawString(_photoName, new Font("Arial", 12, FontStyle.Bold), new SolidBrush(Color.Black), new Point(0, this.Height - 52));
-            //}
-            //timer_Paint.Stop();
-        }
-
-        //Form end resize event.
-        //Draws picture name when done resizing window
-        //Cavan
-        private void Form_Viewer_ResizeEnd(object sender, EventArgs e)
-        {
-            // Following code is unnecessary, as we don't use this method to label image anymore.
-            // TODO: Remove
-            //using (Graphics gWrite = this.CreateGraphics()) 
-            //{
-            //    gWrite.DrawString(_photoName, new Font("Arial", 12, FontStyle.Bold), new SolidBrush(Color.Black), new Point(0, this.Height - 52));
-            //}
-        }
-
         //Form closing event
         //Disposes created images and this Form thread
         //Cavan
         private void Form_Viewer_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //_imageTemp.Dispose(); //release resources on temp image
+            saveModifiedImage();
+            this.Dispose();
+        }
 
-            if (_isModified && MessageBox.Show("Would you like to save the changes you have made?", "Confirm Save", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+        private void saveModifiedImage()
+        {
+            if (_isModifiedCurrent && MessageBox.Show("Would you like to save the changes you have made?", "Confirm Save", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                _imageViewer.Save(_imagePath); //save the rotated image
+                _imageViewer.Save(_pictureList[_currentImage].path); //save the rotated image
+                _isModifiedCurrent = false;
+                _isModified = true;
             }
             else
             {
-                _isModified = false;
+                _isModifiedCurrent = false;
             }
 
             _imageViewer.Dispose(); //release resources on loaded image
-            this.Dispose();
         }
 
         //Timer Tick event
@@ -162,22 +118,11 @@ namespace PhotoAlbumViewOfTheGods
         {
             timer_Resize.Stop();
             this.Show();
-            //Size screenSize = new Size((int)(Screen.PrimaryScreen.Bounds.Width / 1.5), (int)(Screen.PrimaryScreen.Bounds.Height / 1.5));
-            //if (_picWidth > screenSize.Width || _picHeight > screenSize.Height)
-            //{
-            //    this.Size = screenSize;
-            //}
-            //else
-            //{
-            //    this.Width = _picWidth + 50;
-            //    this.Height = _picHeight + 50;
-            //} 
-            //timer_Paint.Start(); //Used to call initial paint values that cannot be called on load events
         }
 
         private void button_rotate_cc_Click(object sender, EventArgs e)
         {
-            _isModified = true;
+            _isModifiedCurrent = true;
             _imageViewer.RotateFlip(RotateFlipType.Rotate90FlipNone);
             pictureBox1.Image = _imageViewer;
             Invalidate();
@@ -185,7 +130,7 @@ namespace PhotoAlbumViewOfTheGods
 
         private void button_rotate_ccw_Click(object sender, EventArgs e)
         {
-            _isModified = true;
+            _isModifiedCurrent = true;
             _imageViewer.RotateFlip(RotateFlipType.Rotate270FlipNone);
             pictureBox1.Image = _imageViewer;
             Invalidate();
@@ -193,7 +138,23 @@ namespace PhotoAlbumViewOfTheGods
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Utilities.printImage(_imagePath);
+            Utilities.printImage(_pictureList[_currentImage].path);
+        }
+
+        private void buttonPrevImage_Click(object sender, EventArgs e)
+        {
+            saveModifiedImage();
+            if (_currentImage > 0)
+                _currentImage--;
+            viewImage(_pictureList[_currentImage].path);
+        }
+
+        private void buttonNextImage_Click(object sender, EventArgs e)
+        {
+            saveModifiedImage();
+            if (_currentImage < _pictureList.Count-1)
+                _currentImage++;
+            viewImage(_pictureList[_currentImage].path);
         }
     }
 }

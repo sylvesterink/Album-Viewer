@@ -2,9 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Drawing;
 
 namespace PhotoAlbumViewOfTheGods
 {
+    //Photo data structure
+    public struct pictureData
+    {
+        public string id;
+        public string path;
+        public string name;
+        public string description;
+        public Size size;
+        public string MD5;
+        public string dateAdded;
+        public string dateModified;
+    }
+
     //Simple class representing the current photo selected by the user
     //Cavan
     class Photo

@@ -12,19 +12,6 @@ using System.Xml.Linq;
 
 namespace PhotoAlbumViewOfTheGods
 {
-    //Photo data structure
-    struct pictureData
-    {
-        public string id;
-        public string path;
-        public string name;
-        public string description;
-        public Size size;
-        public string MD5;
-        public string dateAdded;
-        public string dateModified;
-    }
-
     //Main UI form
     public partial class Form_Main : Form
     {
@@ -1148,7 +1135,7 @@ namespace PhotoAlbumViewOfTheGods
         {
             if (File.Exists(_currentPhoto.path)) //Shows nothing if file wasn't found (warning images)
             {
-                Form_Viewer picView = new Form_Viewer(_currentPhoto.path, _currentPhoto.name);
+                Form_Viewer picView = new Form_Viewer(_pictureList, Convert.ToInt32(_currentPhoto.id));
                 picView.ShowDialog();
                 if (picView.isModified)
                 {
