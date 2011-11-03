@@ -65,7 +65,7 @@ namespace PhotoAlbumViewOfTheGods
             //if (textBox_AlbumName.Text == "" || !Utilities.isStringValid(textBox_AlbumName.Text))
             if (!Utilities.isValidString(textBox_AlbumName.Text))
             {
-                MessageBox.Show("Your album name may only contain underscores, hyphens, and alphanumeric characters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Your album name may only contain underscores, hyphens, spaces, and alphanumeric characters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox_AlbumName.Focus();
             }
             //Checks for albums with the same name
@@ -74,9 +74,15 @@ namespace PhotoAlbumViewOfTheGods
                 MessageBox.Show("That album name has alrady been created.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox_AlbumName.Focus();
             }
+            else if (textBox_AlbumName.Text.Trim() == "")
+            {
+                MessageBox.Show("You cannot have a blank album name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                textBox_AlbumName.Focus();
+            }
             else
             {
                 //name is valid
+                textBox_AlbumName.Text = textBox_AlbumName.Text.Trim();
                 this.Close();
             }
         }

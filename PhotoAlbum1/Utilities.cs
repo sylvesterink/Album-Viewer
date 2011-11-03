@@ -176,7 +176,7 @@ namespace PhotoAlbumViewOfTheGods
 
         public static bool isValidString(string text)
         {
-            return (System.Text.RegularExpressions.Regex.IsMatch(text, "^[a-zA-Z0-9_-]+$")) ? true : false;
+            return (System.Text.RegularExpressions.Regex.IsMatch(text, "^[a-zA-Z0-9_ -]+$")) ? true : false;
         }
 
         //Utility Funtion. Passed string file path
