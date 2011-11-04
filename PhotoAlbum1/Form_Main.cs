@@ -491,7 +491,7 @@ namespace PhotoAlbumViewOfTheGods
                 textBox_Name.Text = _pictureDataStored.name;
                 //picViewPath = pictureDataStored.path;
                 richTextBox_Description.Text = _pictureDataStored.description;
-                label_picSize.Text = (_pictureDataStored.size.Width + ", " + _pictureDataStored.size.Height);
+                label_picSize.Text = _pictureDataStored.size.Width + " x " + _pictureDataStored.size.Height + " pixels";
 
                 p.BackColor = panel_Border.BackColor; //reset last thubmnail backcolor
 

@@ -115,7 +115,7 @@ namespace PhotoAlbumViewOfTheGods
                 }
 
                 image.dateAdded = dateAdded;
-                image.dateModified = "0";
+                image.dateModified = dateAdded;
                 image.MD5 = calculateMD5;
                 image.path = newPath;
                 image.name = imageName;

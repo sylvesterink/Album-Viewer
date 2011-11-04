@@ -43,6 +43,9 @@
             this.imageNameLabel = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.labelResolution = new System.Windows.Forms.Label();
+            this.labelModified = new System.Windows.Forms.Label();
+            this.labelAdded = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.panelButtons.SuspendLayout();
             this.SuspendLayout();
@@ -62,7 +65,7 @@
             // 
             // button_rotate_cc
             // 
-            this.button_rotate_cc.Location = new System.Drawing.Point(62, 28);
+            this.button_rotate_cc.Location = new System.Drawing.Point(62, 54);
             this.button_rotate_cc.Name = "button_rotate_cc";
             this.button_rotate_cc.Size = new System.Drawing.Size(75, 23);
             this.button_rotate_cc.TabIndex = 0;
@@ -72,7 +75,7 @@
             // 
             // button_rotate_ccw
             // 
-            this.button_rotate_ccw.Location = new System.Drawing.Point(143, 28);
+            this.button_rotate_ccw.Location = new System.Drawing.Point(143, 54);
             this.button_rotate_ccw.Name = "button_rotate_ccw";
             this.button_rotate_ccw.Size = new System.Drawing.Size(75, 23);
             this.button_rotate_ccw.TabIndex = 1;
@@ -82,7 +85,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(285, 28);
+            this.button1.Location = new System.Drawing.Point(285, 54);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -94,14 +97,14 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.DarkGray;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Location = new System.Drawing.Point(0, 413);
+            this.panel1.Location = new System.Drawing.Point(0, 383);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(484, 53);
+            this.panel1.Size = new System.Drawing.Size(484, 83);
             this.panel1.TabIndex = 3;
             // 
             // buttonSlideShow
             // 
-            this.buttonSlideShow.Location = new System.Drawing.Point(366, 28);
+            this.buttonSlideShow.Location = new System.Drawing.Point(366, 54);
             this.buttonSlideShow.Name = "buttonSlideShow";
             this.buttonSlideShow.Size = new System.Drawing.Size(96, 23);
             this.buttonSlideShow.TabIndex = 6;
@@ -111,7 +114,7 @@
             // 
             // buttonPrevImage
             // 
-            this.buttonPrevImage.Location = new System.Drawing.Point(1, 28);
+            this.buttonPrevImage.Location = new System.Drawing.Point(1, 54);
             this.buttonPrevImage.Name = "buttonPrevImage";
             this.buttonPrevImage.Size = new System.Drawing.Size(55, 23);
             this.buttonPrevImage.TabIndex = 5;
@@ -121,7 +124,7 @@
             // 
             // buttonNextImage
             // 
-            this.buttonNextImage.Location = new System.Drawing.Point(224, 28);
+            this.buttonNextImage.Location = new System.Drawing.Point(224, 54);
             this.buttonNextImage.Name = "buttonNextImage";
             this.buttonNextImage.Size = new System.Drawing.Size(55, 23);
             this.buttonNextImage.TabIndex = 4;
@@ -143,7 +146,7 @@
             // 
             this.pictureBox1.Location = new System.Drawing.Point(0, 1);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(483, 410);
+            this.pictureBox1.Size = new System.Drawing.Size(483, 380);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
@@ -151,6 +154,9 @@
             // panelButtons
             // 
             this.panelButtons.BackColor = System.Drawing.Color.DarkGray;
+            this.panelButtons.Controls.Add(this.labelAdded);
+            this.panelButtons.Controls.Add(this.labelModified);
+            this.panelButtons.Controls.Add(this.labelResolution);
             this.panelButtons.Controls.Add(this.imageNameLabel);
             this.panelButtons.Controls.Add(this.buttonSlideShow);
             this.panelButtons.Controls.Add(this.buttonPrevImage);
@@ -158,10 +164,40 @@
             this.panelButtons.Controls.Add(this.buttonNextImage);
             this.panelButtons.Controls.Add(this.button1);
             this.panelButtons.Controls.Add(this.button_rotate_cc);
-            this.panelButtons.Location = new System.Drawing.Point(11, 414);
+            this.panelButtons.Location = new System.Drawing.Point(11, 384);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(462, 50);
+            this.panelButtons.Size = new System.Drawing.Size(462, 80);
             this.panelButtons.TabIndex = 5;
+            // 
+            // labelResolution
+            // 
+            this.labelResolution.AutoSize = true;
+            this.labelResolution.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelResolution.Location = new System.Drawing.Point(4, 30);
+            this.labelResolution.Name = "labelResolution";
+            this.labelResolution.Size = new System.Drawing.Size(117, 16);
+            this.labelResolution.TabIndex = 7;
+            this.labelResolution.Text = "hide me resolution";
+            // 
+            // labelModified
+            // 
+            this.labelModified.AutoSize = true;
+            this.labelModified.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelModified.Location = new System.Drawing.Point(300, 30);
+            this.labelModified.Name = "labelModified";
+            this.labelModified.Size = new System.Drawing.Size(111, 16);
+            this.labelModified.TabIndex = 8;
+            this.labelModified.Text = "hide me modified";
+            // 
+            // labelAdded
+            // 
+            this.labelAdded.AutoSize = true;
+            this.labelAdded.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelAdded.Location = new System.Drawing.Point(140, 30);
+            this.labelAdded.Name = "labelAdded";
+            this.labelAdded.Size = new System.Drawing.Size(99, 16);
+            this.labelAdded.TabIndex = 9;
+            this.labelAdded.Text = "hide me added";
             // 
             // Form_Viewer
             // 
@@ -204,5 +240,8 @@
         private System.Windows.Forms.Button buttonNextImage;
         private System.Windows.Forms.Button buttonSlideShow;
         private System.Windows.Forms.Panel panelButtons;
+        private System.Windows.Forms.Label labelModified;
+        private System.Windows.Forms.Label labelResolution;
+        private System.Windows.Forms.Label labelAdded;
     }
 }

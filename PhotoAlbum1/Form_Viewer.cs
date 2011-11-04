@@ -72,6 +72,16 @@ namespace PhotoAlbumViewOfTheGods
             _imageViewer = Image.FromFile(path);
             this.Text = _windowTitle + " - " + _pictureList[_currentImage].name;
             imageNameLabel.Text = _pictureList[_currentImage].name;
+            labelResolution.Text = _pictureList[_currentImage].size.Width + " x " + _pictureList[_currentImage].size.Height + " pixels";
+            
+            DateTime time = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            time = time.AddSeconds(Convert.ToDouble(_pictureList[_currentImage].dateModified));
+            labelModified.Text = "Last Modified: " + time.ToShortDateString();
+
+            time = time.AddSeconds(-Convert.ToDouble(_pictureList[_currentImage].dateModified));
+            time = time.AddSeconds(Convert.ToDouble(_pictureList[_currentImage].dateAdded));
+            labelAdded.Text = "Added: " + time.ToShortDateString();
+
             _picWidth = _imageViewer.Size.Width;
             _picHeight = _imageViewer.Size.Height;
             //Sets window starting size
