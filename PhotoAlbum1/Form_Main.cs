@@ -736,7 +736,7 @@ namespace PhotoAlbumViewOfTheGods
             else
             {
                 List<pictureData> newList = new List<pictureData>();
-                foreach (pictureData picture in _pictureList.FindAll(s => s.name == searchTerm))
+                foreach (pictureData picture in _pictureList.FindAll(s => s.name.Contains(searchTerm)))
                 {
                     newList.Add(picture);
                 }
