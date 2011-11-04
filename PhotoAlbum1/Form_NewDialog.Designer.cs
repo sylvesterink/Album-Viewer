@@ -61,7 +61,7 @@
             // textBox_AlbumName
             // 
             this.textBox_AlbumName.Location = new System.Drawing.Point(91, 26);
-            this.textBox_AlbumName.MaxLength = 80;
+            this.textBox_AlbumName.MaxLength = 100;
             this.textBox_AlbumName.Name = "textBox_AlbumName";
             this.textBox_AlbumName.Size = new System.Drawing.Size(163, 20);
             this.textBox_AlbumName.TabIndex = 1;

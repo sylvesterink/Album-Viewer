@@ -44,6 +44,10 @@ namespace PhotoAlbumViewOfTheGods
             else if (Directory.Exists(usersFolder + userName))
             {
                 MessageBox.Show("User already exists.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (Utilities.checkStringLength(userName, 100))
+            {
+                MessageBox.Show("User name must be 100 characters or less.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }else{
                 this.Close();
             }

@@ -18,6 +18,8 @@ namespace PhotoAlbumViewOfTheGods
     //Cavan
     public partial class Form_Viewer : Form
     {
+        private int _totalFlips = 0;
+        private string _windowTitle;
         private int _picWidth = 0;
         private int _picHeight = 0;
         private bool _isModified = false;
@@ -36,11 +38,12 @@ namespace PhotoAlbumViewOfTheGods
 
         //Constructor function, saves passed values and calls main
         //Cavan
-        public Form_Viewer(List<pictureData> pictureList, int currentImage)
+        public Form_Viewer(List<pictureData> pictureList, int currentImage, string title)
         {
             InitializeComponent();
             _pictureList = pictureList;
             _currentImage = currentImage;
+            _windowTitle = title;
 
             //Sets painting variables
             //MAY NOT BE NECESSARY FOR PICTURE BOX
@@ -52,6 +55,7 @@ namespace PhotoAlbumViewOfTheGods
             //set up timer for slideshow
             slideshowTimer = new System.Windows.Forms.Timer();
             slideshowTimer.Tick += new EventHandler(TimerEventProcessor);
+            
         }
 
         //Main function: sets all needed values for painting image
@@ -60,7 +64,7 @@ namespace PhotoAlbumViewOfTheGods
         private void viewImage(string path)
         {
             _imageViewer = Image.FromFile(path);
-            this.Text = _pictureList[_currentImage].name;
+            this.Text = _windowTitle + " - " + _pictureList[_currentImage].name;
             imageNameLabel.Text = _pictureList[_currentImage].name;
             _picWidth = _imageViewer.Size.Width;
             _picHeight = _imageViewer.Size.Height;
@@ -102,23 +106,30 @@ namespace PhotoAlbumViewOfTheGods
                 endSlideshow();
             }
             saveModifiedImage();
-            this.Dispose();
+            _imageViewer.Dispose(); //release resources on loaded image
         }
 
         private void saveModifiedImage()
         {
-            if (_isModifiedCurrent && MessageBox.Show("Would you like to save the changes you have made?", "Confirm Save", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            try
             {
-                _imageViewer.Save(_pictureList[_currentImage].path); //save the rotated image
-                _isModifiedCurrent = false;
-                _isModified = true;
+                if (_isModifiedCurrent && MessageBox.Show("Would you like to save the changes you have made?", "Confirm Save", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    _imageViewer.Save(_pictureList[_currentImage].path); //save the rotated image
+                    _isModifiedCurrent = false;
+                    _isModified = true;
+                    _totalFlips = 0;
+                }
+                else
+                {
+                    _isModifiedCurrent = false;
+                }
             }
-            else
+            catch
             {
-                _isModifiedCurrent = false;
+                MessageBox.Show("Sorry but an error has occurred while saving your image.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.Close();
             }
-
-            _imageViewer.Dispose(); //release resources on loaded image
         }
 
         //Timer Tick event
@@ -132,7 +143,8 @@ namespace PhotoAlbumViewOfTheGods
 
         private void button_rotate_cc_Click(object sender, EventArgs e)
         {
-            _isModifiedCurrent = true;
+            _totalFlips = (_totalFlips >= 3) ? 0 : ++_totalFlips;
+            _isModifiedCurrent = (_totalFlips == 0) ? false : true;
             _imageViewer.RotateFlip(RotateFlipType.Rotate90FlipNone);
             pictureBox1.Image = _imageViewer;
             Invalidate();
@@ -140,7 +152,8 @@ namespace PhotoAlbumViewOfTheGods
 
         private void button_rotate_ccw_Click(object sender, EventArgs e)
         {
-            _isModifiedCurrent = true;
+            _totalFlips = (_totalFlips <= -3) ? 0 : --_totalFlips;
+            _isModifiedCurrent = (_totalFlips == 0) ? false : true;
             _imageViewer.RotateFlip(RotateFlipType.Rotate270FlipNone);
             pictureBox1.Image = _imageViewer;
             Invalidate();
@@ -156,6 +169,7 @@ namespace PhotoAlbumViewOfTheGods
             saveModifiedImage();
             if (_currentImage > 0)
             {
+                _totalFlips = 0;
                 _currentImage--;
                 viewImage(_pictureList[_currentImage].path);
             }
@@ -166,6 +180,7 @@ namespace PhotoAlbumViewOfTheGods
             saveModifiedImage();
             if (_currentImage < _pictureList.Count - 1)
             {
+                _totalFlips = 0;
                 _currentImage++;
                 viewImage(_pictureList[_currentImage].path);
             }

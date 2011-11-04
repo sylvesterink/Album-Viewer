@@ -42,6 +42,11 @@ namespace PhotoAlbumViewOfTheGods
             pd.Print();
         }
 
+        public static bool checkStringLength(string text, int length)
+        {
+            return (text.Length > length) ? true : false;
+        }
+
         //http://social.msdn.microsoft.com/Forums/en-US/csharpgeneral/thread/eb80fbbe-6b89-4c3d-9ede-88a2b105c714/
         private static void PrintImage(object o, System.Drawing.Printing.PrintPageEventArgs e)
         {

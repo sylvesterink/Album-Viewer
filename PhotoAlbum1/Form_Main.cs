@@ -1135,8 +1135,9 @@ namespace PhotoAlbumViewOfTheGods
         {
             if (File.Exists(_currentPhoto.path)) //Shows nothing if file wasn't found (warning images)
             {
-                Form_Viewer picView = new Form_Viewer(_pictureList, Convert.ToInt32(_currentPhoto.id));
+                Form_Viewer picView = new Form_Viewer(_pictureList, Convert.ToInt32(_currentPhoto.id), _constantAppName);
                 picView.ShowDialog();
+                picView.Dispose();
                 if (picView.isModified)
                 {
                     clearDisplay();

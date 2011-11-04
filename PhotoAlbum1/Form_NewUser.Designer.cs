@@ -68,6 +68,7 @@
             // text_username
             // 
             this.text_username.Location = new System.Drawing.Point(78, 23);
+            this.text_username.MaxLength = 100;
             this.text_username.Name = "text_username";
             this.text_username.Size = new System.Drawing.Size(159, 20);
             this.text_username.TabIndex = 0;

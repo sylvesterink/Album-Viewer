@@ -63,26 +63,32 @@ namespace PhotoAlbumViewOfTheGods
         {
             //Check if name is null or contains invalid characters
             //if (textBox_AlbumName.Text == "" || !Utilities.isStringValid(textBox_AlbumName.Text))
-            if (!Utilities.isValidString(textBox_AlbumName.Text))
+            string albumName = textBox_AlbumName.Text.Trim();
+            if (!Utilities.isValidString(albumName))
             {
                 MessageBox.Show("Your album name may only contain underscores, hyphens, spaces, and alphanumeric characters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox_AlbumName.Focus();
             }
             //Checks for albums with the same name
-            else if(albumsList.Contains(textBox_AlbumName.Text.ToUpper()))
+            else if (albumsList.Contains(albumName, StringComparer.OrdinalIgnoreCase))
             {
                 MessageBox.Show("That album name has alrady been created.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox_AlbumName.Focus();
             }
-            else if (textBox_AlbumName.Text.Trim() == "")
+            else if (albumName == "")
             {
                 MessageBox.Show("You cannot have a blank album name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                textBox_AlbumName.Focus();
+            }
+            else if (Utilities.checkStringLength(albumName, 100))
+            {
+                MessageBox.Show("Album names must be 100 characters or less.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 textBox_AlbumName.Focus();
             }
             else
             {
                 //name is valid
-                textBox_AlbumName.Text = textBox_AlbumName.Text.Trim();
+                textBox_AlbumName.Text = albumName;
                 this.Close();
             }
         }
