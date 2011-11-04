@@ -89,8 +89,11 @@ namespace PhotoAlbumViewOfTheGods
         {
             Size clientSize = this.ClientSize;
 
-            panel1.Top = clientSize.Height - panel1.Height;// panel1.Height;
+            panel1.Top = clientSize.Height - panel1.Height;
             panel1.Width = clientSize.Width;
+
+            panelButtons.Top = clientSize.Height - panel1.Height + 2;
+            panelButtons.Left = clientSize.Width/2 - panelButtons.Width/2;
 
             pictureBox1.Width = clientSize.Width;
             pictureBox1.Height = clientSize.Height - panel1.Height - 1;

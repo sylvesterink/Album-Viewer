@@ -42,8 +42,9 @@
             this.buttonNextImage = new System.Windows.Forms.Button();
             this.imageNameLabel = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.panel1.SuspendLayout();
+            this.panelButtons = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.panelButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -61,7 +62,7 @@
             // 
             // button_rotate_cc
             // 
-            this.button_rotate_cc.Location = new System.Drawing.Point(70, 25);
+            this.button_rotate_cc.Location = new System.Drawing.Point(62, 28);
             this.button_rotate_cc.Name = "button_rotate_cc";
             this.button_rotate_cc.Size = new System.Drawing.Size(75, 23);
             this.button_rotate_cc.TabIndex = 0;
@@ -71,7 +72,7 @@
             // 
             // button_rotate_ccw
             // 
-            this.button_rotate_ccw.Location = new System.Drawing.Point(151, 25);
+            this.button_rotate_ccw.Location = new System.Drawing.Point(143, 28);
             this.button_rotate_ccw.Name = "button_rotate_ccw";
             this.button_rotate_ccw.Size = new System.Drawing.Size(75, 23);
             this.button_rotate_ccw.TabIndex = 1;
@@ -81,7 +82,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(293, 25);
+            this.button1.Location = new System.Drawing.Point(285, 28);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -93,13 +94,6 @@
             // 
             this.panel1.BackColor = System.Drawing.Color.DarkGray;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.buttonSlideShow);
-            this.panel1.Controls.Add(this.buttonPrevImage);
-            this.panel1.Controls.Add(this.buttonNextImage);
-            this.panel1.Controls.Add(this.imageNameLabel);
-            this.panel1.Controls.Add(this.button_rotate_cc);
-            this.panel1.Controls.Add(this.button1);
-            this.panel1.Controls.Add(this.button_rotate_ccw);
             this.panel1.Location = new System.Drawing.Point(0, 413);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(484, 53);
@@ -107,7 +101,7 @@
             // 
             // buttonSlideShow
             // 
-            this.buttonSlideShow.Location = new System.Drawing.Point(374, 25);
+            this.buttonSlideShow.Location = new System.Drawing.Point(366, 28);
             this.buttonSlideShow.Name = "buttonSlideShow";
             this.buttonSlideShow.Size = new System.Drawing.Size(96, 23);
             this.buttonSlideShow.TabIndex = 6;
@@ -117,7 +111,7 @@
             // 
             // buttonPrevImage
             // 
-            this.buttonPrevImage.Location = new System.Drawing.Point(9, 25);
+            this.buttonPrevImage.Location = new System.Drawing.Point(1, 28);
             this.buttonPrevImage.Name = "buttonPrevImage";
             this.buttonPrevImage.Size = new System.Drawing.Size(55, 23);
             this.buttonPrevImage.TabIndex = 5;
@@ -127,7 +121,7 @@
             // 
             // buttonNextImage
             // 
-            this.buttonNextImage.Location = new System.Drawing.Point(232, 25);
+            this.buttonNextImage.Location = new System.Drawing.Point(224, 28);
             this.buttonNextImage.Name = "buttonNextImage";
             this.buttonNextImage.Size = new System.Drawing.Size(55, 23);
             this.buttonNextImage.TabIndex = 4;
@@ -139,10 +133,11 @@
             // 
             this.imageNameLabel.AutoSize = true;
             this.imageNameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.imageNameLabel.Location = new System.Drawing.Point(3, 0);
+            this.imageNameLabel.Location = new System.Drawing.Point(3, 5);
             this.imageNameLabel.Name = "imageNameLabel";
-            this.imageNameLabel.Size = new System.Drawing.Size(0, 20);
+            this.imageNameLabel.Size = new System.Drawing.Size(68, 20);
             this.imageNameLabel.TabIndex = 3;
+            this.imageNameLabel.Text = "Hide Me";
             // 
             // pictureBox1
             // 
@@ -153,6 +148,21 @@
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
             // 
+            // panelButtons
+            // 
+            this.panelButtons.BackColor = System.Drawing.Color.DarkGray;
+            this.panelButtons.Controls.Add(this.imageNameLabel);
+            this.panelButtons.Controls.Add(this.buttonSlideShow);
+            this.panelButtons.Controls.Add(this.buttonPrevImage);
+            this.panelButtons.Controls.Add(this.button_rotate_ccw);
+            this.panelButtons.Controls.Add(this.buttonNextImage);
+            this.panelButtons.Controls.Add(this.button1);
+            this.panelButtons.Controls.Add(this.button_rotate_cc);
+            this.panelButtons.Location = new System.Drawing.Point(11, 414);
+            this.panelButtons.Name = "panelButtons";
+            this.panelButtons.Size = new System.Drawing.Size(462, 50);
+            this.panelButtons.TabIndex = 5;
+            // 
             // Form_Viewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -160,6 +170,7 @@
             this.AutoValidate = System.Windows.Forms.AutoValidate.Disable;
             this.BackColor = System.Drawing.Color.AliceBlue;
             this.ClientSize = new System.Drawing.Size(484, 466);
+            this.Controls.Add(this.panelButtons);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel1);
             this.DoubleBuffered = true;
@@ -171,9 +182,9 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Image Viewer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_Viewer_FormClosing);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.panelButtons.ResumeLayout(false);
+            this.panelButtons.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -192,5 +203,6 @@
         private System.Windows.Forms.Button buttonPrevImage;
         private System.Windows.Forms.Button buttonNextImage;
         private System.Windows.Forms.Button buttonSlideShow;
+        private System.Windows.Forms.Panel panelButtons;
     }
 }
