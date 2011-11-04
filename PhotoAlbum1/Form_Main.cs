@@ -727,12 +727,10 @@ namespace PhotoAlbumViewOfTheGods
 
                     picData = _pictureList[i];
                     tempPanel = getNewThumbnail(picData, i); //Create new panel
-                    //tempPanel.BackColor = color_backColor; Used if main panel color has changed.
                     panel1.Controls.Add(tempPanel); //Add panel to main panel
-                    //MessageBox.Show(panel1.Controls.Count.ToString());
-                    panel1.Controls[i].Show();
 
                     tempPanel.Location = getFrameLocation(i); //Sets panel position from frame variables   
+                    tempPanel.Show();  //Still shares reference with panel1.Controls element, so this change affects that one
                 }
             }
             else
@@ -751,10 +749,10 @@ namespace PhotoAlbumViewOfTheGods
 
                     picData = newList[i];
                     tempPanel = getNewThumbnail(picData, i); //Create new panel
-                    //tempPanel.BackColor = color_backColor; Used if main panel color has changed.
                     panel1.Controls.Add(tempPanel); //Add panel to main panel
 
                     tempPanel.Location = getFrameLocation(i); //Sets panel position from frame variables               
+                    tempPanel.Show();   //Still shares reference with panel1.Controls element, so this change affects that one
                 }
             }
 
