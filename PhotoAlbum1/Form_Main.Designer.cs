@@ -43,6 +43,7 @@
             this.pictureToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.importToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.backgroundColorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.changeBackgroundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -62,6 +63,7 @@
             this.viewToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.removeToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.printImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyImageToAnotherAlbumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel_PictureData = new System.Windows.Forms.Panel();
             this.button_RenamePic = new System.Windows.Forms.Button();
             this.label_NameError = new System.Windows.Forms.Label();
@@ -92,7 +94,6 @@
             this.colorDialog_Background = new System.Windows.Forms.ColorDialog();
             this.panel_Line = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.copyImageToAnotherAlbumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -192,7 +193,8 @@
             // 
             this.pictureToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.importToolStripMenuItem,
-            this.removeToolStripMenuItem});
+            this.removeToolStripMenuItem,
+            this.searchToolStripMenuItem});
             this.pictureToolStripMenuItem.Name = "pictureToolStripMenuItem";
             this.pictureToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
             this.pictureToolStripMenuItem.Text = "&Picture";
@@ -212,6 +214,14 @@
             this.removeToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
             this.removeToolStripMenuItem.Text = "&Remove";
             this.removeToolStripMenuItem.Click += new System.EventHandler(this.removeToolStripMenuItem_Click);
+            // 
+            // searchToolStripMenuItem
+            // 
+            this.searchToolStripMenuItem.Enabled = false;
+            this.searchToolStripMenuItem.Name = "searchToolStripMenuItem";
+            this.searchToolStripMenuItem.Size = new System.Drawing.Size(117, 22);
+            this.searchToolStripMenuItem.Text = "Search";
+            this.searchToolStripMenuItem.Click += new System.EventHandler(this.searchToolStripMenuItem_Click);
             // 
             // viewToolStripMenuItem
             // 
@@ -309,7 +319,7 @@
             // 
             // panel_Border
             // 
-            this.panel_Border.BackColor = System.Drawing.Color.Black;
+            this.panel_Border.BackColor = System.Drawing.Color.LightGray;
             this.panel_Border.Location = new System.Drawing.Point(252, 15);
             this.panel_Border.Name = "panel_Border";
             this.panel_Border.Size = new System.Drawing.Size(110, 110);
@@ -360,6 +370,13 @@
             this.printImageToolStripMenuItem.Size = new System.Drawing.Size(237, 22);
             this.printImageToolStripMenuItem.Text = "Print Image";
             this.printImageToolStripMenuItem.Click += new System.EventHandler(this.printImageToolStripMenuItem_Click);
+            // 
+            // copyImageToAnotherAlbumToolStripMenuItem
+            // 
+            this.copyImageToAnotherAlbumToolStripMenuItem.Enabled = false;
+            this.copyImageToAnotherAlbumToolStripMenuItem.Name = "copyImageToAnotherAlbumToolStripMenuItem";
+            this.copyImageToAnotherAlbumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.copyImageToAnotherAlbumToolStripMenuItem.Text = "Copy Image to";
             // 
             // panel_PictureData
             // 
@@ -640,13 +657,6 @@
             this.panel_Line.MouseEnter += new System.EventHandler(this.treeMin_MouseEnter);
             this.panel_Line.MouseLeave += new System.EventHandler(this.treeMin_MouseLeave);
             // 
-            // copyImageToAnotherAlbumToolStripMenuItem
-            // 
-            this.copyImageToAnotherAlbumToolStripMenuItem.Enabled = false;
-            this.copyImageToAnotherAlbumToolStripMenuItem.Name = "copyImageToAnotherAlbumToolStripMenuItem";
-            this.copyImageToAnotherAlbumToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.copyImageToAnotherAlbumToolStripMenuItem.Text = "Copy Image to";
-            // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -752,6 +762,7 @@
         private System.Windows.Forms.ToolStripMenuItem printImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem printAlbumToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyImageToAnotherAlbumToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
     }
 }
 

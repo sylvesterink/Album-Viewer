@@ -266,6 +266,7 @@ namespace PhotoAlbumViewOfTheGods
                 MessageBox.Show("Welcome to Photo Album Viewer of the Gods. Before you can continue you must create a new user account.", "Welcome", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 Directory.CreateDirectory(_directoryUsers);
                 Form_NewUser namePrompt = new Form_NewUser(_directoryUsers, true);
+                namePrompt.StartPosition = FormStartPosition.CenterScreen;
                 namePrompt.ShowDialog();
                 _currentUser = namePrompt.userName;
                 namePrompt.Dispose();
@@ -690,6 +691,10 @@ namespace PhotoAlbumViewOfTheGods
                 _albumData.filePath = path;
                 enableItems();
                 this.Text = _constantAppName + " : " + Utilities.getNameFromPath(path);
+                if (_pictureList.Count > 0)
+                {
+                    searchToolStripMenuItem.Enabled = true;
+                }
             }
         }
 
@@ -697,7 +702,7 @@ namespace PhotoAlbumViewOfTheGods
         //Method: Retrieves current data list. For each picture, creates a thumbnail panel. Shows and positions each thumbnail
         //        Sets each panel's properties and event handlers.
         //Cavan
-        private void populateScreen()
+        private void populateScreen(string searchTerm="")
         {
             panel1.Hide();
             Panel tempPanel;
@@ -707,29 +712,54 @@ namespace PhotoAlbumViewOfTheGods
             _pictureList = _albumData.getDataList();
             
             panel1.VerticalScroll.Value = 0; //set scroll to top for correct reference when setting panel location
-            int loopCount = _pictureList.Count();
-            for (int i = 0; i < loopCount; i++)
-            {          
-                //If panel is already added, skip it (mainly for when inporting pictures)
-                if (panel1.Controls.Find("panel" + Utilities.getIdFromInt(i), false).Count() > 0)
-                    continue;
 
-                picData = _pictureList[i];
-                tempPanel = getNewThumbnail(picData, i); //Create new panel
-                //tempPanel.BackColor = color_backColor; Used if main panel color has changed.
-                panel1.Controls.Add(tempPanel); //Add panel to main panel
-
-                tempPanel.Location = getFrameLocation(i); //Sets panel position from frame variables               
-            }
-
-            
-            foreach (Panel value in panel1.Controls)
-            {
-                value.Show();
-            }
-            panel_Border.Visible = false;
-            
             panel1.Show();
+            if (searchTerm == "")
+            {
+                int loopCount = _pictureList.Count();
+                for (int i = 0; i < loopCount; i++)
+                {
+                    //If panel is already added, skip it (mainly for when inporting pictures)
+                    if (panel1.Controls.Find("panel" + Utilities.getIdFromInt(i), false).Count() > 0)
+                    {
+                        continue;
+                    }
+
+                    picData = _pictureList[i];
+                    tempPanel = getNewThumbnail(picData, i); //Create new panel
+                    //tempPanel.BackColor = color_backColor; Used if main panel color has changed.
+                    panel1.Controls.Add(tempPanel); //Add panel to main panel
+                    //MessageBox.Show(panel1.Controls.Count.ToString());
+                    panel1.Controls[i].Show();
+
+                    tempPanel.Location = getFrameLocation(i); //Sets panel position from frame variables   
+                }
+            }
+            else
+            {
+                List<pictureData> newList = new List<pictureData>();
+                foreach (pictureData picture in _pictureList.FindAll(s => s.name == searchTerm))
+                {
+                    newList.Add(picture);
+                }
+
+                for (int i = 0; i < newList.Count; i++)
+                {
+                    //If panel is already added, skip it (mainly for when inporting pictures)
+                    if (panel1.Controls.Find("panel" + Utilities.getIdFromInt(i), false).Count() > 0)
+                        continue;
+
+                    picData = newList[i];
+                    tempPanel = getNewThumbnail(picData, i); //Create new panel
+                    //tempPanel.BackColor = color_backColor; Used if main panel color has changed.
+                    panel1.Controls.Add(tempPanel); //Add panel to main panel
+
+                    tempPanel.Location = getFrameLocation(i); //Sets panel position from frame variables               
+                }
+            }
+
+            panel_Border.Visible = false;
+
             //Update Tooltip size
             toolStripStatusLabel_Total.Text = _pictureList.Count.ToString();
             //Update nameList
@@ -967,6 +997,7 @@ namespace PhotoAlbumViewOfTheGods
             }
             else
             {
+                searchToolStripMenuItem.Enabled = false;
                 clearDisplay();
                 //Clear Trees
                 treeView_Pictures.Nodes.Clear();
@@ -1034,14 +1065,15 @@ namespace PhotoAlbumViewOfTheGods
                     if (Utilities.isImageValid(value))
                     {
                         _albumData.addPhoto(value);
-                        populateScreen();
-                        populateList();
+                        
                     }
                     else
                     {
                         handleError("Invalid Photo Selected: " + value);
                     }
                 }
+                populateScreen();
+                populateList();
             }
         }
 
@@ -1282,6 +1314,23 @@ namespace PhotoAlbumViewOfTheGods
         private void updateStatusBar(string statusBarText)
         {
             toolStripStatusLabel_TotalLabel.Text = statusBarText;
+        }
+
+        private void searchToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string searchTerm;
+
+            Form_Search searchForm = new Form_Search();
+            searchForm.ShowDialog();
+            searchTerm = searchForm.searchTerm;
+            searchForm.Dispose();
+
+            if (searchTerm != "")
+            {
+                clearDisplay();
+                populateScreen(searchTerm);
+            }
+           
         }
     }
 }
