@@ -699,25 +699,12 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Display thumbnails method
-        //Method: Retrieves current data list. For each picture, creates a thumbnail panel. Shows and positions each thumbnail
-        //        Sets each panel's properties and event handlers.
-        //Cavan
-        private void populateScreen(string searchTerm="")
+        private void showThumbnail(List<pictureData> picList)
         {
-            panel1.Hide();
-            Panel tempPanel;
             pictureData picData = new pictureData();
-            int scrollPosition = panel1.VerticalScroll.Value; //save user scroll position
-            
-            _pictureList = _albumData.getDataList();
-            
-            panel1.VerticalScroll.Value = 0; //set scroll to top for correct reference when setting panel location
-
-            panel1.Show();
-            if (searchTerm == "")
-            {
-                int loopCount = _pictureList.Count();
+            int loopCount = picList.Count;
+            Panel tempPanel;
+            try{               
                 for (int i = 0; i < loopCount; i++)
                 {
                     //If panel is already added, skip it (mainly for when inporting pictures)
@@ -725,14 +712,35 @@ namespace PhotoAlbumViewOfTheGods
                     {
                         continue;
                     }
-
-                    picData = _pictureList[i];
+                    picData = picList[i];
                     tempPanel = getNewThumbnail(picData, i); //Create new panel
-                    panel1.Controls.Add(tempPanel); //Add panel to main panel
-
                     tempPanel.Location = getFrameLocation(i); //Sets panel position from frame variables   
                     tempPanel.Show();  //Still shares reference with panel1.Controls element, so this change affects that one
+                    this.Invoke(new MethodInvoker(delegate()
+                    {                            
+                        panel1.Controls.Add(tempPanel); //Add panel to main panel                           
+                    }));                    
                 }
+                Console.WriteLine("done");
+            }
+            catch { }
+        }
+
+        //Display thumbnails method
+        //Method: Retrieves current data list. For each picture, creates a thumbnail panel. Shows and positions each thumbnail
+        //        Sets each panel's properties and event handlers.
+        //Cavan
+        private void populateScreen(string searchTerm="")
+        {
+            int scrollPosition = panel1.VerticalScroll.Value; //save user scroll position
+            
+            _pictureList = _albumData.getDataList();
+            
+            panel1.VerticalScroll.Value = 0; //set scroll to top for correct reference when setting panel location
+            panel1.Show();
+            if (searchTerm == "")
+            {
+                new Thread(() => this.showThumbnail(_pictureList)).Start();
             }
             else
             {
@@ -741,27 +749,13 @@ namespace PhotoAlbumViewOfTheGods
                 {
                     newList.Add(picture);
                 }
-
-                for (int i = 0; i < newList.Count; i++)
-                {
-                    //If panel is already added, skip it (mainly for when inporting pictures)
-                    if (panel1.Controls.Find("panel" + Utilities.getIdFromInt(i), false).Count() > 0)
-                        continue;
-
-                    picData = newList[i];
-                    tempPanel = getNewThumbnail(picData, i); //Create new panel
-                    panel1.Controls.Add(tempPanel); //Add panel to main panel
-
-                    tempPanel.Location = getFrameLocation(i); //Sets panel position from frame variables               
-                    tempPanel.Show();   //Still shares reference with panel1.Controls element, so this change affects that one
-                }
+                new Thread(() => this.showThumbnail(newList)).Start();
             }
 
             panel_Border.Visible = false;
 
             //Update Tooltip size
             toolStripStatusLabel_Total.Text = _pictureList.Count.ToString();
-            //Update nameList
             panel1.Focus();
             panel1.VerticalScroll.Value = scrollPosition; //return user scroll posiiton
         }
@@ -1071,9 +1065,8 @@ namespace PhotoAlbumViewOfTheGods
                         handleError("Invalid Photo Selected: " + value);
                     }
                 }
-                MessageBox.Show("done");
-                populateScreen();
                 populateList();
+                populateScreen();
             }
         }
 

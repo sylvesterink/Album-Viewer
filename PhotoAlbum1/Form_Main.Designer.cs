@@ -765,4 +765,3 @@
         private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
     }
 }
-
