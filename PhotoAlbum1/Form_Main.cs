@@ -776,27 +776,26 @@ namespace PhotoAlbumViewOfTheGods
             newPanel.Name = "panel" + imageData.id;
             newPanel.Size = frameSize;
             newPanel.BackgroundImageLayout = ImageLayout.Zoom;
-            //Image.GetThumbnailImageAbort imageCallback = new Image.GetThumbnailImageAbort(thumbailCallback);
+
             //Attempts to load background Image. If fail, loads a default image and updates description
             try
             {
                 Image tempImage = Image.FromFile(imageData.path);
-                imageData.size = tempImage.Size;
-                _albumData.setData(imageData, id);
+                //imageData.size = tempImage.Size;
+                //_albumData.setData(imageData, id);
                 newPanel.BackgroundImage = Utilities.ScalImage(tempImage, new Size(frameSize.Width, frameSize.Height));
-                //newPanel.BackgroundImage = Image.FromFile(imageData.path).GetThumbnailImage(frameSize.Width, frameSize.Height, imageCallback, IntPtr.Zero);
-                imageData.size = newPanel.BackgroundImage.Size;
+                //imageData.size = newPanel.BackgroundImage.Size;
                 tempImage.Dispose();
             }
             catch
             {
                 newPanel.BackgroundImage = Resources.Resource1.warning;
-                imageData.size = new Size(0, 0);
+                //imageData.size = new Size(0, 0);
                 if (!imageData.description.Contains("File not found"))
                 {
                     imageData.description = "File not found\n\n" + imageData.description;
                 }
-                _albumData.setData(imageData, id);
+                //_albumData.setData(imageData, id);
             }
             //Panel event handlers
             newPanel.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panel_MouseClick);
