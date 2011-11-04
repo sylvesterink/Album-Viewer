@@ -192,15 +192,18 @@ namespace PhotoAlbumViewOfTheGods
         {
             int append = 2;
             string extension = Path.GetExtension(filePath);
+            string newPath;
             filePath = filePath.Substring(0, (filePath.Length - extension.Length)); //path without extensions
             while (true)
             {
-                if (!File.Exists(filePath + "(" + append.ToString() + ")" + extension))
+                newPath = filePath + "(" + append.ToString() + ")" + extension;
+                if (!File.Exists(newPath))
+                {
                     break;
+                }
                 append++;
             }
-
-            return filePath + "(" + append.ToString() + ")" + extension;
+            return newPath;
         }
 
         //Scale image to desired size. Passed image and desired size.

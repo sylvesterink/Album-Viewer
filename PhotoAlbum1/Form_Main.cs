@@ -1137,6 +1137,7 @@ namespace PhotoAlbumViewOfTheGods
             {
                 Form_Viewer picView = new Form_Viewer(_pictureList, Convert.ToInt32(_currentPhoto.id), _constantAppName);
                 picView.ShowDialog();
+                _pictureList = picView.pictureList;
                 picView.Dispose();
                 if (picView.isModified)
                 {
@@ -1188,7 +1189,7 @@ namespace PhotoAlbumViewOfTheGods
             if (MessageBox.Show("Are you sure you want to delete this photo?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
                 _albumData.RemovePic(_currentPhoto.id);
-
+                _albumData.saveAlbum();
                 clearDisplay();
                 populateScreen();
                 populateList();

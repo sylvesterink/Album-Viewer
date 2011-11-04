@@ -247,6 +247,7 @@ namespace PhotoAlbumViewOfTheGods
                     PicData.MD5 = PictureInfo.Attribute("md5").Value;
                     PicData.dateAdded = PictureInfo.Attribute("dateAdded").Value;
                     PicData.dateModified = PictureInfo.Attribute("dateModified").Value;
+                    PicData.albumPath = albumName;
                     dataList.Add(PicData);
                 }
             }

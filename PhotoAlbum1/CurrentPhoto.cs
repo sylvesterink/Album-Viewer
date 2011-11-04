@@ -17,6 +17,7 @@ namespace PhotoAlbumViewOfTheGods
         public string MD5;
         public string dateAdded;
         public string dateModified;
+        public string albumPath;
     }
 
     //Simple class representing the current photo selected by the user
@@ -29,6 +30,12 @@ namespace PhotoAlbumViewOfTheGods
         {
             get { return photoData.dateModified; }
             set { photoData.dateModified = value; }
+        }
+
+        public string albumPath
+        {
+            get { return photoData.albumPath; }
+            set { photoData.albumPath = value; }
         }
 
         public string MD5
