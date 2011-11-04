@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Drawing2D;
 using System.Xml.Linq;
+using System.Threading;
 
 namespace PhotoAlbumViewOfTheGods
 {
@@ -1053,6 +1054,7 @@ namespace PhotoAlbumViewOfTheGods
             openFileDialog_Load.FileName = "";
             openFileDialog_Load.InitialDirectory = _lastImportedFrom;
             openFileDialog_Load.Multiselect = true; //alow loading of multiple files
+            List<Utilities.AllImagesInfo> allImages = Utilities.getAllImageInfo();
             if (openFileDialog_Load.ShowDialog() == DialogResult.OK)
             {
                 _lastImportedFrom = Path.GetDirectoryName(openFileDialog_Load.FileNames[0]);
@@ -1061,14 +1063,15 @@ namespace PhotoAlbumViewOfTheGods
                     //check if file is valid
                     if (Utilities.isImageValid(value))
                     {
-                        _albumData.addPhoto(value);
-                        
+                        _albumData.addPhoto(value, ref allImages);
+                        _albumData.saveAlbum();
                     }
                     else
                     {
                         handleError("Invalid Photo Selected: " + value);
                     }
                 }
+                MessageBox.Show("done");
                 populateScreen();
                 populateList();
             }

@@ -170,13 +170,16 @@ namespace PhotoAlbumViewOfTheGods
         {
             try
             {
-                using (Image temp = Image.FromFile(photoPath)) { };
+                using (Image temp = Image.FromFile(photoPath))
+                {
+                    temp.Dispose();
+                    return true;
+                };
             }
             catch
             {
                 return false;
             }
-            return true;
         }
 
         public static bool isValidString(string text)

@@ -5,6 +5,8 @@ using System.Text;
 using System.IO;
 using System.Xml.Linq;
 using System.Windows.Forms;
+using System.Threading;
+
 //Cavan & Zach: This class deals with events that use or modify data in the XML(.abm) files
 namespace PhotoAlbumViewOfTheGods
 {
@@ -68,60 +70,62 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        private void copyImage(string from, string to)
+        {
+            File.Copy(from, to);
+        }
+
         //Function is called when importing a picture, where path is the picture's path
         //Copies the pic to a new photos folder
         //Compares pictires if a duplicate name exists
         //adds the image to the datalist
         //sets a default description to nothing
         //Zach & Cavan
-        public void addPhoto(string path)
+        public void addPhoto(string path, ref List<Utilities.AllImagesInfo> allImages)
         {
-            saveAlbum();
-            List<Utilities.AllImagesInfo> allImages = Utilities.getAllImageInfo();
-            pictureData image = new pictureData();
-            image.description = "";
+            int totalImages = allImages.Count;            
             string newPath;
-            bool flagPath = false;
+            bool alreadyExists = false;
+            string dateAdded = Utilities.getTimeStamp();
             string imageName = Utilities.getNameFromPath(path);
             string calculateMD5 = Utilities.CalculateMD5(path);
-            int totalImages = allImages.Count;
-            string dateAdded = Utilities.getTimeStamp();
+            Utilities.AllImagesInfo newImage;
+            pictureData image = new pictureData();
             
             newPath = directory + photoFolder + "\\" + imageName + Path.GetExtension(path);
             //Checks to see if a pic with the same name exists, checks if it exists then compare the pics
             try
             {
-                if (!File.Exists(newPath))
+                for (int i = 0; i < totalImages; i++)
                 {
-                    File.Copy(path, newPath);
-                }
-                else
-                {
-                    for (int i = 0; i < totalImages; i++)
+                    if (allImages[i].MD5 == calculateMD5)
                     {
-                        if (allImages[i].MD5 == calculateMD5)
-                        {
-                            flagPath = true;
-                            newPath = allImages[i].path;
-                            break;
-                        }
+                        alreadyExists = true;
+                        newPath = allImages[i].path;
+                        break;
                     }
-
-                    if (!flagPath)
-                    {
-                        File.Copy(path, Utilities.getAppendName(newPath));
-                    }
-
                 }
 
+                if (!alreadyExists) //if the md5 was not found
+                {
+                    if (File.Exists(newPath)) //check to see if a file w/ the same name exists
+                    {
+                        newPath = Utilities.getAppendName(newPath); //append a number to the end of it
+                    }
+                    new Thread(() => copyImage(path, newPath)).Start(); //copy that image over to our photos directory in a new thread
+                }
+
+                newImage.path = newPath;
+                newImage.MD5 = calculateMD5;
+                image.description = "";
                 image.dateAdded = dateAdded;
                 image.dateModified = dateAdded;
                 image.MD5 = calculateMD5;
                 image.path = newPath;
                 image.name = imageName;
                 image.id = Utilities.getIdFromInt(dataList.Count);
+                allImages.Add(newImage);
                 dataList.Add(image);
-                saveAlbum();
             }
             catch { }
             
