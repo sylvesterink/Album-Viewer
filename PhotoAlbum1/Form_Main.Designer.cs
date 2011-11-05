@@ -327,16 +327,16 @@
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.label4);
             this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.panel2.Location = new System.Drawing.Point(265, 149);
+            this.panel2.Location = new System.Drawing.Point(203, 129);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(368, 49);
+            this.panel2.Size = new System.Drawing.Size(435, 93);
             this.panel2.TabIndex = 8;
             this.panel2.Visible = false;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1, 0);
+            this.label4.Location = new System.Drawing.Point(36, 28);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(363, 39);
             this.label4.TabIndex = 0;

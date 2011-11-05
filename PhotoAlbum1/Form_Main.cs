@@ -699,8 +699,8 @@ namespace PhotoAlbumViewOfTheGods
         
         private void enablePanel()
         {
-            _timer.Stop();
-            _timer.Dispose();
+            _periodCounter = 3;
+            _timer.Close();
             this.Invoke(new MethodInvoker(delegate()
             {
                 panel2.Hide();
@@ -1187,10 +1187,9 @@ namespace PhotoAlbumViewOfTheGods
                 {
                     populateTree();
                     _albumData.filePath = (_albumData.filePath == filePathToDelete) ? "" : filePathToDelete; //we deleted the open album so clear the filePath or else on reopen it will save the album again
-
-                    //make sure to clear images of deleted album
-                    _pictureList.Clear();
+                    _pictureList.Clear(); //make sure to clear images of deleted album
                     clearDisplay();
+                    _albumData.currentAlbum = "";
                 }
                 else
                 {
