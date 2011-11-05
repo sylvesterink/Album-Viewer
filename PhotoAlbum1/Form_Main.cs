@@ -1040,6 +1040,7 @@ namespace PhotoAlbumViewOfTheGods
                 }
                 populateList();
                 populateScreen();
+                searchToolStripMenuItem.Enabled = true;
             }
         }
 
@@ -1127,6 +1128,10 @@ namespace PhotoAlbumViewOfTheGods
                 {
                     populateTree();
                     _albumData.filePath = (_albumData.filePath == filePathToDelete) ? "" : filePathToDelete; //we deleted the open album so clear the filePath or else on reopen it will save the album again
+
+                    //make sure to clear images of deleted album
+                    _pictureList.Clear();
+                    clearDisplay();
                 }
                 else
                 {
@@ -1194,6 +1199,11 @@ namespace PhotoAlbumViewOfTheGods
                 clearDisplay();
                 populateScreen();
                 populateList();
+
+                if (_albumData.isEmpty())
+                {
+                    searchToolStripMenuItem.Enabled = false;
+                }
             }
         }
 
