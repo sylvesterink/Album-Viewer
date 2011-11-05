@@ -18,8 +18,7 @@ namespace PhotoAlbumViewOfTheGods
     //Cavan
     public partial class Form_NewFileDialog : Form
     {
-        string[] albumsList;
-        //Return Value
+        string[] _albumsList;
         public string albumNameValue
         {
             get
@@ -40,10 +39,11 @@ namespace PhotoAlbumViewOfTheGods
         public Form_NewFileDialog(string[] albums, string ext)
         {
             InitializeComponent();
-            albumsList = albums;
-            for (int i = albumsList.Count() - 1; i >= 0; i--)
+            _albumsList = albums;
+            int totalAlbums = _albumsList.Length;
+            for (int i = 0; i < totalAlbums; i++)
             {
-                albumsList[i] = Utilities.getNameFromPath(albumsList[i]).ToUpper();
+                _albumsList[i] = Utilities.getNameFromPath(_albumsList[i]);
             }
         }
 
@@ -70,7 +70,7 @@ namespace PhotoAlbumViewOfTheGods
                 textBox_AlbumName.Focus();
             }
             //Checks for albums with the same name
-            else if (albumsList.Contains(albumName, StringComparer.OrdinalIgnoreCase))
+            else if (_albumsList.Contains(albumName, StringComparer.OrdinalIgnoreCase))
             {
                 MessageBox.Show("That album name has alrady been created.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox_AlbumName.Focus();

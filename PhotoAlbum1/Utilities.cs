@@ -91,6 +91,7 @@ namespace PhotoAlbumViewOfTheGods
             {
                 users[i] = users[i].Replace(usersDirectory+"\\", "");
             }
+            users.Sort();
             return users;
         }
 

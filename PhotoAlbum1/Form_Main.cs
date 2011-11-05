@@ -75,8 +75,8 @@ namespace PhotoAlbumViewOfTheGods
         //Sets thumbnail frame spacing and updates the album list tree
         private void Form1_Load(object sender, EventArgs e)
         {
-            bool isFirstTime = false;
-
+            bool isFirstTime = true;
+            _allUsers = Utilities.listOfUsers(_directoryUsers);
             if (File.Exists(_lastUserFile)) //get the last user to use the program
             {
                 TextReader tr = new StreamReader(_lastUserFile); //open the last user file
@@ -84,14 +84,31 @@ namespace PhotoAlbumViewOfTheGods
                 tr.Close(); //close the text reader
                 tr.Dispose(); //release all resources of the text reader
 
-                if (_currentUser.Replace(" ","") == "" || _currentUser == null) //if the user is blank then it's their first time
+                if (_currentUser.Replace(" ", "") != "") //if the user is blank then it's their first time
                 {
-                    isFirstTime = true; //someone is messing with the config file!!
+                    _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
+                    isFirstTime = false; //someone is messing with the config file!!
                 }
                 else
                 {
                     _directoryCurrentUser = _directoryUsers + "\\" + _currentUser; //set the users current directory
                 }
+            }
+           
+            if (isFirstTime || !File.Exists(_lastUserFile))
+            {
+                MessageBox.Show("Welcome to Photo Album Viewer of the Gods. Before you can continue you must create a new user profile.", "Welcome", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                newUser();
+                populateUsers();
+                if (_allUsers.Count == 0) //happens if the user did not create an account
+                {
+                    this.Close();
+                }
+                
+                _currentUser = _allUsers.Last();
+                _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
+                updateLastUserFile();
+                _allUsers.Sort();
             }
 
             if (!Directory.Exists(_directoryUsers)) //if the users directory does not exist
@@ -102,26 +119,6 @@ namespace PhotoAlbumViewOfTheGods
             if (!Directory.Exists(_directoryPhotos)) //if the photos directory does not exist
             {
                 Directory.CreateDirectory(_directoryPhotos); //create the photos directory
-            }
-
-            _allUsers = Utilities.listOfUsers(_directoryUsers);
-            _allUsers.Sort();
-
-            if (isFirstTime || _allUsers.Count == 0)
-            {
-                MessageBox.Show("Welcome to Photo Album Viewer of the Gods. Before you can continue you must create a new user account.", "Welcome", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                newUser();
-                populateUsers();
-                if (_allUsers.Count == 0) //happens if the user did not create an account
-                {
-                    this.Close();
-                }
-                else
-                {
-                    _currentUser = _allUsers.Last();
-                    _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
-                    updateLastUserFile();
-                }
             }
 
             if (!Directory.Exists(_directoryCurrentUser)) //if the current user directory does not exist
@@ -329,11 +326,14 @@ namespace PhotoAlbumViewOfTheGods
             _currentUser = sender.ToString();
             _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
             _albumData.CurrentUser = _currentUser;
+            _albumData.currentAlbum = "";
+            _albumData.filePath = "";
             clearDisplay();
             populateList();
             populateTree();
             populateUsers();
             updateLastUserFile();
+            updateStatusBar("Current user: " + _currentUser);
         }
 
         private string[] totalUsers()
@@ -701,7 +701,6 @@ namespace PhotoAlbumViewOfTheGods
                         panel1.Controls.Add(tempPanel); //Add panel to main panel                           
                     }));                    
                 }
-                Console.WriteLine("done");
             }
             catch { }
         }
@@ -953,6 +952,11 @@ namespace PhotoAlbumViewOfTheGods
         /// <returns>Returns true on successful save, false otherwise</returns>
         private bool albumClose()
         {
+            if (_albumData.currentAlbum == "")
+            {
+                return true;
+            }
+
             if (!saveAlbum())
             {
                 handleError("Unable to save album");
@@ -1234,6 +1238,7 @@ namespace PhotoAlbumViewOfTheGods
             namePrompt.StartPosition = FormStartPosition.CenterParent;
             namePrompt.ShowDialog();
             namePrompt.Dispose();
+            switchUserToolStripMenuItem.Enabled = (_allUsers.Count > 1) ? true : false; //enable the "Switch User" button under file
         }
 
         private void cleanupPhotosToolStripMenuItem_Click(object sender, EventArgs e)

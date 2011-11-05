@@ -13,14 +13,6 @@ namespace PhotoAlbumViewOfTheGods
 {
     public partial class Form_NewUser : Form
     {
-        public string userName
-        {
-            get
-            {
-                return text_username.Text;
-            }
-        }
-
         private bool _firstRun;
         private string _usersDirectory;
         private List<string> _users;
@@ -39,7 +31,8 @@ namespace PhotoAlbumViewOfTheGods
 
         private void button_adduser_Click(object sender, EventArgs e)
         {
-            if (userName.Replace(" ", "") == "")
+            string userName = text_username.Text.Trim();
+            if (userName == "")
             {
                 MessageBox.Show("Please enter a user name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }else if (!Utilities.isValidString(userName))
@@ -56,7 +49,7 @@ namespace PhotoAlbumViewOfTheGods
             }else{
                 Directory.CreateDirectory(_usersDirectory + "\\" + userName);
                 _users.Add(userName);
-                _users.Sort();
+                MessageBox.Show("User '" + userName + "' has been created.", "User Created", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
         }
@@ -67,7 +60,7 @@ namespace PhotoAlbumViewOfTheGods
             {
                 this.Close();
             }
-            else if (userName != "")
+            else if (text_username.Text.Trim() != "")
             {
                 if (MessageBox.Show("Are you sure you want to discard changes?", "Discard Changes?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
                 {
