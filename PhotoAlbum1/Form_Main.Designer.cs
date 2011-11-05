@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Main));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.albumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.newAlbumToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -121,7 +121,7 @@
             // albumToolStripMenuItem
             // 
             this.albumToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripMenuItem,
+            this.newAlbumToolStripMenuItem,
             this.renameToolStripMenuItem,
             this.deleteToolStripMenuItem,
             this.toolStripSeparator1,
@@ -133,13 +133,13 @@
             this.albumToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.albumToolStripMenuItem.Text = "&File";
             // 
-            // newToolStripMenuItem
+            // newAlbumToolStripMenuItem
             // 
-            this.newToolStripMenuItem.Enabled = false;
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
-            this.newToolStripMenuItem.Text = "&New Album";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            this.newAlbumToolStripMenuItem.Enabled = false;
+            this.newAlbumToolStripMenuItem.Name = "newAlbumToolStripMenuItem";
+            this.newAlbumToolStripMenuItem.Size = new System.Drawing.Size(156, 22);
+            this.newAlbumToolStripMenuItem.Text = "&New Album";
+            this.newAlbumToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // renameToolStripMenuItem
             // 
@@ -727,7 +727,7 @@
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Button buttonHideTree;
         private System.Windows.Forms.Label label_picSize;
-        private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem newAlbumToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Tree;
         private System.Windows.Forms.ToolStripMenuItem openAlbumToolStripMenuItem;

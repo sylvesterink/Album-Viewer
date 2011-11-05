@@ -7,11 +7,10 @@ using System.Drawing; //needed for Image compares
 using System.Drawing.Drawing2D;
 using System.Security.Cryptography; //needed for MD5 values
 using System.Xml.Linq;
+using System.Windows.Forms;
 
 namespace PhotoAlbumViewOfTheGods
 {
-    
-
     //Public static class providing common functions for PhotoAlbum namespace
     //Cavan
     public static class Utilities
@@ -33,6 +32,8 @@ namespace PhotoAlbumViewOfTheGods
         {
             return ((long)((DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks) / 10000000)).ToString();
         }
+
+
 
         public static void printImage(string filePath)
         {
@@ -81,6 +82,16 @@ namespace PhotoAlbumViewOfTheGods
                 }
             }
             return totalRemoved;
+        }
+
+        public static List<string> listOfUsers(string usersDirectory)
+        {
+            List<string> users = Directory.GetDirectories(usersDirectory).ToList();
+            for (int i = 0; i < users.Count; i++)
+            {
+                users[i] = users[i].Replace(usersDirectory+"\\", "");
+            }
+            return users;
         }
 
         public static List<AllImagesInfo> getAllImageInfo()

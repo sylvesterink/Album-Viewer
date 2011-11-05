@@ -50,8 +50,11 @@ namespace PhotoAlbumViewOfTheGods
         private XMLInterface _albumData;
         private List<pictureData> _pictureList;
         private pictureData _pictureDataStored;
+        private List<string> _allUsers;
 
-        //Constructor function
+        /// <summary>
+        /// Consturctor function for the program. Initalizes member variables and components
+        /// </summary>
         public Form_Main()
         {
             _treeNode = new TreeNode();
@@ -66,10 +69,92 @@ namespace PhotoAlbumViewOfTheGods
             InitializeComponent();
         }
 
+        //Form Main load event
+        //Initializes current directory and creates folders if they don't exist
+        //Checks for any album files and updates menus to allow open if any are found
+        //Sets thumbnail frame spacing and updates the album list tree
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            bool isFirstTime = false;
+
+            if (File.Exists(_lastUserFile)) //get the last user to use the program
+            {
+                TextReader tr = new StreamReader(_lastUserFile); //open the last user file
+                _currentUser = tr.ReadLine(); //read in the user
+                tr.Close(); //close the text reader
+                tr.Dispose(); //release all resources of the text reader
+
+                if (_currentUser.Replace(" ","") == "" || _currentUser == null) //if the user is blank then it's their first time
+                {
+                    isFirstTime = true; //someone is messing with the config file!!
+                }
+                else
+                {
+                    _directoryCurrentUser = _directoryUsers + "\\" + _currentUser; //set the users current directory
+                }
+            }
+
+            if (!Directory.Exists(_directoryUsers)) //if the users directory does not exist
+            {
+                Directory.CreateDirectory(_directoryUsers); //create the users directory
+            }
+
+            if (!Directory.Exists(_directoryPhotos)) //if the photos directory does not exist
+            {
+                Directory.CreateDirectory(_directoryPhotos); //create the photos directory
+            }
+
+            _allUsers = Utilities.listOfUsers(_directoryUsers);
+            _allUsers.Sort();
+
+            if (isFirstTime || _allUsers.Count == 0)
+            {
+                MessageBox.Show("Welcome to Photo Album Viewer of the Gods. Before you can continue you must create a new user account.", "Welcome", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                newUser();
+                populateUsers();
+                if (_allUsers.Count == 0) //happens if the user did not create an account
+                {
+                    this.Close();
+                }
+                else
+                {
+                    _currentUser = _allUsers.Last();
+                    _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
+                    updateLastUserFile();
+                }
+            }
+
+            if (!Directory.Exists(_directoryCurrentUser)) //if the current user directory does not exist
+            {
+                Directory.CreateDirectory(_directoryCurrentUser); //creates the user's directory
+            }
+
+
+            //Initilize data structure
+            _albumData = new XMLInterface(_directoryCurrent, FOLDER_USERS, FOLDER_PHOTOS, _constantFileType, _currentUser);
+
+            _albumData.filePath = ""; //stat with no album open
+            //Set up Frames
+            panel1.BackColor = color_backColor;
+            _frameWidth = (panel1.Width / (_framesPerRow + 1)) - 4;
+            _frameSpacingX = _frameWidth / _framesPerRow;
+            frameSize = new Size(_frameWidth, _frameWidth);
+            //Update Border size
+            panel_Border.Size = new Size((int)(_frameWidth + (_frameWidth / _borderFactor)), (int)(_frameWidth + (_frameWidth / _borderFactor)));
+
+            populateTree(); //Display any album files
+            panel1.Focus(); //Start focus on main panel so any tree nodes are not slected
+            updateStatusBar("Current User: " + _currentUser);
+            populateUsers();
+            cleanupPhotosToolStripMenuItem.Enabled = true; //enable the "Cleanup Photos" button under options
+            newAlbumToolStripMenuItem.Enabled = true; //enable the "New Album" button under file
+            switchUserToolStripMenuItem.Enabled = (_allUsers.Count > 1) ? true : false; //enable the "Switch User" button under file
+            this.Text = _constantAppName;
+        }
+
 
         //Panel double click event
         //If panel was double left clicked calls openviewer
-        //Cavan
         private void panel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -214,95 +299,10 @@ namespace PhotoAlbumViewOfTheGods
             deletePhoto();
         }
 
-        //Form Main load event
-        //Initializes current directory and creates folders if they don't exist
-        //Checks for any album files and updates menus to allow open if any are found
-        //Sets thumbnail frame spacing and updates the album list tree
-        //Cavan
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            bool isFirstTimeError = false;
-            this.Text = _constantAppName;
-
-            if (File.Exists(_lastUserFile))
-            {
-                TextReader tr = new StreamReader(_lastUserFile);
-                _currentUser = tr.ReadLine();
-                tr.Close();
-
-                if (_currentUser == "" || _currentUser == null)
-                {
-                    isFirstTimeError = true; //someone is messing with the config file!!
-                }
-                else
-                {
-                    _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
-                    if (!Directory.Exists(_directoryCurrentUser))
-                    {
-                        MessageBox.Show("An error has occurred - Error: 0x44GGD7", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-                cleanupPhotosToolStripMenuItem.Enabled = true;
-                newToolStripMenuItem.Enabled = true;
-            }
-
-            if (isFirstTimeError || !Directory.Exists(_directoryUsers) || Directory.GetDirectories(_directoryUsers).Count() == 0)
-            {
-                MessageBox.Show("Welcome to Photo Album Viewer of the Gods. Before you can continue you must create a new user account.", "Welcome", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                Directory.CreateDirectory(_directoryUsers);
-                Form_NewUser namePrompt = new Form_NewUser(_directoryUsers, true);
-                namePrompt.StartPosition = FormStartPosition.CenterScreen;
-                namePrompt.ShowDialog();
-                _currentUser = namePrompt.userName;
-                namePrompt.Dispose();
-                if (_currentUser != "")
-                {
-                    _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
-
-                    Directory.CreateDirectory(_directoryCurrentUser);
-                    updateLastUserFile();
-                    cleanupPhotosToolStripMenuItem.Enabled = true;
-                    newToolStripMenuItem.Enabled = true;
-                }
-                else
-                {
-                    this.FormClosing -= Form_Main_FormClosing;
-                    this.Close();
-                }
-            }
-
-
-            //Initilize data structure
-            _albumData = new XMLInterface(_directoryCurrent, FOLDER_USERS, FOLDER_PHOTOS, _constantFileType, _currentUser);
-
-            //Check Folders and create if needed
-            if (Directory.Exists(_directoryUsers) && Directory.GetDirectories(_directoryUsers).Count() > 0)
-            {
-                string[] files = _albumData.getAlbumList();
-                if (files.Count() > 1)
-                {
-                    switchUserToolStripMenuItem.Enabled = true;
-                }
-            }
-
-            if (!Directory.Exists(_directoryPhotos))
-                Directory.CreateDirectory(_directoryPhotos);
-
-            _albumData.filePath = ""; //stat with no album open
-            //Set up Frames
-            panel1.BackColor = color_backColor;
-            _frameWidth = (panel1.Width / (_framesPerRow + 1)) - 4;
-            _frameSpacingX = _frameWidth / _framesPerRow;
-            frameSize = new Size(_frameWidth, _frameWidth);
-            //Update Border size
-            panel_Border.Size = new Size((int)(_frameWidth + (_frameWidth / _borderFactor)), (int)(_frameWidth + (_frameWidth / _borderFactor)));
-
-            populateTree(); //Display any album files
-            panel1.Focus(); //Start focus on main panel so any tree nodes are not slected
-            updateStatusBar("Current User: " + _currentUser);
-            populateUsers();
-        }
-
+        
+        /// <summary>
+        /// Updates the last user file
+        /// </summary>
         private void updateLastUserFile()
         {
             TextWriter tw = new StreamWriter(_lastUserFile);
@@ -312,22 +312,14 @@ namespace PhotoAlbumViewOfTheGods
 
         private void populateUsers()
         {
-            string userName;
-            string[] userList = totalUsers();
-            Array.Sort(userList);
             switchUserToolStripMenuItem.DropDownItems.Clear();
-            if (userList.Count() > 1)
+            foreach (string userName in _allUsers)
             {
-                switchUserToolStripMenuItem.Enabled = true;
-                foreach (string userDirectory in userList)
+                if (_currentUser != userName)
                 {
-                    userName = System.IO.Path.GetFileName(userDirectory);
-                    if (_currentUser != userName)
-                    {
-                        ToolStripItem toolStripItem = new ToolStripMenuItem(userName,null, new EventHandler(switchUser));
-                        switchUserToolStripMenuItem.DropDownItems.Add(toolStripItem);
-                    }
-                }
+                    ToolStripItem toolStripItem = new ToolStripMenuItem(userName, null, new EventHandler(switchUser));
+                    switchUserToolStripMenuItem.DropDownItems.Add(toolStripItem);
+                }                
             }
         }
 
@@ -1050,7 +1042,10 @@ namespace PhotoAlbumViewOfTheGods
         //Saves current album, removes event handler and closes
         private void Form_Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            saveAlbum();
+            if (_albumData.currentAlbum != "")
+            {
+                saveAlbum();
+            }
             this.FormClosing -= Form_Main_FormClosing;
             this.Close();
         }
@@ -1229,34 +1224,16 @@ namespace PhotoAlbumViewOfTheGods
 
         private void newUserToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string userName;
-            Form_NewUser namePrompt = new Form_NewUser(_directoryUsers, false);
-            namePrompt.StartPosition = FormStartPosition.CenterParent;
-            namePrompt.ShowDialog();
-            userName = namePrompt.userName; //Retrieve name entered by user
-            namePrompt.Dispose();
-
-            if (userName != "") //Create File if user pressed create
-            {
-                createUserDirectory(userName);
-                populateUsers();
-            }
+            newUser();
+            populateUsers();
         }
 
-        /// <summary>
-        /// Creates a directory in the users folder
-        /// </summary>
-        /// <param name="user">The name of the user whose folder will be created.</param>
-        private void createUserDirectory(string user)
+        private void newUser()
         {
-            try
-            {
-                Directory.CreateDirectory(_directoryUsers + "\\" + user);
-            }
-            catch
-            {
-                handleError("The user account could not be created.");
-            }
+            Form_NewUser namePrompt = new Form_NewUser(ref _allUsers, _directoryUsers, false);
+            namePrompt.StartPosition = FormStartPosition.CenterParent;
+            namePrompt.ShowDialog();
+            namePrompt.Dispose();
         }
 
         private void cleanupPhotosToolStripMenuItem_Click(object sender, EventArgs e)
