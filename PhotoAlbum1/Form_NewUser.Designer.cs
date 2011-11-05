@@ -78,7 +78,6 @@
             this.AcceptButton = this.button_addUser;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.CancelButton = this.button_cancel;
             this.ClientSize = new System.Drawing.Size(259, 88);
             this.Controls.Add(this.text_username);
@@ -90,7 +89,6 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "Form_NewUser";
-            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Add New User";
             this.ResumeLayout(false);

@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
-using System.Drawing.Drawing2D;
-using System.Xml.Linq;
+using System.Linq;
 using System.Threading;
+using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace PhotoAlbumViewOfTheGods
 {
@@ -70,6 +66,7 @@ namespace PhotoAlbumViewOfTheGods
             InitializeComponent();
         }
 
+
         //Panel double click event
         //If panel was double left clicked calls openviewer
         //Cavan
@@ -121,13 +118,6 @@ namespace PhotoAlbumViewOfTheGods
             deletePhoto();
         }
 
-        //Panel delete key event (currently implemented with protected override)
-        //private void panel_KeyPress(object sender, KeyPressEventArgs e)
-        //{
-        //    if (e.KeyChar == (char)Keys.Delete)
-        //        deletePhoto();
-        //}
-
         //Textbox picture name leave event
         //Clears rename text label when textbox loses focus
         //Cavan
@@ -151,12 +141,6 @@ namespace PhotoAlbumViewOfTheGods
         {
             albumClose();
         }
-
-        //Remove the currently selected picture from the thumbnail view
-        //private void button_Remove_Click(object sender, EventArgs e)
-        //{
-        //    deletePhoto();
-        //}
 
         //Album tree double click event
         //Double clicking on the album name will open it
@@ -369,21 +353,25 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void populateTree()
         {
+            int totalAlbums = 0;
             TreeNode node;
             string[] albumList = Directory.GetFiles(_directoryCurrentUser, "*" + _constantFileType);
             treeView_Albums.Nodes.Clear(); //Clears nodes so they can be added again
+            totalAlbums = albumList.Count();
 
             //Loop through each found file and add it to tree. Set its path and show the file name
-            for (int i = 0; i < albumList.Length; i++)
+            for (int i = 0; i < totalAlbums; i++)
             {
                 node = new TreeNode();
                 node.Name = albumList[i];
                 node.Text = Utilities.getNameFromPath(albumList[i]);
                 node.ImageIndex = 0;
                 treeView_Albums.Nodes.Add(node);
-                //Highlight if album node is open
-                if (node.Name == _albumData.filePath)
+
+                if (node.Name == _albumData.filePath) //Highlight if album node is open
+                {
                     node.BackColor = Color.LightGray;
+                }
             }
         }
 
@@ -895,31 +883,18 @@ namespace PhotoAlbumViewOfTheGods
             button_RenamePic.Enabled = true;
         }
 
-        /*Checkbox save event. Not used
-        private void checkBox_Description_Click(object sender, EventArgs e)
-        {
-            //pictureDataStored = albumData.getData(Convert.ToInt32(currentPhoto.id));
-            //pictureDataStored.description = richTextBox_Description.Text;
-            currentPhoto.description = richTextBox_Description.Text;
-            //albumData.setData(pictureDataStored, Convert.ToInt32(currentPhoto.id));
-            albumData.setData(currentPhoto.getData(), Convert.ToInt32(currentPhoto.id));
-            //checkBox_Description.Checked = true;
-            populateList();
-        }
-         * */
-
         //MenuItem New click event
         //Calls createAlbum and and enables menu items if successfull. Updates album tree list. Displays errors if can't access files
         //Cavan
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string albumName;
             Form_NewFileDialog namePrompt = new Form_NewFileDialog(_albumData.getAlbumList(), _constantFileType);
             namePrompt.ShowDialog();
-            //Retrieve name entered by user
-            string albumName = namePrompt.albumNameValue;
+            albumName = namePrompt.albumNameValue; //Retrieve name entered by user
             namePrompt.Dispose();
-            //Create File if user pressed create
-            if (albumName != "")
+
+            if (albumName != "") //Create File if user pressed create
             {
                 //Attmpe to close file
                 if (albumClose())
@@ -931,7 +906,7 @@ namespace PhotoAlbumViewOfTheGods
 
                         _albumData.filePath = _directoryCurrentUser + "\\" + albumName + _constantFileType; //sets current file path
                         populateTree();
-                        this.Text = _constantAppName + " : " + Utilities.getNameFromPath(_albumData.filePath);
+                        updateStatusBar("Current User: "+ _currentUser+ " || "+ _constantAppName + " : " + Utilities.getNameFromPath(_albumData.filePath));
                     }
                     else
                     {
@@ -978,13 +953,17 @@ namespace PhotoAlbumViewOfTheGods
         }
 
         //Close album method
-        //Attempts to save album. calls error if failed. If succeded clears displays and trees, disables menu and clear texts. Clears errors
+        //
         //Cavan
+        /// <summary>
+        /// Attempts to close the currently open album
+        /// </summary>
+        /// <returns>Returns true on successful save, false otherwise</returns>
         private bool albumClose()
         {
-            if (!_albumData.saveAlbum())
+            if (!saveAlbum())
             {
-                handleError("Unable to save file");
+                handleError("Unable to save album");
                 return false;
             }
             else
@@ -994,26 +973,22 @@ namespace PhotoAlbumViewOfTheGods
                 //Clear Trees
                 treeView_Pictures.Nodes.Clear();
                 _albumData.clearAlbum();
-
                 disableItems();
-
                 populateTree(); //remove highlight
-
-
                 return true;
             }
         }
 
-        //Clear thumbnails method
-        //Disposes all panels and images created for thumbnails. Disables picture data panel and clears panel data.
-        //Cavan
+        /// <summary>
+        /// Clear thumbnails method
+        /// Disposes all panels and images created for thumbnails. Disables picture data panel and clears panel data.
+        /// </summary>
         private void clearDisplay()
         {
-            int controlCount = panel1.Controls.Count - 1;
             int controlCounter = 0;
+            int controlCount = panel1.Controls.Count - 1;
             Control[] controlList = new Control[controlCount];
-            //get all panels, excluding border panel
-            foreach (Panel value in panel1.Controls)
+            foreach (Panel value in panel1.Controls) //get all panels, excluding border panel
             {
                 if (value != panel_Border)
                 {
@@ -1043,22 +1018,23 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            openFileDialog_Load.Filter = "Image Files|*.jpg;*.jpeg;*.bmp;*.gif;*.png";
+            List<Utilities.AllImagesInfo> allImages = Utilities.getAllImageInfo();
+
+            openFileDialog_Load.Filter = "Image Files|*.jpg;*.jpeg;*.bmp;*.png;*.gif";
             openFileDialog_Load.Title = "Import Photo";
             openFileDialog_Load.FileName = "";
             openFileDialog_Load.InitialDirectory = _lastImportedFrom;
             openFileDialog_Load.Multiselect = true; //alow loading of multiple files
-            List<Utilities.AllImagesInfo> allImages = Utilities.getAllImageInfo();
+
             if (openFileDialog_Load.ShowDialog() == DialogResult.OK)
             {
                 _lastImportedFrom = Path.GetDirectoryName(openFileDialog_Load.FileNames[0]);
                 foreach (string value in openFileDialog_Load.FileNames)
                 {
-                    //check if file is valid
-                    if (Utilities.isImageValid(value))
+                    if (Utilities.isImageValid(value)) //check if file is valid
                     {
                         _albumData.addPhoto(value, ref allImages);
-                        _albumData.saveAlbum();
+                        saveAlbum();
                     }
                     else
                     {
@@ -1072,12 +1048,20 @@ namespace PhotoAlbumViewOfTheGods
 
         //Form Closing event
         //Saves current album, removes event handler and closes
-        //Cavan
         private void Form_Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            albumClose();
+            saveAlbum();
             this.FormClosing -= Form_Main_FormClosing;
             this.Close();
+        }
+
+        /// <summary>
+        /// Attempts to save the currently open album
+        /// </summary>
+        /// <returns>Returns true on successful save, false otherwise</returns>
+        private bool saveAlbum()
+        {
+            return (_albumData.saveAlbum()) ? true : false;
         }
 
         //Album tree double click event
@@ -1085,15 +1069,17 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void treeView_Pictures_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if(e.Button == MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
+            {
                 openViewer();
+            }
         }
 
-        //Rename album method
-        //Closes current album. creates name prompt. Retrieves user entered value. Calls loadAlbum passing album name.
-        //Calls deleteAlbum, to delete the album file. Calls saveAlbum, to write file with the new name.
-        //Calls error handler if any files cannot be accessed
-        //Zach
+        /// <summary>
+        /// Closes current album. creates name prompt. Retrieves user entered value. Calls loadAlbum passing album name.
+        /// Calls deleteAlbum, to delete the album file. Calls saveAlbum, to write file with the new name.
+        /// Calls error handler if any files cannot be accessed
+        /// </summary>
         private void renameAlbum()
         {
             string newAlbumName;
@@ -1112,8 +1098,7 @@ namespace PhotoAlbumViewOfTheGods
                     if (_albumData.deleteAlbum(_treeNode.Name))
                     {
                         _albumData.filePath = _directoryCurrentUser + "\\" + newAlbumName + _constantFileType;
-                        _albumData.saveAlbum();
-                        //albumData.clearAlbum(); //why was this in here? Ask Cavan
+                        saveAlbum();
                         populateTree();
                         openAlbum(_albumData.filePath);
                     }
@@ -1130,10 +1115,10 @@ namespace PhotoAlbumViewOfTheGods
             }           
         }
 
-        //Delete album method
-        //Passed file to delete
-        //Closes album if its open. Deletes file. Calls error handler if any files can't be accessed. Updates album tree
-        //Zach
+        /// <summary>
+        /// Attempts to delete the passed album path
+        /// </summary>
+        /// <param name="filePathToDelete">The path to the album</param>
         private void deleteAlbum(string filePathToDelete)
         {
             if (MessageBox.Show("Are you sure you want to delete this album and all the photos within?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
@@ -1141,10 +1126,7 @@ namespace PhotoAlbumViewOfTheGods
                 if (_albumData.deleteAlbum(filePathToDelete))
                 {
                     populateTree();
-                    if (_albumData.filePath == filePathToDelete) //we deleted the open album so clear the filePath or else on reopen it will save the album again
-                    {
-                        _albumData.filePath = "";
-                    }
+                    _albumData.filePath = (_albumData.filePath == filePathToDelete) ? "" : filePathToDelete; //we deleted the open album so clear the filePath or else on reopen it will save the album again
                 }
                 else
                 {
@@ -1153,23 +1135,23 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //View image method
-        //Creates a new viewer form passing the photo path and name. Shows new form
-        //Cavan
+        /// <summary>
+        /// Opens the picture viewer and starts the display on the current photo selected
+        /// </summary>
         private void openViewer()
         {
             if (File.Exists(_currentPhoto.path)) //Shows nothing if file wasn't found (warning images)
             {
                 Form_Viewer picView = new Form_Viewer(_pictureList, Convert.ToInt32(_currentPhoto.id), _constantAppName);
+                picView.StartPosition = FormStartPosition.CenterParent;
                 picView.ShowDialog();
                 _pictureList = picView.pictureList;
-                picView.Dispose();
                 if (picView.isModified)
                 {
                     clearDisplay();
                     populateScreen();
                 }
-                picView.Dispose();                
+                picView.Dispose();
             }
         }
 
@@ -1181,8 +1163,6 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            TreeNode node = new TreeNode();
-            node.Name = null;
             if (keyData == Keys.Delete && ActiveControl.GetType() == typeof(Panel) && ActiveControl != panel1 && ActiveControl != panel_Border)
             {
                 deletePhoto();
@@ -1198,23 +1178,19 @@ namespace PhotoAlbumViewOfTheGods
                     }
                 }
 
-            }
-            //Also can intercept enter keys and anything else. Currently disabled.
-            //else if (keyData == Keys.Enter && ActiveControl.GetType() == typeof(Panel) && ActiveControl != panel1 && ActiveControl != panel_Border)
-            //    openViewer();
-            
+            }            
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        //Remove photo method
-        //Removes picture data from data set. Clears display, then reloads both views
-        //Cavan
+        /// <summary>
+        /// Deletes a photo from an album and then saves the album
+        /// </summary>
         private void deletePhoto()
         {
             if (MessageBox.Show("Are you sure you want to delete this photo?", "Confirm Deletion", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == System.Windows.Forms.DialogResult.Yes)
             {
                 _albumData.RemovePic(_currentPhoto.id);
-                _albumData.saveAlbum();
+                saveAlbum();
                 clearDisplay();
                 populateScreen();
                 populateList();
@@ -1242,13 +1218,12 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Event Handler
-        //Clears errors
-        //Cavan
+        /// <summary>
+        /// This function displays a message box
+        /// </summary>
+        /// <param name="message">A string that will be displayed in an error messagebox.</param>
         private void handleError(string message)
         {
-            //toolStripStatusLabel_Error.Text = "";
-            //toolStripStatusLabel_Clear.Visible = false;
             MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
@@ -1258,14 +1233,29 @@ namespace PhotoAlbumViewOfTheGods
             Form_NewUser namePrompt = new Form_NewUser(_directoryUsers, false);
             namePrompt.StartPosition = FormStartPosition.CenterParent;
             namePrompt.ShowDialog();
-            //Retrieve name entered by user
-            userName = namePrompt.userName;
+            userName = namePrompt.userName; //Retrieve name entered by user
             namePrompt.Dispose();
-            //Create File if user pressed create
-            if (userName != "")
+
+            if (userName != "") //Create File if user pressed create
             {
-                Directory.CreateDirectory(_directoryUsers + "\\" + userName);
+                createUserDirectory(userName);
                 populateUsers();
+            }
+        }
+
+        /// <summary>
+        /// Creates a directory in the users folder
+        /// </summary>
+        /// <param name="user">The name of the user whose folder will be created.</param>
+        private void createUserDirectory(string user)
+        {
+            try
+            {
+                Directory.CreateDirectory(_directoryUsers + "\\" + user);
+            }
+            catch
+            {
+                handleError("The user account could not be created.");
             }
         }
 
@@ -1275,7 +1265,6 @@ namespace PhotoAlbumViewOfTheGods
             string wording;
             if (MessageBox.Show("You are about to remove all photos that are not in use by any of the users of this program. This action cannot be undone. Are you sure you want to continue?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                _albumData.saveAlbum();
                 totalRemoved = Utilities.cleanUpPhotos();
                 wording = totalRemoved + ((totalRemoved == 1) ? " photo was removed" : " photos were removed");
                 MessageBox.Show(wording, "Photos Removed", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -1289,12 +1278,15 @@ namespace PhotoAlbumViewOfTheGods
 
         private void printAlbumToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            int total;
+            string wording;
             openAlbum(_treeNode.Name);
-            int total = _pictureList.Count;
-            string wording = (total == 1) ? "photo" : "photos";
+            total = _pictureList.Count;
+            wording = (total == 1) ? "photo" : "photos";
+
             if (total == 0)
             {
-                MessageBox.Show("There are no photos in this album!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("There are no photos in this album!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }else if(MessageBox.Show("Are you sure you want to print " + total + " " + wording + "?", "Confirm Print", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 for (int i = 0; i < total; i++)
@@ -1312,8 +1304,8 @@ namespace PhotoAlbumViewOfTheGods
         private void searchToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string searchTerm;
-
             Form_Search searchForm = new Form_Search();
+            searchForm.StartPosition = FormStartPosition.CenterParent;
             searchForm.ShowDialog();
             searchTerm = searchForm.searchTerm;
             searchForm.Dispose();

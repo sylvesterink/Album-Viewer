@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form_Search));
             this.buttonSearch = new System.Windows.Forms.Button();
             this.textBoxSearchTerm = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -36,7 +37,7 @@
             // 
             // buttonSearch
             // 
-            this.buttonSearch.Location = new System.Drawing.Point(122, 61);
+            this.buttonSearch.Location = new System.Drawing.Point(122, 44);
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.Size = new System.Drawing.Size(75, 23);
             this.buttonSearch.TabIndex = 1;
@@ -46,7 +47,7 @@
             // 
             // textBoxSearchTerm
             // 
-            this.textBoxSearchTerm.Location = new System.Drawing.Point(122, 32);
+            this.textBoxSearchTerm.Location = new System.Drawing.Point(122, 18);
             this.textBoxSearchTerm.Name = "textBoxSearchTerm";
             this.textBoxSearchTerm.Size = new System.Drawing.Size(172, 20);
             this.textBoxSearchTerm.TabIndex = 0;
@@ -54,7 +55,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 32);
+            this.label1.Location = new System.Drawing.Point(12, 18);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(103, 13);
             this.label1.TabIndex = 2;
@@ -63,7 +64,7 @@
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(219, 61);
+            this.buttonCancel.Location = new System.Drawing.Point(219, 44);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonCancel.TabIndex = 2;
@@ -77,13 +78,18 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(312, 102);
+            this.ClientSize = new System.Drawing.Size(312, 81);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxSearchTerm);
             this.Controls.Add(this.buttonSearch);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "Form_Search";
-            this.Text = "Form_Search";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.Text = "Search Photos";
             this.ResumeLayout(false);
             this.PerformLayout();
 
