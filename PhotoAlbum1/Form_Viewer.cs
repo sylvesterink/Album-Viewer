@@ -1,36 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-//Needed for drawing images
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Runtime.InteropServices;
+using System.Linq;
+using System.Windows.Forms;
 using System.Xml.Linq;
 
 namespace PhotoAlbumViewOfTheGods
 {
-    //Public form class for viewing photo in a new window
-    //Passed file path and photo name
-    //Returns nothing, all values are private
-    //Cavan
+    /// <summary>
+    /// Public form class for viewing photo in a new window
+    /// </summary>
     public partial class Form_Viewer : Form
     {
-        private int _totalFlips = 0;
         private string _windowTitle;
+        private int _currentImage;
         private int _picWidth = 0;
         private int _picHeight = 0;
+        private int _totalFlips = 0;
         private bool _isModified = false;
         private bool _isModifiedCurrent = false;
         private Image _imageViewer;
-
         private List<pictureData> _pictureList;
-        private int _currentImage;
-
-        static System.Windows.Forms.Timer slideshowTimer;
+        private Timer slideshowTimer;
 
         public bool isModified
         {
@@ -42,31 +33,30 @@ namespace PhotoAlbumViewOfTheGods
             get { return _pictureList; }
         }
 
-        //Constructor function, saves passed values and calls main
-        //Cavan
+        /// <summary>
+        /// Constructor function that initailizes member variables
+        /// </summary>
+        /// <param name="pictureList">All the pictures from the current album</param>
+        /// <param name="currentImage">The image to start on</param>
+        /// <param name="title">The title that will go in the top bar of the form</param>
         public Form_Viewer(List<pictureData> pictureList, int currentImage, string title)
         {
             InitializeComponent();
             _pictureList = pictureList;
             _currentImage = currentImage;
             _windowTitle = title;
-
-            //Sets painting variables
-            //MAY NOT BE NECESSARY FOR PICTURE BOX
-            //SetStyle(ControlStyles.UserPaint, true);
-            //SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            
             viewImage(_pictureList[_currentImage].path);
-
-            //set up timer for slideshow
-            slideshowTimer = new System.Windows.Forms.Timer();
+            slideshowTimer = new Timer();
             slideshowTimer.Tick += new EventHandler(TimerEventProcessor);
-            
         }
 
         //Main function: sets all needed values for painting image
         //Passed file path
         //Cavan
+        /// <summary>
+        /// Changes the current image in the photo viewer to the passed string path
+        /// </summary>
+        /// <param name="path">The path to the image to display</param>
         private void viewImage(string path)
         {
             _imageViewer = Image.FromFile(path);

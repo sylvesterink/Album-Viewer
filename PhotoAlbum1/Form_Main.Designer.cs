@@ -56,6 +56,8 @@
             this.toolStripStatusLabel_Spacer = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel_Error = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
             this.panel_Border = new System.Windows.Forms.Panel();
             this.contextMenuStrip_Picture = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.fileNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,6 +99,7 @@
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.contextMenuStrip_Picture.SuspendLayout();
             this.panel_PictureData.SuspendLayout();
             this.tabControl_List.SuspendLayout();
@@ -310,6 +313,7 @@
             this.panel1.AutoScroll = true;
             this.panel1.BackColor = System.Drawing.Color.Silver;
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel1.Controls.Add(this.panel2);
             this.panel1.Controls.Add(this.panel_Border);
             this.panel1.Location = new System.Drawing.Point(3, 0);
             this.panel1.Name = "panel1";
@@ -317,10 +321,31 @@
             this.panel1.TabIndex = 2;
             this.panel1.Click += new System.EventHandler(this.panel1_Click);
             // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.Gainsboro;
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.label4);
+            this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.panel2.Location = new System.Drawing.Point(265, 149);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(368, 49);
+            this.panel2.TabIndex = 8;
+            this.panel2.Visible = false;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(1, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(363, 39);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "Processing Images...";
+            // 
             // panel_Border
             // 
             this.panel_Border.BackColor = System.Drawing.Color.LightGray;
-            this.panel_Border.Location = new System.Drawing.Point(252, 15);
+            this.panel_Border.Location = new System.Drawing.Point(5, 4);
             this.panel_Border.Name = "panel_Border";
             this.panel_Border.Size = new System.Drawing.Size(110, 110);
             this.panel_Border.TabIndex = 7;
@@ -682,6 +707,8 @@
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.contextMenuStrip_Picture.ResumeLayout(false);
             this.panel_PictureData.ResumeLayout(false);
             this.panel_PictureData.PerformLayout();
@@ -763,5 +790,7 @@
         private System.Windows.Forms.ToolStripMenuItem printAlbumToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyImageToAnotherAlbumToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem searchToolStripMenuItem;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Label label4;
     }
 }

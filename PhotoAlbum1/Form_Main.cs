@@ -44,6 +44,9 @@ namespace PhotoAlbumViewOfTheGods
         private int _frameSpacingX = 0;
         private const float _borderFactor = 8;
 
+        //Memember Variables
+        private int _periodCounter = 3;
+
         //Data Structures    
         private TreeNode _treeNode;
         private Photo _currentPhoto;
@@ -51,6 +54,7 @@ namespace PhotoAlbumViewOfTheGods
         private List<pictureData> _pictureList;
         private pictureData _pictureDataStored;
         private List<string> _allUsers;
+        private System.Timers.Timer _timer = new System.Timers.Timer();
 
         /// <summary>
         /// Consturctor function for the program. Initalizes member variables and components
@@ -680,12 +684,56 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        private void disablePanel()
+        {
+            _timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimedEvent);
+            _timer.Interval = 500;
+            _timer.Start();
+            this.Invoke(new MethodInvoker(delegate()
+            {
+                panel2.Show();
+                panel2.BringToFront();
+                tabControl_List.Enabled = false;
+            }));
+        }
+        
+        private void enablePanel()
+        {
+            _timer.Stop();
+            _timer.Dispose();
+            this.Invoke(new MethodInvoker(delegate()
+            {
+                panel2.Hide();
+                tabControl_List.Enabled = true;
+            }));
+        }
+
+        private void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
+        {
+            try
+            {
+                this.Invoke(new MethodInvoker(delegate()
+                {
+                    string periods = "";
+                    _periodCounter = (_periodCounter > 3) ? 0 : _periodCounter;
+                    for (int i = 0; i < _periodCounter; i++)
+                    {
+                        periods += ".";
+                    }
+                    label4.Text = "Processing Images" + periods;
+                    _periodCounter++;
+                }));
+            }
+            catch { }
+        }
+
         private void showThumbnail(List<pictureData> picList)
         {
             pictureData picData = new pictureData();
             int loopCount = picList.Count;
             Panel tempPanel;
-            try{               
+            try{
+                disablePanel();
                 for (int i = 0; i < loopCount; i++)
                 {
                     //If panel is already added, skip it (mainly for when inporting pictures)
@@ -694,16 +742,21 @@ namespace PhotoAlbumViewOfTheGods
                         continue;
                     }
                     picData = picList[i];
-                    tempPanel = getNewThumbnail(picData, i); //Create new panel
+                    tempPanel = getNewThumbnail(ref picData, i); //Create new panel
+                    picList[i] = picData; //reset the picList[i] with the picData changed in the thumbnail - we update the photo dimensions
                     tempPanel.Location = getFrameLocation(i); //Sets panel position from frame variables   
-                    tempPanel.Show();  //Still shares reference with panel1.Controls element, so this change affects that one
                     this.Invoke(new MethodInvoker(delegate()
-                    {                            
+                    {
+                        tempPanel.Show();  //Still shares reference with panel1.Controls element, so this change affects that one
                         panel1.Controls.Add(tempPanel); //Add panel to main panel                           
                     }));                    
                 }
+                enablePanel();
             }
-            catch { }
+            catch
+            {
+
+            }
         }
 
         //Display thumbnails method
@@ -744,7 +797,7 @@ namespace PhotoAlbumViewOfTheGods
         //Parameters: accepts picturedata struct
         //Creates a new panel, sets its picture data, and sets background image to scaled down image from file
         //Returns thumbnial panel
-        private Panel getNewThumbnail(pictureData imageData, int id)
+        private Panel getNewThumbnail(ref pictureData imageData, int id)
         {
             Panel newPanel = new Panel();
             newPanel.Visible = false;
@@ -758,6 +811,8 @@ namespace PhotoAlbumViewOfTheGods
                 Image tempImage = Image.FromFile(imageData.path);
                 //imageData.size = tempImage.Size;
                 //_albumData.setData(imageData, id);
+                imageData.size.Height = tempImage.Height;
+                imageData.size.Width = tempImage.Width;
                 newPanel.BackgroundImage = Utilities.ScalImage(tempImage, new Size(frameSize.Width, frameSize.Height));
                 //imageData.size = newPanel.BackgroundImage.Size;
                 tempImage.Dispose();
@@ -996,7 +1051,11 @@ namespace PhotoAlbumViewOfTheGods
             //dispoose all panels
             for (int j = controlList.Count() - 1; j >= 0; j--)
             {
-                controlList[j].Dispose();
+                if (controlList[j].Name != panel2.Name) //dispose of panels that is not the processing image panel
+                {
+                    controlList[j].Dispose();
+                }
+                
             }
 
             //Clear and disable data panel
