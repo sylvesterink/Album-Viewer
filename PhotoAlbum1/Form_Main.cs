@@ -76,7 +76,18 @@ namespace PhotoAlbumViewOfTheGods
         private void Form1_Load(object sender, EventArgs e)
         {
             bool isFirstTime = true;
-            _allUsers = Utilities.listOfUsers(_directoryUsers);
+
+            if (!Directory.Exists(_directoryUsers)) //if the users directory does not exist
+            {
+                Directory.CreateDirectory(_directoryUsers); //create the users directory
+            }
+
+            if (!Directory.Exists(_directoryPhotos)) //if the photos directory does not exist
+            {
+                Directory.CreateDirectory(_directoryPhotos); //create the photos directory
+            }
+
+            _allUsers = Utilities.listOfUsers(_directoryUsers); //gets all the users - keep after we make sure we have already created the users directory
             if (File.Exists(_lastUserFile)) //get the last user to use the program
             {
                 TextReader tr = new StreamReader(_lastUserFile); //open the last user file
@@ -94,7 +105,7 @@ namespace PhotoAlbumViewOfTheGods
                     _directoryCurrentUser = _directoryUsers + "\\" + _currentUser; //set the users current directory
                 }
             }
-           
+            
             if (isFirstTime || !File.Exists(_lastUserFile))
             {
                 MessageBox.Show("Welcome to Photo Album Viewer of the Gods. Before you can continue you must create a new user profile.", "Welcome", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -109,16 +120,6 @@ namespace PhotoAlbumViewOfTheGods
                 _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
                 updateLastUserFile();
                 _allUsers.Sort();
-            }
-
-            if (!Directory.Exists(_directoryUsers)) //if the users directory does not exist
-            {
-                Directory.CreateDirectory(_directoryUsers); //create the users directory
-            }
-
-            if (!Directory.Exists(_directoryPhotos)) //if the photos directory does not exist
-            {
-                Directory.CreateDirectory(_directoryPhotos); //create the photos directory
             }
 
             if (!Directory.Exists(_directoryCurrentUser)) //if the current user directory does not exist
