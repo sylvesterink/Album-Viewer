@@ -45,6 +45,7 @@
             this.removeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.defaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortDateAddedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sortDateModifiedToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -100,7 +101,6 @@
             this.colorDialog_Background = new System.Windows.Forms.ColorDialog();
             this.panel_Line = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.defaultToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -243,24 +243,31 @@
             this.sortToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.sortToolStripMenuItem.Text = "S&ort By";
             // 
+            // defaultToolStripMenuItem
+            // 
+            this.defaultToolStripMenuItem.Name = "defaultToolStripMenuItem";
+            this.defaultToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.defaultToolStripMenuItem.Text = "Default";
+            this.defaultToolStripMenuItem.Click += new System.EventHandler(this.defaultToolStripMenuItem_Click);
+            // 
             // sortNameToolStripMenuItem
             // 
             this.sortNameToolStripMenuItem.Name = "sortNameToolStripMenuItem";
-            this.sortNameToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sortNameToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.sortNameToolStripMenuItem.Text = "&Name";
             this.sortNameToolStripMenuItem.Click += new System.EventHandler(this.sortNameToolStripMenuItem_Click);
             // 
             // sortDateAddedToolStripMenuItem
             // 
             this.sortDateAddedToolStripMenuItem.Name = "sortDateAddedToolStripMenuItem";
-            this.sortDateAddedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sortDateAddedToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.sortDateAddedToolStripMenuItem.Text = "Date &Added";
             this.sortDateAddedToolStripMenuItem.Click += new System.EventHandler(this.sortDateAddedToolStripMenuItem_Click);
             // 
             // sortDateModifiedToolStripMenuItem
             // 
             this.sortDateModifiedToolStripMenuItem.Name = "sortDateModifiedToolStripMenuItem";
-            this.sortDateModifiedToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.sortDateModifiedToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.sortDateModifiedToolStripMenuItem.Text = "Date &Modified";
             this.sortDateModifiedToolStripMenuItem.Click += new System.EventHandler(this.sortDateModifiedToolStripMenuItem_Click);
             // 
@@ -720,13 +727,6 @@
             this.panel_Line.TabIndex = 16;
             this.panel_Line.MouseEnter += new System.EventHandler(this.treeMin_MouseEnter);
             this.panel_Line.MouseLeave += new System.EventHandler(this.treeMin_MouseLeave);
-            // 
-            // defaultToolStripMenuItem
-            // 
-            this.defaultToolStripMenuItem.Name = "defaultToolStripMenuItem";
-            this.defaultToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.defaultToolStripMenuItem.Text = "Default";
-            this.defaultToolStripMenuItem.Click += new System.EventHandler(this.defaultToolStripMenuItem_Click);
             // 
             // Form_Main
             // 

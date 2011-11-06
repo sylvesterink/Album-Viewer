@@ -1373,13 +1373,22 @@ namespace PhotoAlbumViewOfTheGods
             if (searchTerm != "")
             {
                 List<pictureData> newList = new List<pictureData>();
-                foreach (pictureData picture in _pictureList.FindAll(s => s.name.Contains(searchTerm)))
+                foreach (pictureData picture in _pictureList.FindAll(s => s.name.ToLower().Contains(searchTerm.ToLower())))
                 {
                     newList.Add(picture);
                 }
-                clearDisplay();
-                populateScreen(newList);
-                populateList(newList);
+                if (newList.Count > 0)
+                {
+                    clearDisplay();
+                    populateScreen(newList);
+                    populateList(newList);
+                    ToolStripMenuItem test = new ToolStripMenuItem("Clear Search",null, new EventHandler(clearResults));
+                    pictureToolStripMenuItem.DropDownItems.Insert(3, test);
+                }
+                else
+                {
+                    MessageBox.Show("No images matched your search criteria.", "No Images Found", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
             }
            
         }
@@ -1419,6 +1428,13 @@ namespace PhotoAlbumViewOfTheGods
             clearDisplay();
             populateScreen(sortedPictureList);
             populateList(sortedPictureList);
+        }
+
+        private void clearResults(object sender, EventArgs e)
+        {
+            populateList();
+            populateScreen();
+            pictureToolStripMenuItem.DropDownItems.RemoveAt(3);
         }
     }
 }
