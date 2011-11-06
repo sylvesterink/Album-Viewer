@@ -46,14 +46,14 @@ namespace PhotoAlbumViewOfTheGods
 
         //Memember Variables
         private int _periodCounter = 3;
-        private bool _isSorted = false;
+        //private bool _isSorted = false;
 
         //Data Structures    
         private TreeNode _treeNode;
         private Photo _currentPhoto;
         private XMLInterface _albumData;
         private List<pictureData> _pictureList;
-        private List<pictureData> _sortedPictureList;
+        //private List<pictureData> _sortedPictureList;
         private pictureData _pictureDataStored;
         private List<string> _allUsers;
         private System.Timers.Timer _timer = new System.Timers.Timer();
@@ -411,7 +411,7 @@ namespace PhotoAlbumViewOfTheGods
         //Method: retrieve album data and clear tree
         //        loop through each picture and add its name, description, and path to the photo tree.
         //Cavan
-        private void populateList()
+        private void populateList(List<pictureData> searchList = null)
         {
             //these don't seem to be needed.  delete if the list tests out fine
             //_pictureList = _albumData.getDataList();
@@ -424,9 +424,9 @@ namespace PhotoAlbumViewOfTheGods
 
             List<pictureData> picList;
 
-            if (_isSorted)
+            if (searchList != null)
             {
-                picList = _sortedPictureList;
+                picList = searchList;
             }
             else
             {
@@ -761,7 +761,7 @@ namespace PhotoAlbumViewOfTheGods
         //Method: Retrieves current data list. For each picture, creates a thumbnail panel. Shows and positions each thumbnail
         //        Sets each panel's properties and event handlers.
         //Cavan
-        private void populateScreen(string searchTerm="")
+        private void populateScreen(List<pictureData> searchList = null)
         {
             int scrollPosition = panel1.VerticalScroll.Value; //save user scroll position
             
@@ -769,25 +769,13 @@ namespace PhotoAlbumViewOfTheGods
             
             panel1.VerticalScroll.Value = 0; //set scroll to top for correct reference when setting panel location
             panel1.Show();
-            if (searchTerm == "")
+            if (searchList == null)
             {
-                if (_isSorted)
-                {
-                    new Thread(() => this.showThumbnail(_sortedPictureList)).Start();
-                }
-                else
-                {
-                    new Thread(() => this.showThumbnail(_pictureList)).Start();
-                }
+                new Thread(() => this.showThumbnail(_pictureList)).Start();
             }
             else
             {
-                List<pictureData> newList = new List<pictureData>();
-                foreach (pictureData picture in _pictureList.FindAll(s => s.name.Contains(searchTerm)))
-                {
-                    newList.Add(picture);
-                }
-                new Thread(() => this.showThumbnail(newList)).Start();
+                new Thread(() => this.showThumbnail(searchList)).Start();
             }
 
             panel_Border.Visible = false;
@@ -1013,7 +1001,6 @@ namespace PhotoAlbumViewOfTheGods
         /// <returns>Returns true on successful save, false otherwise</returns>
         private bool albumClose()
         {
-            _isSorted = false;
             
             if (_albumData.currentAlbum == "")
             {
@@ -1385,25 +1372,30 @@ namespace PhotoAlbumViewOfTheGods
 
             if (searchTerm != "")
             {
+                List<pictureData> newList = new List<pictureData>();
+                foreach (pictureData picture in _pictureList.FindAll(s => s.name.Contains(searchTerm)))
+                {
+                    newList.Add(picture);
+                }
                 clearDisplay();
-                populateScreen(searchTerm);
+                populateScreen(newList);
+                populateList(newList);
             }
            
         }
 
         private void sortNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _sortedPictureList = new List<pictureData>(_pictureList);
-            _sortedPictureList.Sort((x, y) => string.Compare(x.name, y.name));
-            _isSorted = true;
+            List<pictureData> sortedPictureList;
+            sortedPictureList = new List<pictureData>(_pictureList);
+            sortedPictureList.Sort((x, y) => string.Compare(x.name, y.name));
             clearDisplay();
-            populateScreen();
-            populateList();
+            populateScreen(sortedPictureList);
+            populateList(sortedPictureList);
         }
 
         private void defaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _isSorted = false;
             clearDisplay();
             populateScreen();
             populateList();
@@ -1411,22 +1403,22 @@ namespace PhotoAlbumViewOfTheGods
 
         private void sortDateAddedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _sortedPictureList = new List<pictureData>(_pictureList);
-            _sortedPictureList.Sort((x, y) => string.Compare(x.dateAdded, y.dateAdded));
-            _isSorted = true;
+            List<pictureData> sortedPictureList;
+            sortedPictureList = new List<pictureData>(_pictureList);
+            sortedPictureList.Sort((x, y) => string.Compare(x.dateAdded, y.dateAdded));
             clearDisplay();
-            populateScreen();
-            populateList();
+            populateScreen(sortedPictureList);
+            populateList(sortedPictureList);
         }
 
         private void sortDateModifiedToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _sortedPictureList = new List<pictureData>(_pictureList);
-            _sortedPictureList.Sort((x, y) => string.Compare(x.dateModified, y.dateModified));
-            _isSorted = true;
+            List<pictureData> sortedPictureList;
+            sortedPictureList = new List<pictureData>(_pictureList);
+            sortedPictureList.Sort((x, y) => string.Compare(x.dateModified, y.dateModified));
             clearDisplay();
-            populateScreen();
-            populateList();
+            populateScreen(sortedPictureList);
+            populateList(sortedPictureList);
         }
     }
 }
