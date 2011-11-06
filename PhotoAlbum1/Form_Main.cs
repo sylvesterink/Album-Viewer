@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -46,12 +46,14 @@ namespace PhotoAlbumViewOfTheGods
 
         //Memember Variables
         private int _periodCounter = 3;
+        private bool _isSorted = false;
 
         //Data Structures    
         private TreeNode _treeNode;
         private Photo _currentPhoto;
         private XMLInterface _albumData;
         private List<pictureData> _pictureList;
+        private List<pictureData> _sortedPictureList;
         private pictureData _pictureDataStored;
         private List<string> _allUsers;
         private System.Timers.Timer _timer = new System.Timers.Timer();
@@ -411,11 +413,47 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void populateList()
         {
+            //these don't seem to be needed.  delete if the list tests out fine
+            //_pictureList = _albumData.getDataList();
+            //string[] nodes = _albumData.getPictureList();
+
+            setListContextMenu(); //setup the context menus for the list
+
             TreeNode newNode;
-            _pictureList = _albumData.getDataList();
-            treeView_Pictures.Nodes.Clear();
-            string[] nodes = _albumData.getPictureList();
             string tempText = "";
+
+            List<pictureData> picList;
+
+            if (_isSorted)
+            {
+                picList = _sortedPictureList;
+            }
+            else
+            {
+                picList = _pictureList;
+            }
+
+
+            treeView_Pictures.Nodes.Clear();
+            for (int i = 0; i < picList.Count; i++)
+            {
+                //Photo list
+                newNode = new TreeNode();
+                newNode.Name = picList[i].path;
+                //Append description if there is any
+                tempText = picList[i].description;
+                if (tempText.Length > 50)
+                    newNode.Text = picList[i].name + "   |   " + tempText.Substring(0, 50) + "...";
+                else if (tempText.Length > 0)
+                    newNode.Text = picList[i].name + "   |   " + picList[i].description.Substring(0, picList[i].description.Length);
+                else
+                    newNode.Text = picList[i].name;
+                treeView_Pictures.Nodes.Add(newNode);
+            }
+        }
+
+        private void setListContextMenu()
+        {
             ToolStripItem toolStripItem;
             string[] albums = _albumData.getAlbumList();
             copyImageToAnotherAlbumToolStripMenuItem.Enabled = false;
@@ -432,23 +470,6 @@ namespace PhotoAlbumViewOfTheGods
                         copyImageToAnotherAlbumToolStripMenuItem.DropDownItems.Add(toolStripItem);
                     }
                 }
-            }
-
-            
-            for (int i = 0; i < _pictureList.Count; i++)
-            {
-                //Photo list
-                newNode = new TreeNode();
-                newNode.Name = _pictureList[i].path;
-                //Append description if there is any
-                tempText = _pictureList[i].description;
-                if (tempText.Length > 50)
-                    newNode.Text = _pictureList[i].name + "   |   " + tempText.Substring(0, 50) + "...";
-                else if (tempText.Length > 0)
-                    newNode.Text = _pictureList[i].name + "   |   " + _pictureList[i].description.Substring(0, _pictureList[i].description.Length);
-                else
-                    newNode.Text = _pictureList[i].name;
-                treeView_Pictures.Nodes.Add(newNode);
             }
         }
 
@@ -714,10 +735,10 @@ namespace PhotoAlbumViewOfTheGods
                 for (int i = 0; i < loopCount; i++)
                 {
                     //If panel is already added, skip it (mainly for when inporting pictures)
-                    if (panel1.Controls.Find("panel" + Utilities.getIdFromInt(i), false).Count() > 0)
-                    {
-                        continue;
-                    }
+                    //if (panel1.Controls.Find("panel" + Utilities.getIdFromInt(i), false).Count() > 0)
+                    //{
+                    //    continue;
+                    //}
                     picData = picList[i];
                     tempPanel = getNewThumbnail(ref picData, i); //Create new panel
                     picList[i] = picData; //reset the picList[i] with the picData changed in the thumbnail - we update the photo dimensions
@@ -750,7 +771,14 @@ namespace PhotoAlbumViewOfTheGods
             panel1.Show();
             if (searchTerm == "")
             {
-                new Thread(() => this.showThumbnail(_pictureList)).Start();
+                if (_isSorted)
+                {
+                    new Thread(() => this.showThumbnail(_sortedPictureList)).Start();
+                }
+                else
+                {
+                    new Thread(() => this.showThumbnail(_pictureList)).Start();
+                }
             }
             else
             {
@@ -985,6 +1013,8 @@ namespace PhotoAlbumViewOfTheGods
         /// <returns>Returns true on successful save, false otherwise</returns>
         private bool albumClose()
         {
+            _isSorted = false;
+            
             if (_albumData.currentAlbum == "")
             {
                 return true;
@@ -1359,6 +1389,44 @@ namespace PhotoAlbumViewOfTheGods
                 populateScreen(searchTerm);
             }
            
+        }
+
+        private void sortNameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _sortedPictureList = new List<pictureData>(_pictureList);
+            _sortedPictureList.Sort((x, y) => string.Compare(x.name, y.name));
+            _isSorted = true;
+            clearDisplay();
+            populateScreen();
+            populateList();
+        }
+
+        private void defaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _isSorted = false;
+            clearDisplay();
+            populateScreen();
+            populateList();
+        }
+
+        private void sortDateAddedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _sortedPictureList = new List<pictureData>(_pictureList);
+            _sortedPictureList.Sort((x, y) => string.Compare(x.dateAdded, y.dateAdded));
+            _isSorted = true;
+            clearDisplay();
+            populateScreen();
+            populateList();
+        }
+
+        private void sortDateModifiedToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _sortedPictureList = new List<pictureData>(_pictureList);
+            _sortedPictureList.Sort((x, y) => string.Compare(x.dateModified, y.dateModified));
+            _isSorted = true;
+            clearDisplay();
+            populateScreen();
+            populateList();
         }
     }
 }
