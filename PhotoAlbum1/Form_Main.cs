@@ -429,7 +429,6 @@ namespace PhotoAlbumViewOfTheGods
                     if (albumName != _albumData.currentAlbum)
                     {
                         toolStripItem = new ToolStripMenuItem(Utilities.getNameFromPath(albumName), null, new EventHandler(copyImageToAlbum));
-                        toolStripItem.Tag = "test";
                         copyImageToAnotherAlbumToolStripMenuItem.DropDownItems.Add(toolStripItem);
                     }
                 }
@@ -633,24 +632,18 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void openAlbum(string albumPath)
         {
-            //If there is a file open, close it then open, else just open
-            if (_albumData.filePath != "")
+            if (_albumData.filePath == "") //if no album is open
             {
-                //If album can't close show error message and stop
-                if (albumClose())
+                openAlbumFromFile(albumPath);
+            }else if(_albumData.filePath != albumPath){ ///make sure we're not opening the same album
+                if (albumClose()) //close the open album
                 {
-                    //Open
                     openAlbumFromFile(albumPath);
                 }
                 else
                 {
                     handleError("Unable to access file to save");
                 }
-            }
-            else
-            {
-                //Open
-                openAlbumFromFile(albumPath);
             }
             panel1.Focus();
         }
@@ -686,42 +679,26 @@ namespace PhotoAlbumViewOfTheGods
 
         private void disablePanel()
         {
-            _timer.Elapsed += new System.Timers.ElapsedEventHandler(OnTimedEvent);
-            _timer.Interval = 500;
-            _timer.Start();
-            this.Invoke(new MethodInvoker(delegate()
+            try
             {
-                panel2.Show();
-                panel2.BringToFront();
-                tabControl_List.Enabled = false;
-            }));
+                this.Invoke(new MethodInvoker(delegate()
+                {
+                    panel2.Show();
+                    panel2.BringToFront();
+                    tabControl_List.Enabled = false;
+                }));
+            }
+            catch { }
         }
         
         private void enablePanel()
-        {
-            _periodCounter = 3;
-            _timer.Close();
-            this.Invoke(new MethodInvoker(delegate()
-            {
-                panel2.Hide();
-                tabControl_List.Enabled = true;
-            }));
-        }
-
-        private void OnTimedEvent(object source, System.Timers.ElapsedEventArgs e)
         {
             try
             {
                 this.Invoke(new MethodInvoker(delegate()
                 {
-                    string periods = "";
-                    _periodCounter = (_periodCounter > 3) ? 0 : _periodCounter;
-                    for (int i = 0; i < _periodCounter; i++)
-                    {
-                        periods += ".";
-                    }
-                    label4.Text = "Processing Images" + periods;
-                    _periodCounter++;
+                    panel2.Hide();
+                    tabControl_List.Enabled = true;
                 }));
             }
             catch { }
@@ -1040,6 +1017,7 @@ namespace PhotoAlbumViewOfTheGods
             int controlCounter = 0;
             int controlCount = panel1.Controls.Count - 1;
             Control[] controlList = new Control[controlCount];
+            panel1.Hide();
             foreach (Panel value in panel1.Controls) //get all panels, excluding border panel
             {
                 if (value != panel_Border)
@@ -1057,7 +1035,7 @@ namespace PhotoAlbumViewOfTheGods
                 }
                 
             }
-
+            panel1.Show();
             //Clear and disable data panel
             panel_Border.Visible = false;
             textBox_Name.Text = "";
@@ -1085,6 +1063,8 @@ namespace PhotoAlbumViewOfTheGods
             if (openFileDialog_Load.ShowDialog() == DialogResult.OK)
             {
                 _lastImportedFrom = Path.GetDirectoryName(openFileDialog_Load.FileNames[0]);
+                clearDisplay();
+                disablePanel();
                 foreach (string value in openFileDialog_Load.FileNames)
                 {
                     if (Utilities.isImageValid(value)) //check if file is valid
@@ -1097,6 +1077,7 @@ namespace PhotoAlbumViewOfTheGods
                         handleError("Invalid Photo Selected: " + value);
                     }
                 }
+                enablePanel();
                 populateList();
                 populateScreen();
                 searchToolStripMenuItem.Enabled = true;
@@ -1203,16 +1184,27 @@ namespace PhotoAlbumViewOfTheGods
         /// </summary>
         private void openViewer()
         {
+            Image tempImage;
+            List<Form_Viewer.modifiedImageInfo> modifiedImages;
             if (File.Exists(_currentPhoto.path)) //Shows nothing if file wasn't found (warning images)
             {
                 Form_Viewer picView = new Form_Viewer(_pictureList, Convert.ToInt32(_currentPhoto.id), _constantAppName);
                 picView.StartPosition = FormStartPosition.CenterParent;
                 picView.ShowDialog();
                 _pictureList = picView.pictureList;
-                if (picView.isModified)
+                if (picView.isModified) //if any pictures were modified
                 {
-                    clearDisplay();
-                    populateScreen();
+                    modifiedImages = picView.modifiedImages; //get list of modified images
+                    try
+                    {
+                        for (int i = 0; i < modifiedImages.Count; i++) //loop through all modified images
+                        {
+                            tempImage = Image.FromFile(modifiedImages[i].path); //grab the image
+                            panel1.Controls[modifiedImages[i].id].BackgroundImage = Utilities.ScalImage(tempImage, new Size(frameSize.Width, frameSize.Height)); //change the background image
+                            tempImage.Dispose(); //dispose of the temp image
+                        }
+                    }
+                    catch { }
                 }
                 picView.Dispose();
             }

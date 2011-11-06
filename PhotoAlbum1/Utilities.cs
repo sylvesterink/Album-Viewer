@@ -130,7 +130,7 @@ namespace PhotoAlbumViewOfTheGods
 
         public static string CalculateMD5(string path)
         {
-            FileStream file = new FileStream(path, FileMode.Open);
+            FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read);
             MD5 md5 = new MD5CryptoServiceProvider();
             byte[] retVal = md5.ComputeHash(file);
             file.Close();

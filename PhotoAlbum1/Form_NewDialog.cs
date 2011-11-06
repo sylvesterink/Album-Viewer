@@ -64,7 +64,11 @@ namespace PhotoAlbumViewOfTheGods
             //Check if name is null or contains invalid characters
             //if (textBox_AlbumName.Text == "" || !Utilities.isStringValid(textBox_AlbumName.Text))
             string albumName = textBox_AlbumName.Text.Trim();
-            if (!Utilities.isValidString(albumName))
+            if (albumName == "")
+            {
+                MessageBox.Show("Your album name cannot be blank.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textBox_AlbumName.Focus();
+            }else if (!Utilities.isValidString(albumName))
             {
                 MessageBox.Show("Your album name may only contain underscores, hyphens, spaces, and alphanumeric characters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 textBox_AlbumName.Focus();
@@ -87,8 +91,6 @@ namespace PhotoAlbumViewOfTheGods
             }
             else
             {
-                //name is valid
-                textBox_AlbumName.Text = albumName;
                 this.Close();
             }
         }

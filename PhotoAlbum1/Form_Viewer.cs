@@ -22,6 +22,7 @@ namespace PhotoAlbumViewOfTheGods
         private Image _imageViewer;
         private List<pictureData> _pictureList;
         private Timer slideshowTimer;
+        private List<modifiedImageInfo> _modifiedImages;
 
         public bool isModified
         {
@@ -33,6 +34,11 @@ namespace PhotoAlbumViewOfTheGods
             get { return _pictureList; }
         }
 
+        public List<modifiedImageInfo> modifiedImages
+        {
+            get { return _modifiedImages; }
+        }
+
         /// <summary>
         /// Constructor function that initailizes member variables
         /// </summary>
@@ -42,6 +48,7 @@ namespace PhotoAlbumViewOfTheGods
         public Form_Viewer(List<pictureData> pictureList, int currentImage, string title)
         {
             InitializeComponent();
+            _modifiedImages = new List<modifiedImageInfo>();
             _pictureList = pictureList;
             _currentImage = currentImage;
             _windowTitle = title;
@@ -125,6 +132,7 @@ namespace PhotoAlbumViewOfTheGods
             string newPath;
             string newMD5;
             string newModified;
+            modifiedImageInfo holder;
 
             List<Utilities.AllImagesInfo> allImages;
 
@@ -176,6 +184,9 @@ namespace PhotoAlbumViewOfTheGods
                     _isModifiedCurrent = false;
                     _isModified = true;
                     _totalFlips = 0;
+                    holder.path = newPath;
+                    holder.id = "panel" + imageID;
+                    _modifiedImages.Add(holder);
                 }
                 else
                 {
@@ -188,6 +199,12 @@ namespace PhotoAlbumViewOfTheGods
                 Console.WriteLine("Error: " + e.Message);
                 this.Close();
             }
+        }
+
+        public struct modifiedImageInfo
+        {
+            public string path;
+            public string id;
         }
 
         //Timer Tick event
