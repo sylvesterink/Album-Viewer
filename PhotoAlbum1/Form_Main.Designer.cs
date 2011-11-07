@@ -101,6 +101,7 @@
             this.colorDialog_Background = new System.Windows.Forms.ColorDialog();
             this.panel_Line = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.progressImageProcess = new System.Windows.Forms.ProgressBar();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -371,6 +372,7 @@
             // 
             this.panel2.BackColor = System.Drawing.Color.Gainsboro;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel2.Controls.Add(this.progressImageProcess);
             this.panel2.Controls.Add(this.label4);
             this.panel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.panel2.Location = new System.Drawing.Point(203, 129);
@@ -381,12 +383,13 @@
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(58, 25);
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(65, 13);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(330, 39);
+            this.label4.Size = new System.Drawing.Size(323, 31);
             this.label4.TabIndex = 0;
             this.label4.Text = "Processing Images";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // panel_Border
             // 
@@ -728,6 +731,13 @@
             this.panel_Line.MouseEnter += new System.EventHandler(this.treeMin_MouseEnter);
             this.panel_Line.MouseLeave += new System.EventHandler(this.treeMin_MouseLeave);
             // 
+            // progressImageProcess
+            // 
+            this.progressImageProcess.Location = new System.Drawing.Point(65, 57);
+            this.progressImageProcess.Name = "progressImageProcess";
+            this.progressImageProcess.Size = new System.Drawing.Size(323, 23);
+            this.progressImageProcess.TabIndex = 1;
+            // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -754,7 +764,6 @@
             this.statusStrip1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.contextMenuStrip_Picture.ResumeLayout(false);
             this.panel_PictureData.ResumeLayout(false);
             this.panel_PictureData.PerformLayout();
@@ -843,5 +852,6 @@
         private System.Windows.Forms.ToolStripMenuItem sortDateAddedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sortDateModifiedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem defaultToolStripMenuItem;
+        private System.Windows.Forms.ProgressBar progressImageProcess;
     }
 }

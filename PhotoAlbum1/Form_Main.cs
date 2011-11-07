@@ -708,7 +708,7 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        private void disablePanel()
+        private void disablePanel(int progressMax)
         {
             try
             {
@@ -716,6 +716,8 @@ namespace PhotoAlbumViewOfTheGods
                 {
                     panel2.Show();
                     panel2.BringToFront();
+                    progressImageProcess.Maximum = progressMax;
+                    progressImageProcess.Value = 1;
                     tabControl_List.Enabled = false;
                 }));
             }
@@ -741,7 +743,7 @@ namespace PhotoAlbumViewOfTheGods
             int loopCount = picList.Count;
             Panel tempPanel;
             try{
-                disablePanel();
+                disablePanel(loopCount);
                 for (int i = 0; i < loopCount; i++)
                 {
                     //If panel is already added, skip it (mainly for when inporting pictures)
@@ -756,14 +758,16 @@ namespace PhotoAlbumViewOfTheGods
                     this.Invoke(new MethodInvoker(delegate()
                     {
                         tempPanel.Show();  //Still shares reference with panel1.Controls element, so this change affects that one
-                        panel1.Controls.Add(tempPanel); //Add panel to main panel                           
-                    }));                    
+                        panel1.Controls.Add(tempPanel); //Add panel to main panel  
+                        //label4.Text = "Processing Images " + i.ToString() + "/" + loopCount.ToString();
+                        progressImageProcess.Increment(1);
+                    }));
                 }
                 enablePanel();
             }
             catch
             {
-
+                handleError("Unable to show thumbnails.");
             }
         }
 
@@ -1091,7 +1095,7 @@ namespace PhotoAlbumViewOfTheGods
             {
                 _lastImportedFrom = Path.GetDirectoryName(openFileDialog_Load.FileNames[0]);
                 clearDisplay();
-                disablePanel();
+                disablePanel(openFileDialog_Load.FileNames.Count());
                 foreach (string value in openFileDialog_Load.FileNames)
                 {
                     if (Utilities.isImageValid(value)) //check if file is valid
