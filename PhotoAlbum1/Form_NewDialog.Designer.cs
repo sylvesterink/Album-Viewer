@@ -94,6 +94,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "New Album";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form_NewFileDialog_FormClosing);
             this.ResumeLayout(false);
             this.PerformLayout();
 

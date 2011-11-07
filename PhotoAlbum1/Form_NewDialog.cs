@@ -18,7 +18,8 @@ namespace PhotoAlbumViewOfTheGods
     //Cavan
     public partial class Form_NewFileDialog : Form
     {
-        string[] _albumsList;
+        private string[] _albumsList;
+        private bool _userClose = false;
         public string albumNameValue
         {
             get
@@ -53,6 +54,7 @@ namespace PhotoAlbumViewOfTheGods
         private void button_Cancel_Click(object sender, EventArgs e)
         {
             textBox_AlbumName.Text = "";
+            _userClose = true;
             this.Close();
         }
 
@@ -91,9 +93,20 @@ namespace PhotoAlbumViewOfTheGods
             }
             else
             {
+                _userClose = true;
                 this.Close();
             }
         }
 
+        private void Form_NewFileDialog_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                if (!_userClose)
+                {
+                    textBox_AlbumName.Text = "";
+                }
+            }
+        }
     }
 }

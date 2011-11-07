@@ -127,6 +127,7 @@ namespace PhotoAlbumViewOfTheGods
 
         private void saveModifiedImage()
         {
+            bool gifContinue = true;
             string imageID;
             string imagePath;
             string newPath;
@@ -139,54 +140,68 @@ namespace PhotoAlbumViewOfTheGods
             try
             {
                 if (_isModifiedCurrent && MessageBox.Show("Would you like to save the changes you have made?", "Confirm Save", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-                {          
-                    allImages = Utilities.getAllImageInfo();
-                    imagePath = _pictureList[_currentImage].path;
-                    imageID = _pictureList[_currentImage].id;
-
-                    if (allImages.FindAll(s => s.path == imagePath).Count > 1) //if photo exists multiple times
+                {
+                    if (System.IO.Path.GetExtension(_pictureList[_currentImage].path) == ".gif" && MessageBox.Show("You appear to be rotating a .GIF image. If there is animation in your GIF file, the animation will not be saved after being rotate. Are you sure you want to continue?", "Confirm", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.No)
                     {
-                        newPath = Utilities.getAppendName(imagePath);
-                    }else{
-                        newPath = imagePath;
+                        gifContinue = false;
                     }
 
-                    _imageViewer.Save(newPath);
-                    try
+                    if (gifContinue)
                     {
-                        XDocument xdoc = new XDocument();
-                        xdoc = XDocument.Load(_pictureList[_currentImage].albumPath);
-                        var Albums = from AlbumInfo in xdoc.Elements("Album").Elements("AlbumInfo").Elements("PictureInfo") select AlbumInfo;
+                        allImages = Utilities.getAllImageInfo();
+                        imagePath = _pictureList[_currentImage].path;
+                        imageID = _pictureList[_currentImage].id;
 
-                        foreach (XElement picture in Albums)
+                        if (allImages.FindAll(s => s.path == imagePath).Count > 1) //if photo exists multiple times
                         {
-                            if (picture.Attribute("id").Value == imageID)
-                            {
-                                newMD5 = Utilities.CalculateMD5(newPath);
-                                newModified = Utilities.getTimeStamp();
-                                picture.Attribute("path").Value = newPath;
-                                picture.Attribute("md5").Value = newMD5;
-                                picture.Attribute("dateModified").Value = newModified;
-                                pictureData temp = _pictureList[_currentImage];
-                                temp.path = newPath;
-                                temp.MD5 = newMD5;
-                                temp.dateModified = newModified;
-                                _pictureList[_currentImage] = temp;
-                            }
+                            newPath = Utilities.getAppendName(imagePath);
                         }
-                        xdoc.Save(_pictureList[_currentImage].albumPath);
+                        else
+                        {
+                            newPath = imagePath;
+                        }
+
+                        _imageViewer.Save(newPath);
+                        try
+                        {
+                            XDocument xdoc = new XDocument();
+                            xdoc = XDocument.Load(_pictureList[_currentImage].albumPath);
+                            var Albums = from AlbumInfo in xdoc.Elements("Album").Elements("AlbumInfo").Elements("PictureInfo") select AlbumInfo;
+
+                            foreach (XElement picture in Albums)
+                            {
+                                if (picture.Attribute("id").Value == imageID)
+                                {
+                                    newMD5 = Utilities.CalculateMD5(newPath);
+                                    newModified = Utilities.getTimeStamp();
+                                    picture.Attribute("path").Value = newPath;
+                                    picture.Attribute("md5").Value = newMD5;
+                                    picture.Attribute("dateModified").Value = newModified;
+                                    pictureData temp = _pictureList[_currentImage];
+                                    temp.path = newPath;
+                                    temp.MD5 = newMD5;
+                                    temp.dateModified = newModified;
+                                    _pictureList[_currentImage] = temp;
+                                }
+                            }
+                            xdoc.Save(_pictureList[_currentImage].albumPath);
+                        }
+                        catch
+                        {
+                            MessageBox.Show("you gone done sumthin wrong");
+                        }
+
+                        _isModifiedCurrent = false;
+                        _isModified = true;
+                        _totalFlips = 0;
+                        holder.path = newPath;
+                        holder.id = "panel" + imageID;
+                        _modifiedImages.Add(holder);
                     }
-                    catch
+                    else
                     {
-                        MessageBox.Show("you gone done sumthin wrong");
+                        _isModifiedCurrent = false;
                     }
-                    
-                    _isModifiedCurrent = false;
-                    _isModified = true;
-                    _totalFlips = 0;
-                    holder.path = newPath;
-                    holder.id = "panel" + imageID;
-                    _modifiedImages.Add(holder);
                 }
                 else
                 {
