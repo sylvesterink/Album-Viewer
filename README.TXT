@@ -33,6 +33,18 @@ Table of Contents
 3. Version History
 	
 Cycle 2 Deployment
+	2.5.4328.2229 11/07/2011
+			- Added progress bar for importing and displaying images
+			- Fixed list tab acting on incorrect nodes when using a sorted/searched list
+
+	2.4.4327.38722 11/06/2011
+			- Can now search for photos
+			- Can now clear search results
+			- Sort photos by date added/modified and by name
+			- Fixed other minor bugs
+			- Displays dialog when photos are being added or the album is opening
+			- Minor bug fixes
+
 	2.3.4324.23252 11/03/2011
 			- Fixed MD5 checks on new photos
 			- Added ability to store extra info of pictures, such as timestamps
