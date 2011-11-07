@@ -45,8 +45,7 @@ namespace PhotoAlbumViewOfTheGods
         private const float _borderFactor = 8;
 
         //Memember Variables
-        private int _periodCounter = 3;
-        //private bool _isSorted = false;
+        //private int _periodCounter = 3;
 
         //Data Structures    
         private TreeNode _treeNode;
@@ -783,6 +782,9 @@ namespace PhotoAlbumViewOfTheGods
             
             panel1.VerticalScroll.Value = 0; //set scroll to top for correct reference when setting panel location
             panel1.Show();
+
+            label4.Text = "Processing Images";
+            label4.Update();
             if (searchList == null)
             {
                 new Thread(() => this.showThumbnail(_pictureList)).Start();
@@ -1096,12 +1098,19 @@ namespace PhotoAlbumViewOfTheGods
                 _lastImportedFrom = Path.GetDirectoryName(openFileDialog_Load.FileNames[0]);
                 clearDisplay();
                 disablePanel(openFileDialog_Load.FileNames.Count());
+                label4.Text = "Importing Images";
+                label4.Update();
                 foreach (string value in openFileDialog_Load.FileNames)
                 {
                     if (Utilities.isImageValid(value)) //check if file is valid
                     {
                         _albumData.addPhoto(value, ref allImages);
                         saveAlbum();
+
+                        //this.Invoke(new MethodInvoker(delegate()
+                        //{
+                            progressImageProcess.Increment(1);
+                        //}));
                     }
                     else
                     {
