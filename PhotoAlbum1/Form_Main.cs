@@ -116,12 +116,12 @@ namespace PhotoAlbumViewOfTheGods
             {
                 MessageBox.Show("Welcome to Photo Album Viewer of the Gods. Before you can continue you must create a new user profile.", "Welcome", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 newUser();
-                populateUsers();
+                
                 if (_allUsers.Count == 0) //happens if the user did not create an account
                 {
                     this.Close();
                 }
-                
+                populateUsers();                
                 _currentUser = _allUsers.Last();
                 _directoryCurrentUser = _directoryUsers + "\\" + _currentUser;
                 updateLastUserFile();
@@ -662,10 +662,8 @@ namespace PhotoAlbumViewOfTheGods
         //Cavan
         private void openAlbum(string albumPath)
         {
-            if (_albumData.filePath == "") //if no album is open
+            if (_albumData.filePath != albumPath) //make sure we're not opening the same album
             {
-                openAlbumFromFile(albumPath);
-            }else if(_albumData.filePath != albumPath){ ///make sure we're not opening the same album
                 if (albumClose()) //close the open album
                 {
                     openAlbumFromFile(albumPath);
@@ -674,6 +672,10 @@ namespace PhotoAlbumViewOfTheGods
                 {
                     handleError("Unable to access file to save");
                 }
+            }
+            else
+            {
+                openAlbumFromFile(albumPath);
             }
             panel1.Focus();
         }
@@ -686,6 +688,7 @@ namespace PhotoAlbumViewOfTheGods
         {
             //Open
             //albumData.filePath = path;
+            _pictureList.Clear();
             if (!_albumData.loadAlbum(path))
             {
                 handleError("Unable to load album.");
@@ -693,6 +696,7 @@ namespace PhotoAlbumViewOfTheGods
             else
             {
                 //Show picture views and set title and label text with file name
+                clearDisplay();
                 populateScreen();
                 populateList();
                 populateTree();
@@ -716,7 +720,7 @@ namespace PhotoAlbumViewOfTheGods
                     panel2.Show();
                     panel2.BringToFront();
                     progressImageProcess.Maximum = progressMax;
-                    progressImageProcess.Value = 1;
+                    progressImageProcess.Value = 0;
                     tabControl_List.Enabled = false;
                 }));
             }
@@ -1128,7 +1132,7 @@ namespace PhotoAlbumViewOfTheGods
         //Saves current album, removes event handler and closes
         private void Form_Main_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (_albumData.currentAlbum != "")
+            if (_albumData != null && _albumData.currentAlbum != "")
             {
                 saveAlbum();
             }
@@ -1142,7 +1146,7 @@ namespace PhotoAlbumViewOfTheGods
         /// <returns>Returns true on successful save, false otherwise</returns>
         private bool saveAlbum()
         {
-            return (_albumData.saveAlbum()) ? true : false;
+            return _albumData.saveAlbum();
         }
 
         //Album tree double click event
@@ -1181,7 +1185,10 @@ namespace PhotoAlbumViewOfTheGods
                         _albumData.filePath = _directoryCurrentUser + "\\" + newAlbumName + _constantFileType;
                         saveAlbum();
                         populateTree();
+                        _pictureList.Clear();
                         openAlbum(_albumData.filePath);
+                        populateScreen();
+                        populateList();
                     }
                     else
                     {
@@ -1207,10 +1214,14 @@ namespace PhotoAlbumViewOfTheGods
                 if (_albumData.deleteAlbum(filePathToDelete))
                 {
                     populateTree();
-                    _albumData.filePath = (_albumData.filePath == filePathToDelete) ? "" : filePathToDelete; //we deleted the open album so clear the filePath or else on reopen it will save the album again
+                    _albumData.filePath = ""; //we deleted the open album so clear the filePath or else on reopen it will save the album again
                     _pictureList.Clear(); //make sure to clear images of deleted album
                     clearDisplay();
                     _albumData.currentAlbum = "";
+                    _albumData.clearAlbum();
+                    importToolStripMenuItem.Enabled = false;
+                    updateStatusBar("Current User: " + _currentUser);
+                    toolStripStatusLabel_Total.Text = "";
                 }
                 else
                 {

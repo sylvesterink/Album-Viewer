@@ -37,7 +37,7 @@ namespace PhotoAlbumViewOfTheGods
                 MessageBox.Show("Please enter a user name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }else if (!Utilities.isValidString(userName))
             {
-                MessageBox.Show("User name may only contain spaces, underscores, hyphens, alphanumeric characters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("User name may only contain spaces, underscores, hyphens, and alphanumeric characters.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else if (_users.Contains(userName, StringComparer.OrdinalIgnoreCase))
             {
