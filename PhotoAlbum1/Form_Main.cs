@@ -53,6 +53,7 @@ namespace PhotoAlbumViewOfTheGods
         private Photo _currentPhoto;
         private XMLInterface _albumData;
         private List<pictureData> _pictureList;
+        private List<pictureData> _filterList;
         //private List<pictureData> _sortedPictureList;
         private pictureData _pictureDataStored;
         private List<string> _allUsers;
@@ -531,7 +532,16 @@ namespace PhotoAlbumViewOfTheGods
             {
                 //Get data
                 int id = e.Node.Index;
-                _pictureDataStored = _albumData.getData(Convert.ToInt32(id));
+
+                if (_filterList == null)
+                {
+                    _pictureDataStored = _albumData.getData(Convert.ToInt32(id));
+                }
+                else
+                {
+                    _pictureDataStored = _filterList[Convert.ToInt32(id)];
+                }
+                
                 _currentPhoto.setData(_pictureDataStored);
                 //Set data panel
                 textBox_Name.Text = _pictureDataStored.name;
@@ -1379,6 +1389,8 @@ namespace PhotoAlbumViewOfTheGods
                 }
                 if (newList.Count > 0)
                 {
+                    _filterList = newList;
+
                     clearDisplay();
                     populateScreen(newList);
                     populateList(newList);
@@ -1393,21 +1405,24 @@ namespace PhotoAlbumViewOfTheGods
            
         }
 
+        private void defaultToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _filterList = null;
+            clearDisplay();
+            populateScreen();
+            populateList();
+        }
+
         private void sortNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<pictureData> sortedPictureList;
             sortedPictureList = new List<pictureData>(_pictureList);
             sortedPictureList.Sort((x, y) => string.Compare(x.name, y.name));
+            _filterList = sortedPictureList;
+
             clearDisplay();
             populateScreen(sortedPictureList);
             populateList(sortedPictureList);
-        }
-
-        private void defaultToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            clearDisplay();
-            populateScreen();
-            populateList();
         }
 
         private void sortDateAddedToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1415,6 +1430,8 @@ namespace PhotoAlbumViewOfTheGods
             List<pictureData> sortedPictureList;
             sortedPictureList = new List<pictureData>(_pictureList);
             sortedPictureList.Sort((x, y) => string.Compare(x.dateAdded, y.dateAdded));
+            _filterList = sortedPictureList;
+
             clearDisplay();
             populateScreen(sortedPictureList);
             populateList(sortedPictureList);
@@ -1425,6 +1442,8 @@ namespace PhotoAlbumViewOfTheGods
             List<pictureData> sortedPictureList;
             sortedPictureList = new List<pictureData>(_pictureList);
             sortedPictureList.Sort((x, y) => string.Compare(x.dateModified, y.dateModified));
+            _filterList = sortedPictureList;
+
             clearDisplay();
             populateScreen(sortedPictureList);
             populateList(sortedPictureList);
@@ -1432,6 +1451,7 @@ namespace PhotoAlbumViewOfTheGods
 
         private void clearResults(object sender, EventArgs e)
         {
+            _filterList = null;
             populateList();
             populateScreen();
             pictureToolStripMenuItem.DropDownItems.RemoveAt(3);
