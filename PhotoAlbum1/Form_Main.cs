@@ -1432,8 +1432,13 @@ namespace PhotoAlbumViewOfTheGods
                     clearDisplay();
                     populateScreen(newList);
                     populateList(newList);
-                    ToolStripMenuItem test = new ToolStripMenuItem("Clear Search",null, new EventHandler(clearResults));
-                    pictureToolStripMenuItem.DropDownItems.Insert(3, test);
+                    
+                    if (!pictureToolStripMenuItem.DropDownItems.ContainsKey("clearsearch"))
+                    {
+                        ToolStripMenuItem test = new ToolStripMenuItem("&Clear Search", null, new EventHandler(clearResults), "clearsearch");
+                        //TODO: Should be changed to reference item after "Search" by finding the index of search.
+                        pictureToolStripMenuItem.DropDownItems.Insert(3, test);
+                    }
                 }
                 else
                 {
@@ -1493,7 +1498,8 @@ namespace PhotoAlbumViewOfTheGods
             clearDisplay();
             populateList();
             populateScreen();
-            pictureToolStripMenuItem.DropDownItems.RemoveAt(3);
+            //pictureToolStripMenuItem.DropDownItems.RemoveAt(3);
+            pictureToolStripMenuItem.DropDownItems.RemoveByKey("clearsearch");
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
