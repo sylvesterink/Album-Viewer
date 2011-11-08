@@ -1125,6 +1125,7 @@ namespace PhotoAlbumViewOfTheGods
                 enablePanel();
                 populateList();
                 populateScreen();
+                populateTree();
                 searchToolStripMenuItem.Enabled = true;
             }
         }
