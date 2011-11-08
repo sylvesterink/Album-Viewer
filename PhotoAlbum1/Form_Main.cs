@@ -967,6 +967,7 @@ namespace PhotoAlbumViewOfTheGods
                         _albumData.filePath = _directoryCurrentUser + "\\" + albumName + _constantFileType; //sets current file path
                         populateTree();
                         updateStatusBar("Current User: "+ _currentUser+ " || "+ _constantAppName + " : " + Utilities.getNameFromPath(_albumData.filePath));
+                        saveAlbum(); // save the album right away so we save the data structure properly
                     }
                     else
                     {

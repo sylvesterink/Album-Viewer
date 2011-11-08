@@ -227,8 +227,7 @@ namespace PhotoAlbumViewOfTheGods
             try
             {
                 xdoc = XDocument.Load(albumName);
-            }
-            catch
+            }catch
             {
                 return false;
             }
