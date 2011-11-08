@@ -54,6 +54,7 @@ namespace PhotoAlbumViewOfTheGods
             Bitmap img = new Bitmap(printImagePath);
             Point p = new Point(10, 10);
             e.Graphics.DrawImage(img, p);
+            img.Dispose(); //dispose of the image!!!!
         }
 
         public static int cleanUpPhotos()
