@@ -55,11 +55,7 @@
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cleanupPhotosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel_ALbumName = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel_TotalLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel_Total = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel_Spacer = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel_Error = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_UserA = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.progressImageProcess = new System.Windows.Forms.ProgressBar();
@@ -104,6 +100,8 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripStatusLabel_AlbumA = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabel_PhotosA = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -317,11 +315,9 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel_ALbumName,
-            this.toolStripStatusLabel_TotalLabel,
-            this.toolStripStatusLabel_Total,
-            this.toolStripStatusLabel_Spacer,
-            this.toolStripStatusLabel_Error});
+            this.toolStripStatusLabel_UserA,
+            this.toolStripStatusLabel_AlbumA,
+            this.toolStripStatusLabel_PhotosA});
             this.statusStrip1.Location = new System.Drawing.Point(0, 581);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1035, 22);
@@ -329,34 +325,13 @@
             this.statusStrip1.TabIndex = 1;
             this.statusStrip1.Text = "statusStrip1";
             // 
-            // toolStripStatusLabel_ALbumName
+            // toolStripStatusLabel_UserA
             // 
-            this.toolStripStatusLabel_ALbumName.Name = "toolStripStatusLabel_ALbumName";
-            this.toolStripStatusLabel_ALbumName.Size = new System.Drawing.Size(0, 17);
-            // 
-            // toolStripStatusLabel_TotalLabel
-            // 
-            this.toolStripStatusLabel_TotalLabel.Name = "toolStripStatusLabel_TotalLabel";
-            this.toolStripStatusLabel_TotalLabel.Size = new System.Drawing.Size(90, 17);
-            this.toolStripStatusLabel_TotalLabel.Text = "No open album";
-            // 
-            // toolStripStatusLabel_Total
-            // 
-            this.toolStripStatusLabel_Total.Name = "toolStripStatusLabel_Total";
-            this.toolStripStatusLabel_Total.Size = new System.Drawing.Size(22, 17);
-            this.toolStripStatusLabel_Total.Text = "     ";
-            // 
-            // toolStripStatusLabel_Spacer
-            // 
-            this.toolStripStatusLabel_Spacer.Name = "toolStripStatusLabel_Spacer";
-            this.toolStripStatusLabel_Spacer.Size = new System.Drawing.Size(55, 17);
-            this.toolStripStatusLabel_Spacer.Text = "                ";
-            // 
-            // toolStripStatusLabel_Error
-            // 
-            this.toolStripStatusLabel_Error.ForeColor = System.Drawing.Color.DarkRed;
-            this.toolStripStatusLabel_Error.Name = "toolStripStatusLabel_Error";
-            this.toolStripStatusLabel_Error.Size = new System.Drawing.Size(0, 17);
+            this.toolStripStatusLabel_UserA.AutoSize = false;
+            this.toolStripStatusLabel_UserA.Name = "toolStripStatusLabel_UserA";
+            this.toolStripStatusLabel_UserA.Size = new System.Drawing.Size(150, 17);
+            this.toolStripStatusLabel_UserA.Text = "User:  ";
+            this.toolStripStatusLabel_UserA.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // panel1
             // 
@@ -756,6 +731,22 @@
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
+            // toolStripStatusLabel_AlbumA
+            // 
+            this.toolStripStatusLabel_AlbumA.AutoSize = false;
+            this.toolStripStatusLabel_AlbumA.Name = "toolStripStatusLabel_AlbumA";
+            this.toolStripStatusLabel_AlbumA.Size = new System.Drawing.Size(150, 17);
+            this.toolStripStatusLabel_AlbumA.Text = "Album:";
+            this.toolStripStatusLabel_AlbumA.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // toolStripStatusLabel_PhotosA
+            // 
+            this.toolStripStatusLabel_PhotosA.AutoSize = false;
+            this.toolStripStatusLabel_PhotosA.Name = "toolStripStatusLabel_PhotosA";
+            this.toolStripStatusLabel_PhotosA.Size = new System.Drawing.Size(100, 17);
+            this.toolStripStatusLabel_PhotosA.Text = "Photos:";
+            this.toolStripStatusLabel_PhotosA.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // Form_Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -806,7 +797,6 @@
         private System.Windows.Forms.ToolStripMenuItem importToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_ALbumName;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip_Picture;
         private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem1;
@@ -837,8 +827,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog_Load;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ColorDialog colorDialog_Background;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_TotalLabel;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_Total;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_UserA;
         private System.Windows.Forms.ToolStripMenuItem backgroundColorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changeBackgroundToolStripMenuItem;
         private System.Windows.Forms.Label label_NameError;
@@ -849,8 +838,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_Rename;
         private System.Windows.Forms.ToolStripMenuItem renameToolStripMenuItem;
         private System.Windows.Forms.Button button_RenamePic;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_Spacer;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_Error;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem_AlbumName;
         private System.Windows.Forms.ToolStripMenuItem fileNameToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator_Picture;
@@ -873,5 +860,7 @@
         private System.Windows.Forms.ProgressBar progressImageProcess;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_AlbumA;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel_PhotosA;
     }
 }

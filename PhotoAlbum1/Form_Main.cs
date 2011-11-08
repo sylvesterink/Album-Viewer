@@ -148,7 +148,7 @@ namespace PhotoAlbumViewOfTheGods
 
             populateTree(); //Display any album files
             panel1.Focus(); //Start focus on main panel so any tree nodes are not slected
-            updateStatusBar("Current User: " + _currentUser);
+            updateStatusBar();//"Current User: " + _currentUser);
             populateUsers();
             cleanupPhotosToolStripMenuItem.Enabled = true; //enable the "Cleanup Photos" button under options
             newAlbumToolStripMenuItem.Enabled = true; //enable the "New Album" button under file
@@ -340,7 +340,7 @@ namespace PhotoAlbumViewOfTheGods
             populateTree();
             populateUsers();
             updateLastUserFile();
-            updateStatusBar("Current user: " + _currentUser);
+            updateStatusBar();//"Current user: " + _currentUser);
         }
 
         private string[] totalUsers()
@@ -678,6 +678,7 @@ namespace PhotoAlbumViewOfTheGods
                 openAlbumFromFile(albumPath);
             }
             panel1.Focus();
+            updateStatusBar();
         }
 
         //Open album from file
@@ -700,7 +701,7 @@ namespace PhotoAlbumViewOfTheGods
                 populateScreen();
                 populateList();
                 populateTree();
-                toolStripStatusLabel_ALbumName.Text = Utilities.getNameFromPath(path) + "  |";
+                //toolStripStatusLabel_ALbumName.Text = Utilities.getNameFromPath(path) + "  |";
                 _albumData.filePath = path;
                 enableItems();
                 this.Text = _constantAppName + " : " + Utilities.getNameFromPath(path);
@@ -801,7 +802,7 @@ namespace PhotoAlbumViewOfTheGods
             panel_Border.Visible = false;
 
             //Update Tooltip size
-            toolStripStatusLabel_Total.Text = _pictureList.Count.ToString();
+            //toolStripStatusLabel_AlbumA.Text = _pictureList.Count.ToString();
             panel1.Focus();
             panel1.VerticalScroll.Value = scrollPosition; //return user scroll posiiton
         }
@@ -966,7 +967,7 @@ namespace PhotoAlbumViewOfTheGods
 
                         _albumData.filePath = _directoryCurrentUser + "\\" + albumName + _constantFileType; //sets current file path
                         populateTree();
-                        updateStatusBar("Current User: "+ _currentUser+ " || "+ _constantAppName + " : " + Utilities.getNameFromPath(_albumData.filePath));
+                        updateStatusBar();//"Current User: "+ _currentUser+ " || "+ _constantAppName + " : " + Utilities.getNameFromPath(_albumData.filePath));
                         saveAlbum(); // save the album right away so we save the data structure properly
                     }
                     else
@@ -988,7 +989,7 @@ namespace PhotoAlbumViewOfTheGods
         {
             //closeToolStripMenuItem.Enabled = true;
             importToolStripMenuItem.Enabled = true;
-            toolStripStatusLabel_TotalLabel.Text = "Pictures: ";
+            //toolStripStatusLabel_User.Text = "Pictures: ";
             deleteToolStripMenuItem.Enabled = true;
             renameToolStripMenuItem.Enabled = true;
         }
@@ -999,9 +1000,9 @@ namespace PhotoAlbumViewOfTheGods
         private void disableItems()
         {
             //Reset text and lables
-            toolStripStatusLabel_ALbumName.Text = "";
-            toolStripStatusLabel_TotalLabel.Text = "No open album";
-            toolStripStatusLabel_Total.Text = "";
+            //toolStripStatusLabel_ALbumName.Text = "";
+            //toolStripStatusLabel_User.Text = "No open album";
+            //toolStripStatusLabel_Album.Text = "";
             label_NameError.Visible = false;
             //Reset menu options
             //closeToolStripMenuItem.Enabled = false;
@@ -1042,6 +1043,7 @@ namespace PhotoAlbumViewOfTheGods
                 _albumData.clearAlbum();
                 disableItems();
                 populateTree(); //remove highlight
+                updateStatusBar();
                 return true;
             }
         }
@@ -1126,6 +1128,7 @@ namespace PhotoAlbumViewOfTheGods
                 populateList();
                 populateScreen();
                 populateTree();
+                updateStatusBar();
                 searchToolStripMenuItem.Enabled = true;
             }
         }
@@ -1191,6 +1194,7 @@ namespace PhotoAlbumViewOfTheGods
                         openAlbum(_albumData.filePath);
                         populateScreen();
                         populateList();
+                        updateStatusBar();
                     }
                     else
                     {
@@ -1224,11 +1228,11 @@ namespace PhotoAlbumViewOfTheGods
                     _albumData.clearAlbum();
                     populateList();
                     importToolStripMenuItem.Enabled = false;                    
-                    toolStripStatusLabel_Total.Text = "";
-                    toolStripStatusLabel_TotalLabel.Text = "";
+                    //toolStripStatusLabel_AlbumA.Text = "";
+                    //toolStripStatusLabel_UserA.Text = "";
                     renameToolStripMenuItem.Enabled = false;
                     deleteToolStripMenuItem.Enabled = false;
-                    updateStatusBar("Current User: " + _currentUser);
+                    updateStatusBar();//"Current User: " + _currentUser);
                 }
                 else
                 {
@@ -1307,6 +1311,7 @@ namespace PhotoAlbumViewOfTheGods
                 clearDisplay();
                 populateScreen();
                 populateList();
+                updateStatusBar();
 
                 if (_albumData.isEmpty())
                 {
@@ -1397,9 +1402,11 @@ namespace PhotoAlbumViewOfTheGods
             }            
         }
 
-        private void updateStatusBar(string statusBarText)
+        private void updateStatusBar()//string statusBarText)
         {
-            toolStripStatusLabel_TotalLabel.Text = statusBarText;
+            toolStripStatusLabel_UserA.Text = "User: " + _currentUser;
+            toolStripStatusLabel_AlbumA.Text = "Album: " + Utilities.getNameFromPath(_albumData.filePath);
+            toolStripStatusLabel_PhotosA.Text = "Photos: " + _pictureList.Count.ToString();
         }
 
         private void searchToolStripMenuItem_Click(object sender, EventArgs e)
