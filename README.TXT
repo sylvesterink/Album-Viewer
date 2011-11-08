@@ -33,6 +33,11 @@ Table of Contents
 3. Version History
 	
 Cycle 2 Deployment
+	2.6.4329.6584 11/08/2011
+			- Fixed statusbar to properly display user name, album, and number of photos
+			- Added Help menu and About box.
+			- Many bugfixes
+
 	2.5.4328.2229 11/07/2011
 			- Added progress bar for importing and displaying images
 			- Fixed list tab acting on incorrect nodes when using a sorted/searched list
