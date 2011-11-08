@@ -1176,7 +1176,7 @@ namespace PhotoAlbumViewOfTheGods
             namePrompt.ShowDialog();
             newAlbumName = namePrompt.albumNameValue;
             namePrompt.Dispose();
-            if (newAlbumName != "")
+            if (_albumData.currentAlbum != "" && newAlbumName != "") //make sure we have an open album
             {
                 if (albumClose())
                 {
@@ -1214,15 +1214,20 @@ namespace PhotoAlbumViewOfTheGods
             {
                 if (_albumData.deleteAlbum(filePathToDelete))
                 {
+                    this.Text = _constantAppName;
                     populateTree();
                     _albumData.filePath = ""; //we deleted the open album so clear the filePath or else on reopen it will save the album again
                     _pictureList.Clear(); //make sure to clear images of deleted album
                     clearDisplay();
                     _albumData.currentAlbum = "";
                     _albumData.clearAlbum();
-                    importToolStripMenuItem.Enabled = false;
-                    updateStatusBar("Current User: " + _currentUser);
+                    populateList();
+                    importToolStripMenuItem.Enabled = false;                    
                     toolStripStatusLabel_Total.Text = "";
+                    toolStripStatusLabel_TotalLabel.Text = "";
+                    renameToolStripMenuItem.Enabled = false;
+                    deleteToolStripMenuItem.Enabled = false;
+                    updateStatusBar("Current User: " + _currentUser);
                 }
                 else
                 {
