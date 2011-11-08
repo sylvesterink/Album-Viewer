@@ -59,5 +59,12 @@ namespace PhotoAlbumViewOfTheGods.Properties {
                 resourceCulture = value;
             }
         }
+        
+        internal static System.Drawing.Bitmap zeus4 {
+            get {
+                object obj = ResourceManager.GetObject("zeus4", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

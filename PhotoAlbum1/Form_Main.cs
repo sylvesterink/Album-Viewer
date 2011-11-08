@@ -1487,5 +1487,11 @@ namespace PhotoAlbumViewOfTheGods
             populateScreen();
             pictureToolStripMenuItem.DropDownItems.RemoveAt(3);
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Form_About AboutBox = new Form_About();
+            AboutBox.ShowDialog();
+        }
     }
 }

@@ -62,6 +62,7 @@
             this.toolStripStatusLabel_Error = new System.Windows.Forms.ToolStripStatusLabel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.progressImageProcess = new System.Windows.Forms.ProgressBar();
             this.label4 = new System.Windows.Forms.Label();
             this.panel_Border = new System.Windows.Forms.Panel();
             this.contextMenuStrip_Picture = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -101,7 +102,8 @@
             this.colorDialog_Background = new System.Windows.Forms.ColorDialog();
             this.panel_Line = new System.Windows.Forms.Panel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.progressImageProcess = new System.Windows.Forms.ProgressBar();
+            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.panel1.SuspendLayout();
@@ -120,7 +122,8 @@
             this.albumToolStripMenuItem,
             this.pictureToolStripMenuItem,
             this.viewToolStripMenuItem,
-            this.optionsToolStripMenuItem});
+            this.optionsToolStripMenuItem,
+            this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1035, 24);
@@ -278,7 +281,7 @@
             this.backgroundColorToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
             this.viewToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
-            this.viewToolStripMenuItem.Text = "View";
+            this.viewToolStripMenuItem.Text = "&View";
             this.viewToolStripMenuItem.Visible = false;
             // 
             // backgroundColorToolStripMenuItem
@@ -286,7 +289,7 @@
             this.backgroundColorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.changeBackgroundToolStripMenuItem});
             this.backgroundColorToolStripMenuItem.Name = "backgroundColorToolStripMenuItem";
-            this.backgroundColorToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.backgroundColorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.backgroundColorToolStripMenuItem.Text = "Colors";
             // 
             // changeBackgroundToolStripMenuItem
@@ -301,7 +304,7 @@
             this.cleanupPhotosToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-            this.optionsToolStripMenuItem.Text = "Options";
+            this.optionsToolStripMenuItem.Text = "&Options";
             // 
             // cleanupPhotosToolStripMenuItem
             // 
@@ -380,6 +383,13 @@
             this.panel2.Size = new System.Drawing.Size(435, 93);
             this.panel2.TabIndex = 8;
             this.panel2.Visible = false;
+            // 
+            // progressImageProcess
+            // 
+            this.progressImageProcess.Location = new System.Drawing.Point(65, 57);
+            this.progressImageProcess.Name = "progressImageProcess";
+            this.progressImageProcess.Size = new System.Drawing.Size(323, 23);
+            this.progressImageProcess.TabIndex = 1;
             // 
             // label4
             // 
@@ -731,12 +741,20 @@
             this.panel_Line.MouseEnter += new System.EventHandler(this.treeMin_MouseEnter);
             this.panel_Line.MouseLeave += new System.EventHandler(this.treeMin_MouseLeave);
             // 
-            // progressImageProcess
+            // helpToolStripMenuItem
             // 
-            this.progressImageProcess.Location = new System.Drawing.Point(65, 57);
-            this.progressImageProcess.Name = "progressImageProcess";
-            this.progressImageProcess.Size = new System.Drawing.Size(323, 23);
-            this.progressImageProcess.TabIndex = 1;
+            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.aboutToolStripMenuItem});
+            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
+            this.helpToolStripMenuItem.Text = "&Help";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Text = "&About";
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // Form_Main
             // 
@@ -853,5 +871,7 @@
         private System.Windows.Forms.ToolStripMenuItem sortDateModifiedToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem defaultToolStripMenuItem;
         private System.Windows.Forms.ProgressBar progressImageProcess;
+        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
     }
 }
