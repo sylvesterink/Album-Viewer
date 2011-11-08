@@ -1490,6 +1490,7 @@ namespace PhotoAlbumViewOfTheGods
         private void clearResults(object sender, EventArgs e)
         {
             _filterList = null;
+            clearDisplay();
             populateList();
             populateScreen();
             pictureToolStripMenuItem.DropDownItems.RemoveAt(3);

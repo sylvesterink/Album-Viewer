@@ -17,7 +17,7 @@ namespace PhotoAlbumViewOfTheGods
 
             Version v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             label2.Text = "Version: " + v.Major + "." + v.Minor;
-            label5.Text = " (Build: " + v.Build + ", Revision: " + v.Revision + ")";
+            label5.Text = "(Build: " + v.Build + ", Revision: " + v.Revision + ")";
         }
     }
 }
