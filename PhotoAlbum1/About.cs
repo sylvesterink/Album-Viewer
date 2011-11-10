@@ -9,8 +9,15 @@ using System.Windows.Forms;
 
 namespace PhotoAlbumViewOfTheGods
 {
+    /// <summary>
+    /// About information box
+    /// </summary>
     public partial class Form_About : Form
     {
+        /// <summary>
+        /// Initialize and display the about box
+        /// Brandon
+        /// </summary>
         public Form_About()
         {
             InitializeComponent();

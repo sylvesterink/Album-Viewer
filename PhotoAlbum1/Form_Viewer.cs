@@ -57,9 +57,6 @@ namespace PhotoAlbumViewOfTheGods
             slideshowTimer.Tick += new EventHandler(TimerEventProcessor);
         }
 
-        //Main function: sets all needed values for painting image
-        //Passed file path
-        //Cavan
         /// <summary>
         /// Changes the current image in the photo viewer to the passed string path
         /// </summary>
@@ -89,15 +86,23 @@ namespace PhotoAlbumViewOfTheGods
             resizeElements();        
         }
 
-        //Form resize event function
-        //Invalidates the form so current image is removed and paint event is called
-        //Cavan
+        /// <summary>
+        /// Form resize event function
+        /// Invalidates the form so current image is removed and paint event is called
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form_Viewer_Resize(object sender, EventArgs e)
         {
             resizeElements();
             Invalidate();
         }
 
+        /// <summary>
+        /// Resizes form elements along with window resize
+        /// Brandon
+        /// </summary>
         private void resizeElements()
         {
             Size clientSize = this.ClientSize;
@@ -112,9 +117,13 @@ namespace PhotoAlbumViewOfTheGods
             pictureBox1.Height = clientSize.Height - panel1.Height - 1;
         }
 
-        //Form closing event
-        //Disposes created images and this Form thread
-        //Cavan
+        /// <summary>
+        /// Form closing event
+        /// Disposes created images and this Form thread
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form_Viewer_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (slideshowTimer.Enabled)
@@ -125,6 +134,10 @@ namespace PhotoAlbumViewOfTheGods
             _imageViewer.Dispose(); //release resources on loaded image
         }
 
+        /// <summary>
+        /// If images are modified, make sure they are saved and that main form
+        /// will be updated appropriately
+        /// </summary>
         private void saveModifiedImage()
         {
             bool gifContinue = true;
@@ -216,21 +229,34 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Structure containing the information of the modified image
+        /// </summary>
         public struct modifiedImageInfo
         {
             public string path;
             public string id;
         }
 
-        //Timer Tick event
-        //Resizes the window to a more manageable size, starts the paint timer
-        //Cavan
+        /// <summary>
+        /// Timer Tick event
+        /// Resizes the window to a more manageable size, starts the paint timer
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void timer_Resize_Tick(object sender, EventArgs e)
         {
             timer_Resize.Stop();
             this.Show();
         }
 
+        /// <summary>
+        /// Rotates image clockwise
+        /// David and Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_rotate_cc_Click(object sender, EventArgs e)
         {
             _totalFlips = (_totalFlips >= 3) ? 0 : ++_totalFlips;
@@ -240,6 +266,12 @@ namespace PhotoAlbumViewOfTheGods
             Invalidate();
         }
 
+        /// <summary>
+        /// Rotates image counter-clockwise
+        /// David and Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_rotate_ccw_Click(object sender, EventArgs e)
         {
             _totalFlips = (_totalFlips <= -3) ? 0 : --_totalFlips;
@@ -248,12 +280,24 @@ namespace PhotoAlbumViewOfTheGods
             pictureBox1.Image = _imageViewer;
             Invalidate();
         }
-
+        
+        /// <summary>
+        /// Prints image
+        /// David
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
         {
             Utilities.printImage(_pictureList[_currentImage].path);
         }
 
+        /// <summary>
+        /// Go to previous image in the picture list
+        /// Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonPrevImage_Click(object sender, EventArgs e)
         {
             saveModifiedImage();
@@ -265,6 +309,12 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Go to next image in the picture list
+        /// Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonNextImage_Click(object sender, EventArgs e)
         {
             saveModifiedImage();
@@ -276,6 +326,12 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Toggle slideshow start and end
+        /// Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonSlideShow_Click(object sender, EventArgs e)
         {
             if (!slideshowTimer.Enabled)
@@ -288,6 +344,10 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Start the slideshow
+        /// Brandon
+        /// </summary>
         private void beginSlideshow()
         {
             saveModifiedImage();
@@ -306,6 +366,10 @@ namespace PhotoAlbumViewOfTheGods
             buttonSlideShow.Text = "End Slideshow";
         }
 
+        /// <summary>
+        /// End the slideshow
+        /// Brandon
+        /// </summary>
         private void endSlideshow()
         {
             slideshowTimer.Stop();
@@ -320,9 +384,13 @@ namespace PhotoAlbumViewOfTheGods
             buttonSlideShow.Text = "Begin Slideshow";
         }
 
+        /// <summary>
         // This is the method to run when the timer is raised.
         // Source: http://msdn.microsoft.com/en-us/library/system.windows.forms.timer.tick(v=vs.71).aspx
         // Brandon
+        /// </summary>
+        /// <param name="myObject"></param>
+        /// <param name="myEventArgs"></param>
         private void TimerEventProcessor(Object myObject, EventArgs myEventArgs)
         {
             if (_currentImage < _pictureList.Count - 1)

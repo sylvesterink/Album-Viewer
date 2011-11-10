@@ -10,12 +10,14 @@ using System.IO;
 
 namespace PhotoAlbumViewOfTheGods
 {
-    //New album name form
-    //Prompts user to input a name for a new album
-    //Value is accessed by albumNameValue after form is closed
-    //Must be disposed explicitly
-    //Passed a list of current album paths and file extension
-    //Cavan
+    /// <summary>
+    /// New album name form
+    /// Prompts user to input a name for a new album
+    /// Value is accessed by albumNameValue after form is closed
+    /// Must be disposed explicitly
+    /// Passed a list of current album paths and file extension
+    /// Cavan
+    /// </summary>
     public partial class Form_NewFileDialog : Form
     {
         private string[] _albumsList;
@@ -28,15 +30,21 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Set value of text box
+        /// </summary>
         public string setValueOfCreate
         {
             set { button_Create.Text = value; }
         }
 
-        //Constructor function.
-        //Passed a list of current album paths and file extension
-        //Method: gets file names from file paths
-        //Cavan
+        /// <summary>
+        /// Constructor function.
+        /// gets file names from file paths
+        /// Cavan
+        /// </summary>
+        /// <param name="albums">List of current album paths</param>
+        /// <param name="ext">file extension</param>
         public Form_NewFileDialog(string[] albums, string ext)
         {
             InitializeComponent();
@@ -48,9 +56,13 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Cancel button event
-        //Closes the form setting the name value to null
-        //Cavan
+        /// <summary>
+        /// Cancel button event
+        /// Closes the form setting the name value to null
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_Cancel_Click(object sender, EventArgs e)
         {
             textBox_AlbumName.Text = "";
@@ -58,9 +70,13 @@ namespace PhotoAlbumViewOfTheGods
             this.Close();
         }
 
-        //Create button event
-        //Checks for invalid names. If valid, closes form
-        //Cavan
+        /// <summary>
+        /// Create button event
+        /// Checks for invalid names. If valid, closes form
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_Create_Click(object sender, EventArgs e)
         {
             //Check if name is null or contains invalid characters
@@ -98,6 +114,11 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Cancels creation of new item
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form_NewFileDialog_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)

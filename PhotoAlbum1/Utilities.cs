@@ -11,8 +11,9 @@ using System.Windows.Forms;
 
 namespace PhotoAlbumViewOfTheGods
 {
-    //Public static class providing common functions for PhotoAlbum namespace
-    //Cavan
+    /// <summary>
+    /// Public static class providing common functions for PhotoAlbum namespace
+    /// </summary>
     public static class Utilities
     {
         private static string printImagePath;
@@ -21,20 +22,33 @@ namespace PhotoAlbumViewOfTheGods
             public string MD5;
             public string path;
         }
-        //Utility Function. Passed file path
-        //Returns the filename without path or extension
+
+        /// <summary>
+        /// Returns the filename without path or extension
+        /// </summary>
+        /// <param name="path">Path to retrieve name from</param>
+        /// <returns>Name of file</returns>
         public static string getNameFromPath(string path)
         {
             return Path.GetFileNameWithoutExtension(path);
         }
 
+        /// <summary>
+        /// Gets the current timestamp
+        /// David
+        /// </summary>
+        /// <returns>Current time in milliseconds</returns>
         public static string getTimeStamp()
         {
             return ((long)((DateTime.UtcNow.Ticks - DateTime.Parse("01/01/1970 00:00:00").Ticks) / 10000000)).ToString();
         }
 
-
-
+        /// <summary>
+        /// Print an image
+        /// David
+        /// TODO: Make it work properly with a print dialog
+        /// </summary>
+        /// <param name="filePath">path to image to print</param>
         public static void printImage(string filePath)
         {
             printImagePath = filePath;
@@ -43,12 +57,24 @@ namespace PhotoAlbumViewOfTheGods
             pd.Print();
         }
 
+        /// <summary>
+        /// Make sure the lengtho of a string is not longer than specified size
+        /// </summary>
+        /// <param name="text">string to check</param>
+        /// <param name="length">Maximum size of string</param>
+        /// <returns>True if string is within size limit</returns>
         public static bool checkStringLength(string text, int length)
         {
             return (text.Length > length) ? true : false;
         }
 
-        //http://social.msdn.microsoft.com/Forums/en-US/csharpgeneral/thread/eb80fbbe-6b89-4c3d-9ede-88a2b105c714/
+        /// <summary>
+        /// Print the image
+        /// http://social.msdn.microsoft.com/Forums/en-US/csharpgeneral/thread/eb80fbbe-6b89-4c3d-9ede-88a2b105c714/
+        /// David
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="e"></param>
         private static void PrintImage(object o, System.Drawing.Printing.PrintPageEventArgs e)
         {
             Bitmap img = new Bitmap(printImagePath);
@@ -57,6 +83,11 @@ namespace PhotoAlbumViewOfTheGods
             img.Dispose(); //dispose of the image!!!!
         }
 
+        /// <summary>
+        /// Remove all photos not referenced by any album
+        /// David
+        /// </summary>
+        /// <returns>Number of photos removed</returns>
         public static int cleanUpPhotos()
         {
             int totalRemoved = 0;
@@ -85,6 +116,12 @@ namespace PhotoAlbumViewOfTheGods
             return totalRemoved;
         }
 
+        /// <summary>
+        /// Gets a list of all the users
+        /// David and Brandon
+        /// </summary>
+        /// <param name="usersDirectory">The Users directory to get the list from.</param>
+        /// <returns>List of all users</returns>
         public static List<string> listOfUsers(string usersDirectory)
         {
             List<string> users = Directory.GetDirectories(usersDirectory).ToList();
@@ -96,6 +133,10 @@ namespace PhotoAlbumViewOfTheGods
             return users;
         }
 
+        /// <summary>
+        /// Get information of all the images
+        /// </summary>
+        /// <returns>Information for each image</returns>
         public static List<AllImagesInfo> getAllImageInfo()
         {
             AllImagesInfo imageInfo;
@@ -129,6 +170,11 @@ namespace PhotoAlbumViewOfTheGods
             return allImageInfo;
         }
 
+        /// <summary>
+        /// Calculate the MD5 sum value for an image
+        /// </summary>
+        /// <param name="path">Path to the image to calculate MD5 sum of</param>
+        /// <returns>MD5 sum</returns>
         public static string CalculateMD5(string path)
         {
             FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read);
@@ -144,9 +190,13 @@ namespace PhotoAlbumViewOfTheGods
             return sb.ToString();
         }
 
-        //Utility Function. Passed integer ID
-        //Returns string value of passed ID
-        //Cavan
+        /// <summary>
+        /// Utility Function. Passed integer ID
+        /// Returns string value of passed ID
+        /// Cavan
+        /// </summary>
+        /// <param name="id">Integer to convert to string</param>
+        /// <returns>Integer in string form</returns>
         public static string getIdFromInt(int id)
         {
             string value = Convert.ToString(id);
@@ -158,9 +208,13 @@ namespace PhotoAlbumViewOfTheGods
             return value;
         }
 
-        //Utlity Function. Passed any string
-        //Returns true if string doesn't contain any invalid file or path characters. False otherwise
-        //Cavan
+        /// <summary>
+        /// Utlity Function. Passed any string
+        /// Returns true if string doesn't contain any invalid file or path characters. False otherwise
+        /// Cavan
+        /// </summary>
+        /// <param name="text">String to check</param>
+        /// <returns>True/False depending on whether invalid characters found</returns>
         public static bool isStringValid(string text)
         {
             //Load all invalid characters
@@ -176,9 +230,13 @@ namespace PhotoAlbumViewOfTheGods
             return true;
         }
 
-        //Utility Function. Passed a string file path
-        //Returns bool value representing if file can be interpreted as an Image
-        //Cavan
+        /// <summary>
+        /// Utility Function. Passed a string file path
+        /// Returns bool value representing if file can be interpreted as an Image
+        /// Cavan
+        /// </summary>
+        /// <param name="photoPath">Path to image file</param>
+        /// <returns>True/false depending on whether image is acceptable</returns>
         public static bool isImageValid(string photoPath)
         {
             try
@@ -195,15 +253,25 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Checks if string contains valid characters
+        /// David and Brandon
+        /// </summary>
+        /// <param name="text">String to check</param>
+        /// <returns>True/false depending on whether image is acceptable</returns>
         public static bool isValidString(string text)
         {
             return (System.Text.RegularExpressions.Regex.IsMatch(text, "^[a-zA-Z0-9_ -]+$")) ? true : false;
         }
 
-        //Utility Funtion. Passed string file path
-        //Method: Removes extension, adds (#) if file exists. Reappends extension to new filename
-        //Returns A unique name if a file with passed path already exists using (#) format at the end.
-        //Cavan & Zach
+        /// <summary>
+        /// Utility Funtion. Passed string file path
+        /// Removes extension, adds (#) if file exists. Reappends extension to new filename
+        /// Returns A unique name if a file with passed path already exists using (#) format at the end.
+        /// Cavan & Zach
+        /// </summary>
+        /// <param name="filePath">Filename to append</param>
+        /// <returns>Appended name</returns>
         public static string getAppendName(string filePath)
         {
             int append = 2;
@@ -222,11 +290,16 @@ namespace PhotoAlbumViewOfTheGods
             return newPath;
         }
 
-        //Scale image to desired size. Passed image and desired size.
-        //Method: calculates new width and height keeping aspect ratio.  Creates a new image of passed size without modifying passed image
-        //Returns: new resized image.
-        //Assistance and function from: http://stackoverflow.com/questions/7029601/scale-image-for-image-list-c
-        //Cavan
+        /// <summary>
+        /// Scale image to desired size. Passed image and desired size.
+        /// Method: calculates new width and height keeping aspect ratio.  Creates a new image of passed size without modifying passed image
+        /// Returns: new resized image.
+        /// Assistance and function from: http://stackoverflow.com/questions/7029601/scale-image-for-image-list-c
+        /// Cavan
+        /// </summary>
+        /// <param name="imgToResize">Image path</param>
+        /// <param name="size">New size of image</param>
+        /// <returns>Resized image</returns>
         public static Image ScalImage(Image imgToResize, Size size)
         {
             int sourceWidth = imgToResize.Width;

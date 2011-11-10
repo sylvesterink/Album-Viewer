@@ -11,12 +11,21 @@ using System.Text.RegularExpressions;
 
 namespace PhotoAlbumViewOfTheGods
 {
+    /// <summary>
+    /// Form to create a new user profile
+    /// </summary>
     public partial class Form_NewUser : Form
     {
         private bool _firstRun;
         private string _usersDirectory;
         private List<string> _users;
 
+        /// <summary>
+        /// Initialize form
+        /// </summary>
+        /// <param name="users">List uf current users</param>
+        /// <param name="usersDirectory">Directory containing user folders</param>
+        /// <param name="isFirstRun">Checks if the user folders has been initialized</param>
         public Form_NewUser(ref List<string> users, string usersDirectory, bool isFirstRun)
         {
             InitializeComponent();
@@ -29,6 +38,11 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Adds the new profile, checking to see that the name is valid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_adduser_Click(object sender, EventArgs e)
         {
             string userName = text_username.Text.Trim();
@@ -53,7 +67,13 @@ namespace PhotoAlbumViewOfTheGods
                 this.Close();
             }
         }
-
+        
+        /// <summary>
+        /// Cancels the creation of a new profile
+        /// If it's the first run, inform the user that a profile is required
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_cancel_Click(object sender, EventArgs e)
         {
             if (_firstRun && MessageBox.Show("You must create a user before you can use this program. Canceling will exit the program. Are you sure you want to quit?", "Error", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.Yes)

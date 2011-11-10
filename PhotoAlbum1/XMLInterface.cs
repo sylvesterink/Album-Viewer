@@ -10,6 +10,9 @@ using System.Threading;
 //Cavan & Zach: This class deals with events that use or modify data in the XML(.abm) files
 namespace PhotoAlbumViewOfTheGods
 {
+    /// <summary>
+    /// Class to keep track of albums and their data
+    /// </summary>
     class XMLInterface
     {
         private List<pictureData> dataList = new List<pictureData>();//Vector containing picture info
@@ -47,7 +50,14 @@ namespace PhotoAlbumViewOfTheGods
             set { _currentAlbumName = value; }
         }
 
-        //Constructor that initializes variables used in this class
+        /// <summary>
+        /// Constructor that initializes variables used in this class
+        /// </summary>
+        /// <param name="folderDir">Absolute path</param>
+        /// <param name="albumDirectory">Directory where albums are stored for current user</param>
+        /// <param name="photoDirectory">Directory where photos are stored</param>
+        /// <param name="ext">Album file extension</param>
+        /// <param name="currentUser">Current user</param>
         public XMLInterface(string folderDir, string albumDirectory, string photoDirectory, string ext, string currentUser)
         {
             directory = folderDir;
@@ -58,7 +68,12 @@ namespace PhotoAlbumViewOfTheGods
             _currentUser = currentUser;
         }
 
-        //sets the data from the dataStruct into the dataList vector, returns false if id is too big
+        /// <summary>
+        /// sets the data from the dataStruct into the dataList vector, returns false if id is too big
+        /// </summary>
+        /// <param name="dataStruct">Structure containing data to set</param>
+        /// <param name="id">Image id to set data of</param>
+        /// <returns>True/False whether image is valid and data was set</returns>
         public bool setData(pictureData dataStruct, int id)
         {
             if (id >= dataList.Count)
@@ -70,17 +85,27 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Copies image to new location
+        /// David
+        /// </summary>
+        /// <param name="from">Original location</param>
+        /// <param name="to">New location</param>
         private void copyImage(string from, string to)
         {
             File.Copy(from, to);
         }
 
-        //Function is called when importing a picture, where path is the picture's path
-        //Copies the pic to a new photos folder
-        //Compares pictires if a duplicate name exists
-        //adds the image to the datalist
-        //sets a default description to nothing
-        //Zach & Cavan
+        /// <summary>
+        /// Function is called when importing a picture, where path is the picture's path
+        /// Copies the pic to a new photos folder
+        /// Compares pictires if a duplicate name exists
+        /// adds the image to the datalist
+        /// sets a default description to nothing
+        /// Zach & Cavan
+        /// </summary>
+        /// <param name="path">Path to picture to import</param>
+        /// <param name="allImages">List of all current images</param>
         public void addPhoto(string path, ref List<Utilities.AllImagesInfo> allImages)
         {
             int totalImages = allImages.Count;            
@@ -131,8 +156,12 @@ namespace PhotoAlbumViewOfTheGods
             
         }
 
-        //Function is used to get picture info from and element in the datalist
-        //The id of the picture is sent and the info for that pic is returned
+        /// <summary>
+        /// Function is used to get picture info from and element in the datalist
+        /// The id of the picture is sent and the info for that pic is returned
+        /// </summary>
+        /// <param name="id">ID of picture to retrieve data of</param>
+        /// <returns>Data retrieved</returns>
         public pictureData getData(int id)
         {
             pictureData tempData = new pictureData();
@@ -150,8 +179,11 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Gets the list of pictures which are used for the list view
-        //Names are retrieved from the datalist
+        /// <summary>
+        /// Gets the list of pictures which are used for the list view
+        /// Names are retrieved from the datalist
+        /// </summary>
+        /// <returns>List of pictures in album</returns>
         public string[] getPictureList()
         {
             string[] picList = new string[dataList.Count];
@@ -167,20 +199,29 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Returns an array of the albums
+        /// <summary>
+        /// Returns an array of the albums
+        /// </summary>
+        /// <returns>List of available albums</returns>
         public string[] getAlbumList()
         {
             return Directory.GetFiles(directory + albumFolder, "*" + albumExtension);
         }
 
-        //Clears datalist vector
+        /// <summary>
+        /// Clears datalist vector
+        /// </summary>
         public void clearAlbum()
         {
             dataList.Clear();
         }
 
-        //Deletes selected album with the given name, returns true if successful
-        //Cavan & Zach
+        /// <summary>
+        /// Deletes selected album with the given name, returns true if successful
+        /// Cavan & Zach
+        /// </summary>
+        /// <param name="albumName">Name of album to delete</param>
+        /// <returns>True/false as to whether album was successfuly deleted</returns>
         public bool deleteAlbum(string albumName)
         {
             //delete file using directory, albumName
@@ -196,8 +237,12 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Creates a new album with the user entered name returns true if successful
-        //Zach
+        /// <summary>
+        /// Creates a new album with the user entered name returns true if successful
+        /// Zach
+        /// </summary>
+        /// <param name="albumName">Name of album to create</param>
+        /// <returns>Whether album creation was successful</returns>
         public bool createAlbum(string albumName)
         {
             //create file using directory, albumName
@@ -215,9 +260,14 @@ namespace PhotoAlbumViewOfTheGods
                 return false;
             }
         }
-        //Loads the album information from a .abm(XML format) file and adds information to a query
-        //then, the datalist vector will get each pictures information
-        //Zach
+
+        /// <summary>
+        /// Loads the album information from a .abm(XML format) file and adds information to a query
+        /// then, the datalist vector will get each pictures information
+        /// Zach
+        /// </summary>
+        /// <param name="albumName">Name of album to open</param>
+        /// <returns>Whether album was successfuly opened</returns>
         public bool loadAlbum(string albumName)
         {
             pictureData PicData = new pictureData();
@@ -263,7 +313,11 @@ namespace PhotoAlbumViewOfTheGods
 
         }
 
-        //Zach: Save function that queries the datalist and writes it in XML format
+        /// <summary>
+        /// Save function that queries the datalist and writes it in XML format
+        /// Zach
+        /// </summary>
+        /// <returns>Whether save was successful or not</returns>
         public bool saveAlbum()
         {
             //loop and load each element into pictureData struct, then 
@@ -300,13 +354,19 @@ namespace PhotoAlbumViewOfTheGods
             return true;
         }
 
-        //Returns current xml data in a vector of struct pictureData
+        /// <summary>
+        /// Returns current xml data in a vector of struct pictureData
+        /// </summary>
+        /// <returns>List of all pictures</returns>
         public List<pictureData> getDataList()
         {
             return dataList;
         }
     
-        //Returns true if no data is loaded into the list
+        /// <summary>
+        /// Returns true if no data is loaded into the list
+        /// </summary>
+        /// <returns>Whether list is empty or not</returns>
         public bool isEmpty()
         {
             if(dataList.Count == 0)
@@ -315,10 +375,14 @@ namespace PhotoAlbumViewOfTheGods
                 return false;
         }
 
-        //Zach: Parameter is a string value of what thumbnail was clicked on
-        //Removes picture from panel; gets the datalist count and removes the 
-        //Curerntly selected picture, the vector should update itself when an
-        //element is removed
+        /// <summary>
+        /// Parameter is a string value of what thumbnail was clicked on
+        /// Removes picture from panel; gets the datalist count and removes the 
+        /// Curerntly selected picture, the vector should update itself when an
+        /// element is removed
+        /// Zach
+        /// </summary>
+        /// <param name="id">ID of picture to remove</param>
         public void RemovePic(string id)
         {
             try

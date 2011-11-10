@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -75,10 +75,15 @@ namespace PhotoAlbumViewOfTheGods
             InitializeComponent();
         }
 
-        //Form Main load event
-        //Initializes current directory and creates folders if they don't exist
-        //Checks for any album files and updates menus to allow open if any are found
-        //Sets thumbnail frame spacing and updates the album list tree
+        
+        /// <summary>
+        /// Form Main load event
+        /// Initializes current directory and creates folders if they don't exist
+        /// Checks for any album files and updates menus to allow open if any are found
+        /// Sets thumbnail frame spacing and updates the album list tree
+        /// </summary>
+        /// <param name="sender"> Reference to calling object </param>
+        /// <param name="e"> Additional calling arguments </param>
         private void Form1_Load(object sender, EventArgs e)
         {
             bool isFirstTime = true;
@@ -157,8 +162,12 @@ namespace PhotoAlbumViewOfTheGods
         }
 
 
-        //Panel double click event
-        //If panel was double left clicked calls openviewer
+        /// <summary>
+        /// Panel double click event
+        /// If panel was double left clicked calls openviewer
+        /// </summary>
+        /// <param name="sender"> Reference to calling object </param>
+        /// <param name="e"> Additional calling arguments </param>
         private void panel_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -167,123 +176,184 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Treehide button enter event
-        //Colors button to show it
-        //Cavan
+        /// <summary>
+        /// Treehide button enter event
+        /// Colors button to show it
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void treeMin_MouseEnter(object sender, EventArgs e)
         {
             buttonHideTree.BackColor = Color.Gray;
         }
 
-        //Treehide button leave event
-        //Colors button to hide it
-        //Cavan
+        /// <summary>
+        /// Treehide button leave event
+        /// Colors button to hide it
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void treeMin_MouseLeave(object sender, EventArgs e)
         {
             buttonHideTree.BackColor = Color.Transparent;
         }
 
-        //Main panel click event
-        //Focuses panel so it can be scrolled if needed
-        //Zach & Cavan
+        
+        /// <summary>
+        /// Main panel click event
+        /// Focuses panel so it can be scrolled if needed
+        /// Zach & Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void panel1_Click(object sender, EventArgs e)
         {
             panel1.Focus();
         }
 
-        //Context Menu view event
-        //Calls openViewer to view current picture
-        //Cavan
+        /// <summary>
+        /// Context Menu view event
+        /// Calls openViewer to view current picture
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void viewToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             openViewer();
         }
 
-        //Context Menu remove event
-        //Calls deletePhoto
-        //Zach & Cavan
+        /// <summary>
+        /// Context Menu remove event
+        /// Calls deletePhoto
+        /// Zach & Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void removeToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             deletePhoto();
         }
 
-        //Textbox picture name leave event
-        //Clears rename text label when textbox loses focus
-        //Cavan
+        /// <summary>
+        /// Textbox picture name leave event
+        /// Clears rename text label when textbox loses focus
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void textBox_Name_Leave_1(object sender, EventArgs e)
         {
             label_NameError.Visible = false;
         }
 
-        //MenuItem Exit click event
-        //Close Program
-        //Zach & Cavan
+        /// <summary>
+        /// MenuItem Exit click event
+        /// Close Program
+        /// Zach & Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        //Menu close
-        //Calls albumClose to close current album
-        //Zach & Cavan
+        /// <summary>
+        /// Menu close
+        /// Calls albumClose to close current album
+        /// Zach & Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             albumClose();
         }
 
-        //Album tree double click event
-        //Double clicking on the album name will open it
-        //Zach & Cavan
+        /// <summary>
+        /// Album tree double click event
+        /// Double clicking on the album name will open it
+        /// Zach & Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void treeView_Albums_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             openAlbum(_treeNode.Name);
         }
 
-        //Menu rename album event
-        //Calls renameAlbum to rename the current album
-        //Zach & Cavan
+        /// <summary>
+        /// Menu rename album event
+        /// Calls renameAlbum to rename the current album
+        /// Zach & Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void toolStripMenuItem_Rename_Click(object sender, EventArgs e)
         {
             renameAlbum();
         }
 
-        //Album tree context menu open event
-        //calls openAlbum to open the specified album
-        //Zach & Cavan
+        /// <summary>
+        /// Album tree context menu open event
+        /// calls openAlbum to open the specified album
+        /// Zach & Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void openAlbumToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openAlbum(_treeNode.Name);
         }
 
-        //Album tree context menu delete event
-        //Calls deleteALbum to delete the specified album
-        //Zach & Cavan
+        /// <summary>
+        /// Album tree context menu delete event
+        /// Calls deleteALbum to delete the specified album
+        /// Zach & Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void deleteAlbumToolStripMenuItem_Click(object sender, EventArgs e)
         {
             deleteAlbum(_treeNode.Name);
         }
 
-        //Album tree context menu rename event
-        //Calls renameAlbum to rename the specified album
-        //Zach & Cavan
+        /// <summary>
+        /// Album tree context menu rename event
+        /// Calls renameAlbum to rename the specified album
+        /// Zach & Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void renameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             renameAlbum();
         }
 
-        //Menu delete album event
-        //calls deleteAlbum to delete the current album
-        //Cavan
+        /// <summary>
+        /// Menu delete album event
+        /// calls deleteAlbum to delete the current album
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void deleteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             deleteAlbum(_albumData.filePath);
         }
 
-        //Update button click event
-        //Updates the current photo with the name and description
-        //Updates the data array with the new info as well
-        //Updates the list view with the new data
-        //Zach & Cavan
+        /// <summary>
+        /// Update button click event
+        /// Updates the current photo with the name and description
+        /// Updates the data array with the new info as well
+        /// Updates the list view with the new data
+        /// Zach & Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void RenamePic_Click(object sender, EventArgs e)
         {
             renamePicture();
@@ -295,9 +365,13 @@ namespace PhotoAlbumViewOfTheGods
             panel1.Focus();
         }
 
-        //Context menu remove event
-        //Calls deletePhoto to remove the slected photo
-        //Cavan
+        /// <summary>
+        /// Context menu remove event
+        /// Calls deletePhoto to remove the slected photo
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void removeToolStripMenuItem_Click(object sender, EventArgs e)
         {
             deletePhoto();
@@ -306,6 +380,7 @@ namespace PhotoAlbumViewOfTheGods
         
         /// <summary>
         /// Updates the last user file
+        /// David and Brandon
         /// </summary>
         private void updateLastUserFile()
         {
@@ -314,6 +389,10 @@ namespace PhotoAlbumViewOfTheGods
             tw.Close();
         }
 
+        /// <summary>
+        /// Adds all users except the current to the switch users submenu
+        /// David and Brandon
+        /// </summary>
         private void populateUsers()
         {
             switchUserToolStripMenuItem.DropDownItems.Clear();
@@ -327,6 +406,12 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Switches to the selected user and shows their albums
+        /// David and Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void switchUser(object sender, EventArgs e)
         {
             albumClose();
@@ -343,13 +428,20 @@ namespace PhotoAlbumViewOfTheGods
             updateStatusBar();//"Current user: " + _currentUser);
         }
 
+        /// <summary>
+        /// Lists the tutal number of users
+        /// David
+        /// </summary>
+        /// <returns>A list of the users</returns>
         private string[] totalUsers()
         {
             return Directory.GetDirectories(_directoryUsers);
         }
 
-        //Populates the album list with any found album files
-        //Cavan
+        /// <summary>
+        /// Populates the album list with any found album files
+        /// Cavan
+        /// </summary>
         private void populateTree()
         {
             int totalAlbums = 0;
@@ -374,6 +466,12 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Retrieves the id of the current album
+        /// David
+        /// </summary>
+        /// <param name="albumName">The name of the album</param>
+        /// <returns>The id of the album</returns>
         private string getAlbumID(string albumName)
         {
             XDocument xdoc = new XDocument();
@@ -381,6 +479,12 @@ namespace PhotoAlbumViewOfTheGods
             return Utilities.getIdFromInt(xdoc.Descendants("PictureInfo").Count()).ToString();
         }
 
+        /// <summary>
+        /// Copies selected image to another album
+        /// David
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void copyImageToAlbum(object sender, EventArgs e)
         {
             string timestamp = Utilities.getTimeStamp();
@@ -407,10 +511,13 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Populates picture list view
-        //Method: retrieve album data and clear tree
-        //        loop through each picture and add its name, description, and path to the photo tree.
-        //Cavan
+        /// <summary>
+        /// Populates picture list view
+        /// retrieve album data and clear tree
+        /// loop through each picture and add its name, description, and path to the photo tree.
+        /// Cavan and Brandon
+        /// </summary>
+        /// <param name="searchList">When searching/sorting, this image list is used</param>
         private void populateList(List<pictureData> searchList = null)
         {
             //these don't seem to be needed.  delete if the list tests out fine
@@ -452,6 +559,10 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Sets up context menu for the list view
+        /// Brandon
+        /// </summary>
         private void setListContextMenu()
         {
             ToolStripItem toolStripItem;
@@ -473,12 +584,16 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Thumbnail click event
-        //Shows border panel around clicked panel. Sets current photo. enables and populates picture info panel
-        //Focusses thumbnail panel for delete button catching
-        //Calls selectNode method
-        //If right clicked also shows the context menu
-        //Cavan & Zach
+        /// <summary>
+        /// Thumbnail click event
+        /// Shows border panel around clicked panel. Sets current photo. enables and populates picture info panel
+        /// Focusses thumbnail panel for delete button catching
+        /// Calls selectNode method
+        /// If right clicked also shows the context menu
+        /// Cavan & Zach
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void panel_MouseClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
@@ -520,11 +635,15 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Picture list tree node click
-        //Updates picture data panel with picture info. Sets current panel and find corresponding panel
-        //Sets border and thubmnails for thumbnail view
-        //calls select node method
-        //Cavan & Zach
+        /// <summary>
+        /// Picture list tree node click
+        /// Updates picture data panel with picture info. Sets current panel and find corresponding panel
+        /// Sets border and thubmnails for thumbnail view
+        /// calls select node method
+        /// Cavan & Zach
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void treeView_Pictures_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button == MouseButtons.Left || e.Button == MouseButtons.Right)
@@ -578,8 +697,11 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Gets node from passed index ID. Sets that node as the selected node
-        //Cavan & Zach
+        /// <summary>
+        /// Gets node from passed index ID. Sets that node as the selected node
+        /// Cavan & Zach
+        /// </summary>
+        /// <param name="id">Id of node to fetch</param>
         private void selectTreeNode(int id)
         {
             //Get the node with corresponding id and select it so that both views match
@@ -595,9 +717,13 @@ namespace PhotoAlbumViewOfTheGods
         }
 
 
-        //Album tree node click event
-        //Saves the clicked node. If right clicked shows context menu
-        //Cavan & Zach
+        /// <summary>
+        /// Album tree node click event
+        /// Saves the clicked node. If right clicked shows context menu
+        /// Cavan & Zach
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void treeView_Albums_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
         {
             if (e.Button == MouseButtons.Right || e.Button == MouseButtons.Left)
@@ -612,10 +738,14 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Treehide button click event
-        //Toggles the album tree
-        //Method: Sets text and posiions of the button, line panel, and album label
-        //Cavan
+        /// <summary>
+        /// Treehide button click event
+        /// Toggles the album tree
+        /// Method: Sets text and posiions of the button, line panel, and album label
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void buttonHideTree_Click(object sender, EventArgs e)
         {
             //Hides the album view
@@ -656,10 +786,13 @@ namespace PhotoAlbumViewOfTheGods
             }
         }*/
 
-        //Open Album method. Passed the file path to open
-        //Close current album if one is open.
-        //Failure to access file shows errors
-        //Cavan
+        /// <summary>
+        /// Open Album method. Passed the file path to open
+        /// Close current album if one is open.
+        /// Failure to access file shows errors
+        /// Cavan
+        /// </summary>
+        /// <param name="albumPath">Path to the album file to open</param>
         private void openAlbum(string albumPath)
         {
             if (_albumData.filePath != albumPath) //make sure we're not opening the same album
@@ -681,10 +814,13 @@ namespace PhotoAlbumViewOfTheGods
             updateStatusBar();
         }
 
-        //Open album from file
-        //Sets album to open. calls loadAlbum. Populates the picture views
-        //Failure to load file calls errors
-        //Cavan
+        /// <summary>
+        /// Open album from file
+        /// Sets album to open. calls loadAlbum. Populates the picture views
+        /// Failure to load file calls errors
+        /// Cavan
+        /// </summary>
+        /// <param name="path">Path to the album file to open</param>
         private void openAlbumFromFile(string path)
         {
             //Open
@@ -712,6 +848,11 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Disables thumbnail panel when it's being used by a thread
+        /// David and Brandon
+        /// </summary>
+        /// <param name="progressMax">Set default progress bar value</param>
         private void disablePanel(int progressMax)
         {
             try
@@ -728,6 +869,10 @@ namespace PhotoAlbumViewOfTheGods
             catch { }
         }
         
+        /// <summary>
+        /// Reenables thumbnail panel after a thread is complete
+        /// David
+        /// </summary>
         private void enablePanel()
         {
             try
@@ -741,6 +886,11 @@ namespace PhotoAlbumViewOfTheGods
             catch { }
         }
 
+        /// <summary>
+        /// Displays the thumbnails in the current picture list
+        /// Brandon
+        /// </summary>
+        /// <param name="picList">List of thumnails to display</param>
         private void showThumbnail(List<pictureData> picList)
         {
             pictureData picData = new pictureData();
@@ -775,10 +925,13 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Display thumbnails method
-        //Method: Retrieves current data list. For each picture, creates a thumbnail panel. Shows and positions each thumbnail
-        //        Sets each panel's properties and event handlers.
-        //Cavan
+        /// <summary>
+        /// Display thumbnails method
+        /// Retrieves current data list. For each picture, creates a thumbnail panel. Shows and positions each thumbnail
+        /// Sets each panel's properties and event handlers.
+        /// Cavan and David and Brandon
+        /// </summary>
+        /// <param name="searchList">List of pictures to use when searchinhg/sorting</param>
         private void populateScreen(List<pictureData> searchList = null)
         {
             int scrollPosition = panel1.VerticalScroll.Value; //save user scroll position
@@ -807,10 +960,15 @@ namespace PhotoAlbumViewOfTheGods
             panel1.VerticalScroll.Value = scrollPosition; //return user scroll posiiton
         }
 
-        //Ceate New Panel thumbnail
-        //Parameters: accepts picturedata struct
-        //Creates a new panel, sets its picture data, and sets background image to scaled down image from file
-        //Returns thumbnial panel
+        /// <summary>
+        /// Ceate New Panel thumbnail
+        /// Parameters: accepts picturedata struct
+        /// Creates a new panel, sets its picture data, and sets background image to scaled down image from file
+        /// Returns thumbnial panel
+        /// </summary>
+        /// <param name="imageData">Picture data to use for thumbnail</param>
+        /// <param name="id">ID of picture to find</param>
+        /// <returns>New thumbnail panel to be inserted</returns>
         private Panel getNewThumbnail(ref pictureData imageData, int id)
         {
             Panel newPanel = new Panel();
@@ -848,9 +1006,13 @@ namespace PhotoAlbumViewOfTheGods
             return newPanel;
         }
 
-        //Frame Position function
-        //Returns frame position based on int id
-        //Cavan
+        /// <summary>
+        /// Frame Position function
+        /// Returns frame position based on int id
+        /// Cavan
+        /// </summary>
+        /// <param name="id"> Number of frame being added</param>
+        /// <returns>The location to place the frame</returns>
         private Point getFrameLocation(int id)
         {    
             Point p = new Point(((id % (_framesPerRow)) * (_frameWidth + _frameSpacingX) + (_frameSpacingX / 2)), 
@@ -858,9 +1020,12 @@ namespace PhotoAlbumViewOfTheGods
             return p;
         }
 
-        //Thumbnail Callback funtion
-        //Used to retrieve a thumbnail
-        //Cavan
+        /// <summary>
+        /// Thumbnail Callback funtion
+        /// Used to retrieve a thumbnail
+        /// Cavan
+        /// </summary>
+        /// <returns> False. Is not used in this version</returns>
         private bool thumbailCallback()
         {
             return false;
@@ -885,9 +1050,13 @@ namespace PhotoAlbumViewOfTheGods
         }
          * */
 
-        //Name textbox key press
-        //Method: If enter was pressed, update info and reload list view
-        //        If any other key, show update button
+        /// <summary>
+        /// Name textbox key press
+        /// If enter was pressed, update info and reload list view
+        /// If any other key, show update button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void textBox_Name_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
@@ -906,9 +1075,11 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Rename Picture method
-        //Checks for invalid names and updates picture data. Notifyes user of success or failure
-        //Cavan
+        /// <summary>
+        /// Rename Picture method
+        /// Checks for invalid names and updates picture data. Notifyes user of success or failure
+        /// Cavan
+        /// </summary>
         private void renamePicture()
         {
             //Check for invalid characters or blank name. If invalid, show error message
@@ -936,17 +1107,25 @@ namespace PhotoAlbumViewOfTheGods
 
         }
 
-        //Description keypress event
-        //Shows update button
-        //Cavan & Zach
+        /// <summary>
+        /// Description keypress event
+        /// Shows update button
+        /// Cavan & Zach
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void richTextBox_Description_KeyPress(object sender, KeyPressEventArgs e)
         {
             button_RenamePic.Enabled = true;
         }
 
-        //MenuItem New click event
-        //Calls createAlbum and and enables menu items if successfull. Updates album tree list. Displays errors if can't access files
-        //Cavan
+        /// <summary>
+        /// MenuItem New click event
+        /// Calls createAlbum and and enables menu items if successfull. Updates album tree list. Displays errors if can't access files
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string albumName;
@@ -983,8 +1162,10 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Enable album method
-        //Enables menu items and cals error handle to clear errors
+        /// <summary>
+        /// Enable album method
+        /// Enables menu items and cals error handle to clear errors
+        /// </summary>
         private void enableItems()
         {
             //closeToolStripMenuItem.Enabled = true;
@@ -994,9 +1175,11 @@ namespace PhotoAlbumViewOfTheGods
             renameToolStripMenuItem.Enabled = true;
         }
 
-        //Disable items method
-        //Disables menu items, label texts and form title
-        //Cavan & Zach
+        /// <summary>
+        /// Disable items method
+        /// Disables menu items, label texts and form title
+        /// Cavan & Zach
+        /// </summary>
         private void disableItems()
         {
             //Reset text and lables
@@ -1014,11 +1197,9 @@ namespace PhotoAlbumViewOfTheGods
             this.Text = _constantAppName;
         }
 
-        //Close album method
-        //
-        //Cavan
         /// <summary>
         /// Attempts to close the currently open album
+        /// Cavan
         /// </summary>
         /// <returns>Returns true on successful save, false otherwise</returns>
         private bool albumClose()
@@ -1085,11 +1266,15 @@ namespace PhotoAlbumViewOfTheGods
             removeToolStripMenuItem.Enabled = false;
         }
 
-        //MenuItem import picture click event
-        //Clears errors and sets up load file dialog
-        //Prompts user to find files and adds them to the album. Calls addPhoto passing path. Updates both views
-        //Checks if image is valid, calls errors if it is not.
-        //Cavan
+        /// <summary>
+        /// MenuItem import picture click event
+        /// Clears errors and sets up load file dialog
+        /// Prompts user to find files and adds them to the album. Calls addPhoto passing path. Updates both views
+        /// Checks if image is valid, calls errors if it is not.
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<Utilities.AllImagesInfo> allImages = Utilities.getAllImageInfo();
@@ -1133,8 +1318,12 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Form Closing event
-        //Saves current album, removes event handler and closes
+        /// <summary>
+        /// Form Closing event
+        /// Saves current album, removes event handler and closes
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Form_Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (_albumData != null && _albumData.currentAlbum != "")
@@ -1154,9 +1343,13 @@ namespace PhotoAlbumViewOfTheGods
             return _albumData.saveAlbum();
         }
 
-        //Album tree double click event
-        //Calls openViewer to view picture
-        //Cavan
+        /// <summary>
+        /// Album tree double click event
+        /// Calls openViewer to view picture
+        /// Cavan
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void treeView_Pictures_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -1272,12 +1465,17 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Delete Key event
-        //Overrides current function to intercept delete key. Used in order to accept delete on panels
-        //Calls delete photo if delete was pressed while on thumbnail panel.
-        //If delete was pressed on picture tree, finds picture id, and deletes photo only if a node is selected
-        //Resends message if conditions weren't matched
-        //Cavan
+        /// <summary>
+        /// Delete Key event
+        /// Overrides current function to intercept delete key. Used in order to accept delete on panels
+        /// Calls delete photo if delete was pressed while on thumbnail panel.
+        /// If delete was pressed on picture tree, finds picture id, and deletes photo only if a node is selected
+        /// Resends message if conditions weren't matched
+        /// Cavan
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <param name="keyData"></param>
+        /// <returns></returns>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Delete && ActiveControl.GetType() == typeof(Panel) && ActiveControl != panel1 && ActiveControl != panel_Border)
@@ -1301,6 +1499,7 @@ namespace PhotoAlbumViewOfTheGods
 
         /// <summary>
         /// Deletes a photo from an album and then saves the album
+        /// David
         /// </summary>
         private void deletePhoto()
         {
@@ -1320,18 +1519,26 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
-        //Update info button event
-        //Hides name text box label and disables update button
-        //Zach
+        /// <summary>
+        /// Update info button event
+        /// Hides name text box label and disables update button
+        /// Zach
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_RenamePic_Leave(object sender, EventArgs e)
         {
             label_NameError.Visible = false;
             button_RenamePic.Enabled = false;
         }
 
-        //List mode switch click event
-        //If a picture is selected, focuses picture list to show selected node. Used when switching from thumbnail view to list view
-        //Cavan & Zach
+        /// <summary>
+        /// List mode switch click event
+        /// If a picture is selected, focuses picture list to show selected node. Used when switching from thumbnail view to list view
+        /// Cavan & Zach
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void tabControl_List_Click(object sender, EventArgs e)
         {
             if (panel_PictureData.Enabled)
@@ -1350,12 +1557,21 @@ namespace PhotoAlbumViewOfTheGods
             MessageBox.Show(message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
+        /// <summary>
+        /// Menu action to add a new user
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void newUserToolStripMenuItem_Click(object sender, EventArgs e)
         {
             newUser();
             populateUsers();
         }
 
+        /// <summary>
+        /// Creates a new user and adds it to the list
+        /// David and Brandon
+        /// </summary>
         private void newUser()
         {
             Form_NewUser namePrompt = new Form_NewUser(ref _allUsers, _directoryUsers, false);
@@ -1365,6 +1581,12 @@ namespace PhotoAlbumViewOfTheGods
             switchUserToolStripMenuItem.Enabled = (_allUsers.Count > 1) ? true : false; //enable the "Switch User" button under file
         }
 
+        /// <summary>
+        /// Removes any photos not referenced by any album
+        /// David
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void cleanupPhotosToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int totalRemoved;
@@ -1377,11 +1599,22 @@ namespace PhotoAlbumViewOfTheGods
             }
         }
 
+        /// <summary>
+        /// Menu action to print a photo
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void printImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Utilities.printImage(_currentPhoto.path);
         }
 
+        /// <summary>
+        /// Menu action to print an entire album
+        /// David
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void printAlbumToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int total;
@@ -1402,6 +1635,10 @@ namespace PhotoAlbumViewOfTheGods
             }            
         }
 
+        /// <summary>
+        /// Updates the status bar with the current user, album, and photo count
+        /// Brandon
+        /// </summary>
         private void updateStatusBar()//string statusBarText)
         {
             toolStripStatusLabel_UserA.Text = "User: " + _currentUser;
@@ -1409,6 +1646,12 @@ namespace PhotoAlbumViewOfTheGods
             toolStripStatusLabel_PhotosA.Text = "Photos: " + _pictureList.Count.ToString();
         }
 
+        /// <summary>
+        /// Search for pictures containing the search info and generate a list of pictures
+        /// Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void searchToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string searchTerm;
@@ -1448,6 +1691,12 @@ namespace PhotoAlbumViewOfTheGods
            
         }
 
+        /// <summary>
+        /// Clear an image sort
+        /// Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void defaultToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _filterList = null;
@@ -1456,6 +1705,12 @@ namespace PhotoAlbumViewOfTheGods
             populateList();
         }
 
+        /// <summary>
+        /// Sort image list by name
+        /// Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void sortNameToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<pictureData> sortedPictureList;
@@ -1468,6 +1723,12 @@ namespace PhotoAlbumViewOfTheGods
             populateList(sortedPictureList);
         }
 
+        /// <summary>
+        /// Sort image list by date added
+        /// Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void sortDateAddedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<pictureData> sortedPictureList;
@@ -1480,6 +1741,12 @@ namespace PhotoAlbumViewOfTheGods
             populateList(sortedPictureList);
         }
 
+        /// <summary>
+        /// Sort image list by date modified
+        /// Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void sortDateModifiedToolStripMenuItem_Click(object sender, EventArgs e)
         {
             List<pictureData> sortedPictureList;
@@ -1492,6 +1759,12 @@ namespace PhotoAlbumViewOfTheGods
             populateList(sortedPictureList);
         }
 
+        /// <summary>
+        /// Clear sorting results
+        /// Brandon
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void clearResults(object sender, EventArgs e)
         {
             _filterList = null;
@@ -1502,6 +1775,11 @@ namespace PhotoAlbumViewOfTheGods
             pictureToolStripMenuItem.DropDownItems.RemoveByKey("clearsearch");
         }
 
+        /// <summary>
+        /// Menu action to open the about box dialog
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Form_About AboutBox = new Form_About();

@@ -6,7 +6,9 @@ using System.Drawing;
 
 namespace PhotoAlbumViewOfTheGods
 {
-    //Photo data structure
+    /// <summary>
+    /// Photo data structure
+    /// </summary>
     public struct pictureData
     {
         public string id;
@@ -20,8 +22,10 @@ namespace PhotoAlbumViewOfTheGods
         public string albumPath;
     }
 
-    //Simple class representing the current photo selected by the user
-    //Cavan
+    /// <summary>
+    /// Simple class representing the current photo selected by the user
+    /// Cavan
+    /// </summary>
     class Photo
     {
         pictureData photoData; //data array representing current photo
